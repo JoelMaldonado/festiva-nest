@@ -4,7 +4,7 @@ import * as path from 'path';
 const httpsCertificate = () => {
   const isProduction = process.env.PRODUCTION === 'true';
   if (!isProduction) {
-    return {};
+    return null;
   }
 
   const dir = 'atmosfera-soltec.com';
