@@ -9,6 +9,7 @@ import { ArtistaModule } from './modules/artista/artista.module';
 import { CatEventoModule } from './modules/cat-evento/cat-evento.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RedesModule } from './modules/redes/redes.module';
+import { CommonModule } from './modules/common/common.module';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { RedesModule } from './modules/redes/redes.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '4h' },
+      signOptions: { expiresIn: '15m' },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -35,6 +36,7 @@ import { RedesModule } from './modules/redes/redes.module';
     CatEventoModule,
     AuthModule,
     RedesModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

@@ -17,22 +17,32 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
     const payload = {
-      correo: user.correo,
+      email: user.correo,
       id: user.id,
     };
 
-    return {
-      access_token: this.jwt.sign(payload),
-    };
+    const access_token = this.jwt.sign(payload, { expiresIn: '15m' });
+    const refresh_token = this.jwt.sign(payload, { expiresIn: '30d' });
+
+    return { access_token, refresh_token };
   }
 
-  async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
-    return bcrypt.hash(password, salt);
+  async refreshToken(token: string) {
+    try {
+      const decoded = this.jwt.verify(token);
+      const newAccessToken = this.jwt.sign(
+        { sub: decoded.sub, email: decoded.email },
+        { expiresIn: '15m' },
+      );
+      return { accessToken: newAccessToken };
+    } catch (error) {
+      throw new UnauthorizedException('Refresh Token inválido');
+    }
   }
 
   async register({ clave, ...dto }: CreateUsuarioDto) {
-    const hashedPassword = await this.hashPassword(clave);
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(clave, salt);
     return this.usersService.create({ clave: hashedPassword, ...dto });
   }
 

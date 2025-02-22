@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { CreateUsuarioDto } from '../usuario/dto/create-usuario.dto';
 import { LoginDto } from './dtos/login.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard as AuthGuard2 } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -11,6 +12,11 @@ export class AuthController {
   @Post('login')
   async login(@Body() { correo, clave }: LoginDto) {
     return await this.authService.validateUser(correo, clave);
+  }
+
+  @Get('refresh')
+  async refresh(@Body('refresh_token') token: string) {
+    return this.authService.refreshToken(token);
   }
 
   @Post('register')
@@ -26,9 +32,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('perfil')
-  getPerfil(
-    @Req() req
-  ) {
+  getPerfil(@Req() req) {
     const id = req.user.id;
     return this.authService.getPerfil(id);
   }
