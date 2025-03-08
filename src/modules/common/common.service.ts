@@ -34,7 +34,7 @@ export class CommonService {
         },
         take: 5,
       }),
-      this.artistaRepo.find({
+      this.discotecaRepo.find({
         select: ['id', 'nombre'],
         where: {
           nombre: Like(searchTerm),
