@@ -28,6 +28,7 @@ export class ClubController {
     }
   }
 
+  // Prueba
   @Get('detail')
   async findAll() {
     try {
