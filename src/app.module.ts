@@ -10,6 +10,7 @@ import { CatEventoModule } from './modules/cat-evento/cat-evento.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RedesModule } from './modules/redes/redes.module';
 import { CommonModule } from './modules/common/common.module';
+import { ClubModule } from './modules/club/club.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { CommonModule } from './modules/common/common.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '15m' },
+      signOptions: { expiresIn: '4h' },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -27,7 +28,7 @@ import { CommonModule } from './modules/common/common.module';
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
     UsuarioModule,
     DiscotecaModule,
@@ -37,6 +38,7 @@ import { CommonModule } from './modules/common/common.module';
     AuthModule,
     RedesModule,
     CommonModule,
+    ClubModule,
   ],
   controllers: [],
   providers: [],
