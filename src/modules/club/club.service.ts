@@ -43,8 +43,9 @@ export class ClubService {
         club: location.club.name,
         logoUrl: location.club.logoUrl,
         address: location.address,
-        latitude: location.latitude,
-        longitude: location.longitude,
+        latitude: location.latitude !== null ? Number(location.latitude) : null,
+        longitude:
+          location.longitude !== null ? Number(location.longitude) : null,
         mapsUrl: location.mapsUrl,
       };
     });
