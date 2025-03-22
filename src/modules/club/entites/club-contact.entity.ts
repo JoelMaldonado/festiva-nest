@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinColumn,
+} from 'typeorm';
 import { Club } from './club.entity';
 import { Status } from 'src/modules/common/entities/status.entity';
 
@@ -7,12 +15,14 @@ export class ClubContact {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @JoinColumn({ name: 'club_id' })
   @ManyToOne(() => Club, (club) => club.contacts)
   club: Club;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone: string;
 
+  @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)
   status: Status;
 

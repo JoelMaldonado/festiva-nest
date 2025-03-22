@@ -61,15 +61,43 @@ export class ClubService {
   }
 
   async findOne(id: number) {
-    const item = await this.clubRepo.findOne({
+    const club = await this.clubRepo.findOne({
+      relations: [
+        'covers',
+        'contacts',
+        'locations',
+        'clubSocialNetworks',
+        'clubSocialNetworks.socialNetwork',
+      ],
       where: {
         id,
         status: { id: 1 },
       },
     });
-    if (!item) {
+    if (!club) {
       throw new NotFoundException(`Club with id ${id} not found`);
     }
-    return item;
+
+    const cover = club.covers[0] || { url_image: null };
+    const contact = club.contacts[0] || { phone: null };
+    const location = club.locations[0] || { address: null, mapsUrl: null };
+
+    return {
+      id: club.id,
+      name: club.name,
+      description: club.description,
+      phone: contact.phone,
+      logoUrl: club.logoUrl,
+      coverUrl: cover.url_image,
+      address: location.address,
+      mapsUrl: location.mapsUrl,
+      socialReds: club.clubSocialNetworks.map((s) => {
+        return {
+          id: s.socialNetwork.id,
+          name: s.socialNetwork.name,
+          logoUrl: s.logo_url,
+        };
+      }),
+    };
   }
 }

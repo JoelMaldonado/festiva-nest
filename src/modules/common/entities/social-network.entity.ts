@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -21,6 +22,7 @@ export class SocialNetwork {
   @Column({ type: 'varchar', length: 255, nullable: true })
   logo_url: string;
 
+  @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status, (status) => status.socialNetworks)
   status: Status;
 
