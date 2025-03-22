@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RedesModule } from './modules/redes/redes.module';
 import { CommonModule } from './modules/common/common.module';
 import { ClubModule } from './modules/club/club.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ClubModule } from './modules/club/club.module';
     RedesModule,
     CommonModule,
     ClubModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
