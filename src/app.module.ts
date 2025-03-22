@@ -12,6 +12,7 @@ import { RedesModule } from './modules/redes/redes.module';
 import { CommonModule } from './modules/common/common.module';
 import { ClubModule } from './modules/club/club.module';
 import { UserModule } from './modules/user/user.module';
+import { ArtistModule } from './modules/artist/artist.module';
 
 @Module({
   imports: [
@@ -34,13 +35,13 @@ import { UserModule } from './modules/user/user.module';
     UsuarioModule,
     DiscotecaModule,
     EventoModule,
-    ArtistaModule,
     CatEventoModule,
     AuthModule,
     RedesModule,
     CommonModule,
     ClubModule,
     UserModule,
+    ArtistModule,
   ],
   controllers: [],
   providers: [],

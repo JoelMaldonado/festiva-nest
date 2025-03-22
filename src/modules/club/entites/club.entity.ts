@@ -14,7 +14,7 @@ import { ClubLocation } from './club-location.entity';
 import { ClubSocialNetwork } from './club-social-network.entity';
 import { Status } from 'src/modules/common/entities/status.entity';
 
-@Entity('club')
+@Entity({ name: 'club' })
 export class Club {
   @PrimaryGeneratedColumn()
   id: number;
@@ -25,17 +25,17 @@ export class Club {
   @Column({ name: 'description', type: 'text', nullable: true })
   description: string;
 
-  @Column({ name: 'logo_url',type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'logo_url', type: 'varchar', length: 255, nullable: true })
   logoUrl: string;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status, (status) => status.clubs)
   status: Status;
 
-  @CreateDateColumn({ name: 'created_at',type: 'timestamp' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn({name: 'updated_at', type: 'timestamp' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date;
 
   @OneToMany(() => ClubCover, (cover) => cover.club)

@@ -24,7 +24,7 @@ export class ClubController {
       const items = await this.clubService.findAllAddress();
       return successResponse('', items);
     } catch (error) {
-      return errorResponse(error.status, error.message);
+      return errorResponse(error);
     }
   }
 
@@ -35,7 +35,7 @@ export class ClubController {
       const items = await this.clubService.findAll();
       return successResponse('', items);
     } catch (error) {
-      return errorResponse(error.status, error.message);
+      return errorResponse(error);
     }
   }
 
@@ -45,7 +45,7 @@ export class ClubController {
       const item = await this.clubService.findOne(id);
       return successResponse('', item);
     } catch (error) {
-      return errorResponse(error.status, error.message);
+      return errorResponse(error);
     }
   }
 }
@@ -59,11 +59,11 @@ export function successResponse(message: string = '', data: any) {
   };
 }
 
-export function errorResponse(code: number, message: string) {
+export function errorResponse(error: any) {
   return {
     isSuccess: false,
-    code: code ?? 500,
-    message: message,
+    code: error.status ?? 500,
+    message: error.message,
     data: null,
   };
 }

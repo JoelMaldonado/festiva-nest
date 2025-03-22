@@ -11,14 +11,8 @@ import { ClubDto } from './dto/club.dto';
 @Injectable()
 export class ClubService {
   constructor(
-    @InjectRepository(ClubContact)
-    private readonly clubContactRepo: Repository<ClubContact>,
-    @InjectRepository(ClubCover)
-    private readonly clubCoverRepo: Repository<ClubCover>,
     @InjectRepository(ClubLocation)
     private readonly clubLocationRepo: Repository<ClubLocation>,
-    @InjectRepository(ClubSocialNetwork)
-    private readonly clubSocialNetworkRepo: Repository<ClubSocialNetwork>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
   ) {}
