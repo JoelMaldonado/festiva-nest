@@ -1,52 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Evento } from '../evento/entities/evento.entity';
 import { Like, Repository } from 'typeorm';
-import { Artista } from '../artista/entities/artista.entity';
-import { Discoteca } from '../discoteca/entities/discoteca.entity';
+import { Event } from '../event/entities/event.entity';
+import { Club } from '../club/entites/club.entity';
+import { Artist } from '../artist/entities/artist.entity';
 
 @Injectable()
 export class CommonService {
   constructor(
-    @InjectRepository(Evento)
-    private readonly eventoRepository: Repository<Evento>,
-    @InjectRepository(Artista)
-    private readonly artistaRepo: Repository<Artista>,
-    @InjectRepository(Discoteca)
-    private readonly discotecaRepo: Repository<Discoteca>,
+    @InjectRepository(Event)
+    private readonly eventRepo: Repository<Event>,
+    @InjectRepository(Artist)
+    private readonly artistRepo: Repository<Artist>,
+    @InjectRepository(Club)
+    private readonly clubRepo: Repository<Club>,
   ) {}
 
   async search(query: string) {
     const searchTerm = `%${query}%`;
-
     const [eventos, artistas, clubs] = await Promise.all([
-      this.eventoRepository.find({
-        select: ['id', 'titulo'],
+      this.eventRepo.find({
+        select: ['id', 'title'],
         where: {
-          titulo: Like(searchTerm),
+          title: Like(searchTerm),
         },
         take: 5,
       }),
-      this.artistaRepo.find({
-        select: ['id', 'nombre'],
+      this.artistRepo.find({
+        select: ['id', 'name'],
         where: {
-          nombre: Like(searchTerm),
+          name: Like(searchTerm),
         },
         take: 5,
       }),
-      this.discotecaRepo.find({
-        select: ['id', 'nombre'],
+      this.clubRepo.find({
+        select: ['id', 'name'],
         where: {
-          nombre: Like(searchTerm),
+          name: Like(searchTerm),
         },
         take: 5,
       }),
     ]);
 
     return [
-      ...eventos.map((e) => ({ id: e.id, detail: e.titulo, type: 'E' })),
-      ...artistas.map((a) => ({ id: a.id, detail: a.nombre, type: 'A' })),
-      ...clubs.map((d) => ({ id: d.id, detail: d.nombre, type: 'C' })),
+      ...eventos.map((e) => ({ id: e.id, detail: e.title, type: 'E' })),
+      ...artistas.map((a) => ({ id: a.id, detail: a.name, type: 'A' })),
+      ...clubs.map((d) => ({ id: d.id, detail: d.name, type: 'C' })),
     ];
   }
 }

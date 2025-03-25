@@ -2,17 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsuarioModule } from './modules/usuario/usuario.module';
-import { DiscotecaModule } from './modules/discoteca/discoteca.module';
-import { EventoModule } from './modules/evento/evento.module';
-import { ArtistaModule } from './modules/artista/artista.module';
-import { CatEventoModule } from './modules/cat-evento/cat-evento.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { RedesModule } from './modules/redes/redes.module';
 import { CommonModule } from './modules/common/common.module';
 import { ClubModule } from './modules/club/club.module';
 import { UserModule } from './modules/user/user.module';
 import { ArtistModule } from './modules/artist/artist.module';
+import { EventModule } from './modules/event/event.module';
 
 @Module({
   imports: [
@@ -32,16 +27,12 @@ import { ArtistModule } from './modules/artist/artist.module';
       autoLoadEntities: true,
       synchronize: false,
     }),
-    UsuarioModule,
-    DiscotecaModule,
-    EventoModule,
-    CatEventoModule,
     AuthModule,
-    RedesModule,
     CommonModule,
     ClubModule,
     UserModule,
     ArtistModule,
+    EventModule,
   ],
   controllers: [],
   providers: [],
