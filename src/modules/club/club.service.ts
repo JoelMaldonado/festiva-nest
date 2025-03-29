@@ -17,6 +17,8 @@ export class ClubService {
     private readonly clubLocationRepo: Repository<ClubLocation>,
     @InjectRepository(ClubSchedule)
     private readonly clubScheduleRepo: Repository<ClubSchedule>,
+    @InjectRepository(ClubContact)
+    private readonly clubContactRepo: Repository<ClubContact>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
   ) {}
@@ -143,4 +145,15 @@ export class ClubService {
       };
     });
   }
+
+  async findAllContact(idClub: number) {
+    const items = this.clubContactRepo.find({
+      where: {
+        club: { id: idClub },
+        status: { id: 1 },
+      },
+    });
+    return items;
+  }
+  
 }
