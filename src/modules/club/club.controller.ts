@@ -28,7 +28,26 @@ export class ClubController {
     }
   }
 
-  // Prueba
+  @Get('location/:id')
+  async findAddress(@Param('id') id: string) {
+    try {
+      const item = await this.clubService.findOneLocation(+id);
+      return successResponse('', item);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
+  @Get(':id/schedule')
+  async findSchedule(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const items = await this.clubService.findSchedule(id);
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
   @Get('detail')
   async findAll() {
     try {

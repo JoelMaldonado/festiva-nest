@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { errorResponse, successResponse } from '../club/club.controller';
 
 @Controller('user')
 export class UserController {
@@ -13,8 +22,13 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    try {
+      const res = await this.userService.findAll();
+      return successResponse('', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
   }
 
   @Get(':id')

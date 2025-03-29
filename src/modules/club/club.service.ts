@@ -7,12 +7,16 @@ import { ClubCover } from './entites/club-cover.entity';
 import { ClubLocation } from './entites/club-location.entity';
 import { ClubSocialNetwork } from './entites/club-social-network.entity';
 import { ClubDto } from './dto/club.dto';
+import { ClubSchedule } from './entites/club-schedule.entity';
+import { find } from 'rxjs';
 
 @Injectable()
 export class ClubService {
   constructor(
     @InjectRepository(ClubLocation)
     private readonly clubLocationRepo: Repository<ClubLocation>,
+    @InjectRepository(ClubSchedule)
+    private readonly clubScheduleRepo: Repository<ClubSchedule>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
   ) {}
@@ -44,6 +48,31 @@ export class ClubService {
       };
     });
     return locationsMap;
+  }
+
+  async findOneLocation(id: number) {
+    const location = await this.clubLocationRepo.findOne({
+      relations: ['club'],
+      where: {
+        club: { id: id },
+        status: { id: 1 },
+      },
+    });
+
+    if (!location) {
+      throw new NotFoundException(`Location with id ${id} not found`);
+    }
+
+    return {
+      idClub: location.club.id,
+      club: location.club.name,
+      logoUrl: location.club.logoUrl,
+      address: location.address,
+      latitude: location.latitude !== null ? Number(location.latitude) : null,
+      longitude:
+        location.longitude !== null ? Number(location.longitude) : null,
+      mapsUrl: location.mapsUrl,
+    };
   }
 
   async findAll() {
@@ -93,5 +122,25 @@ export class ClubService {
         };
       }),
     };
+  }
+
+  async findSchedule(id: number) {
+    await this.findOne(id);
+    const schedules = await this.clubScheduleRepo.find({
+      relations: ['club', 'status'],
+      where: {
+        club: { id },
+        status: { id: 1 },
+      },
+    });
+
+    return schedules.map((schedule) => {
+      return {
+        id: schedule.id,
+        dayOfWeek: schedule.dayOfWeek,
+        openingTime: schedule.openingTime,
+        closingTime: schedule.closingTime,
+      };
+    });
   }
 }

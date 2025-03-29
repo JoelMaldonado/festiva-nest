@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "start": "pm2 start dist/main.js --name Festiva:3245",
+    "restart": "pm2 restart Festiva:3245",
     "dev": "nest start --watch"
   },
   "dependencies": {
