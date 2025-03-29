@@ -50,6 +50,30 @@ export class ClubController {
     }
   }
 
+  @Get(':id/covers')
+  async findAllCovers(
+    @Param('id') id: string,
+  ) {
+    try {
+      const items = await this.clubService.findAllCovers(+id);
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
+  @Get(':id/social-networks')
+  async findAllSocialNetworks(
+    @Param('id') id: string,
+  ) {
+    try {
+      const items = await this.clubService.findAllSocialNetworks(+id);
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
   @Get(':id/schedule')
   async findSchedule(@Param('id', ParseIntPipe) id: number) {
     try {

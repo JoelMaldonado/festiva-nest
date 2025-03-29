@@ -19,6 +19,10 @@ export class ClubService {
     private readonly clubScheduleRepo: Repository<ClubSchedule>,
     @InjectRepository(ClubContact)
     private readonly clubContactRepo: Repository<ClubContact>,
+    @InjectRepository(ClubCover)
+    private readonly clubCoverRepo: Repository<ClubCover>,
+    @InjectRepository(ClubSocialNetwork)
+    private readonly clubSocialNetworkRepo: Repository<ClubSocialNetwork>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
   ) {}
@@ -155,5 +159,32 @@ export class ClubService {
     });
     return items;
   }
-  
+
+  async findAllCovers(idClub: number) {
+    const items = this.clubCoverRepo.find({
+      where: {
+        club: { id: idClub },
+        status: { id: 1 },
+      },
+    });
+    return items;
+  }
+
+  async findAllSocialNetworks(idClub: number) {
+    const items = await this.clubSocialNetworkRepo.find({
+      relations: ['socialNetwork'],
+      where: {
+        club: { id: idClub },
+        status: { id: 1 },
+      },
+    });
+
+    return items.map((item) => {
+      return {
+        id: item.socialNetwork.id,
+        name: item.socialNetwork.name,
+        logoUrl: item.logo_url,
+      };
+    });
+  }
 }
