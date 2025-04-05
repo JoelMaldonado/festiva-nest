@@ -15,7 +15,12 @@ export class ClubController {
 
   @Post()
   async create(@Body() dto: ClubDto) {
-    return await this.clubService.create(dto);
+    try {
+      const res = await this.clubService.create(dto);
+      return successResponse('Create club successfully', res);
+    } catch (error) {
+      return errorResponse(error);
+    }
   }
 
   @Get('address')
@@ -39,9 +44,7 @@ export class ClubController {
   }
 
   @Get(':id/contact')
-  async findAllContact(
-    @Param('id') id: string,
-  ) {
+  async findAllContact(@Param('id') id: string) {
     try {
       const items = await this.clubService.findAllContact(+id);
       return successResponse('', items);
@@ -51,9 +54,7 @@ export class ClubController {
   }
 
   @Get(':id/covers')
-  async findAllCovers(
-    @Param('id') id: string,
-  ) {
+  async findAllCovers(@Param('id') id: string) {
     try {
       const items = await this.clubService.findAllCovers(+id);
       return successResponse('', items);
@@ -63,9 +64,7 @@ export class ClubController {
   }
 
   @Get(':id/social-networks')
-  async findAllSocialNetworks(
-    @Param('id') id: string,
-  ) {
+  async findAllSocialNetworks(@Param('id') id: string) {
     try {
       const items = await this.clubService.findAllSocialNetworks(+id);
       return successResponse('', items);
