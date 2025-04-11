@@ -8,6 +8,7 @@ import { ClubSocialNetwork } from './entites/club-social-network.entity';
 import { Club } from './entites/club.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClubSchedule } from './entites/club-schedule.entity';
+import { ClubLocationModule } from './club-location/club-location.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ClubSchedule } from './entites/club-schedule.entity';
       ClubSocialNetwork,
       Club,
     ]),
+    ClubLocationModule,
   ],
   controllers: [ClubController],
   providers: [ClubService],
