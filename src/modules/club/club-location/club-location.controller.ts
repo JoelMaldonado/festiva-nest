@@ -39,16 +39,14 @@ export class ClubLocationController {
     }
   }
 
-  @Patch(':id/locations/:locationId')
+  @Patch('locations/:idLocation')
   async updateLocation(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('locationId', ParseIntPipe) locationId: number,
+    @Param('idLocation', ParseIntPipe) idLocation: number,
     @Body() dto: ClubLocationDto,
   ) {
     try {
       const item = await this.clubLocationService.updateLocation(
-        id,
-        locationId,
+        idLocation,
         dto,
       );
       return successResponse('', item);

@@ -39,11 +39,10 @@ export class ClubLocationService {
     return location;
   }
 
-  async updateLocation(id: number, locationId: number, dto: ClubLocationDto) {
+  async updateLocation(locationId: number, dto: ClubLocationDto) {
     const updatedLocation = await this.clubLocationRepo.preload({
       id: locationId,
       ...dto,
-      club: { id },
     });
 
     if (!updatedLocation) {
