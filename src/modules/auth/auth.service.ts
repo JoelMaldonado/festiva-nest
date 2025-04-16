@@ -23,7 +23,7 @@ export class AuthService {
     const access_token = this.jwt.sign(payload, { expiresIn: '15m' });
     const refresh_token = this.jwt.sign(payload, { expiresIn: '30d' });
 
-    return { access_token, refresh_token };
+    return { access_token, refresh_token, name: user.username };
   }
 
   async refreshToken(token: string) {
