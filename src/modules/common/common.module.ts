@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Status } from './entities/status.entity';
 import { SocialNetwork } from './entities/social-network.entity';
 import { Event } from '../event/entities/event.entity';
-import { Artist } from '../artist/entities/artist.entity';
+import { Artist } from '../../common/entities/artist.entity';
 import { Club } from '../club/entites/club.entity';
 
 @Module({

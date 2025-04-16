@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ArtistService } from './artist.service';
-import { ArtistController } from './artist.controller';
+import { ArtistService } from './services/artist.service';
+import { ArtistController } from './controllers/artist.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Artist } from './entities/artist.entity';
+import { Artist } from '../../common/entities/artist.entity';
+import { ArtistType } from '../../common/entities/artist-type.entity';
+import { ArtistTypeController } from './controllers/artist-type.controller';
+import { ArtistTypeService } from './services/artist-type.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Artist])],
-  controllers: [ArtistController],
-  providers: [ArtistService],
+  imports: [TypeOrmModule.forFeature([Artist, ArtistType])],
+  controllers: [ArtistController, ArtistTypeController],
+  providers: [ArtistService, ArtistTypeService],
 })
 export class ArtistModule {}

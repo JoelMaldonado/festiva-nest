@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ArtistType } from './artist-type.entity';
 
 @Entity({ name: 'artist' })
 export class Artist {
@@ -17,7 +18,9 @@ export class Artist {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   name: string;
 
-  // ArtistType
+  @JoinColumn({ name: 'artist_type_id' })
+  @ManyToOne(() => ArtistType)
+  artistType: ArtistType;
 
   @Column({ name: 'description', type: 'text', nullable: true })
   description: string;

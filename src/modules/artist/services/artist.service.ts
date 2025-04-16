@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Artist } from './entities/artist.entity';
+import { Artist } from '../../../common/entities/artist.entity';
+import { CreateArtistDto } from '../../../common/dto/create-artist.dto';
 
 @Injectable()
 export class ArtistService {
@@ -45,5 +46,18 @@ export class ArtistService {
       profileCoverUrl: item.profileUrl,
       socialNetworks: [],
     };
+  }
+
+  async create(dto: CreateArtistDto) {
+    const artist = this.repo.create({
+      name: dto.name,
+      artistType: { id: dto.idArtistType },
+      description: dto.description,
+      biography: dto.biography,
+      profileUrl: dto.profileUrl,
+      status: { id: 1 },
+    });
+    await this.repo.save(artist);
+    return this.findOne(artist.id);
   }
 }

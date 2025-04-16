@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { Event } from '../event/entities/event.entity';
 import { Club } from '../club/entites/club.entity';
-import { Artist } from '../artist/entities/artist.entity';
+import { Artist } from '../../common/entities/artist.entity';
 import { SocialNetwork } from './entities/social-network.entity';
 
 @Injectable()

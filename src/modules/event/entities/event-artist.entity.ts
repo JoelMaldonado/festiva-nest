@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Event } from './event.entity';
-import { Artist } from 'src/modules/artist/entities/artist.entity';
+import { Artist } from 'src/common/entities/artist.entity';
 
 @Entity({ name: 'event_artist' })
 export class EventArtist {
