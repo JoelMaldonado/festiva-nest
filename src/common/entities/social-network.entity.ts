@@ -19,18 +19,27 @@ export class SocialNetwork {
   @Column({ type: 'varchar', length: 50, unique: true })
   name: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  logo_url: string;
+  @Column({ name: 'logo_url', type: 'varchar', length: 255, nullable: true })
+  logoUrl: string;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status, (status) => status.socialNetworks)
   status: Status;
 
-  @CreateDateColumn({ type: 'timestamp' })
-  created_at: Date;
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
-  updated_at: Date;
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 
   @OneToMany(() => ClubSocialNetwork, (csn) => csn.socialNetwork)
   clubSocialNetworks: ClubSocialNetwork[];

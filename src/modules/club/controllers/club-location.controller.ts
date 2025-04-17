@@ -8,18 +8,18 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ClubLocationService } from './club-location.service';
 import { successResponse, errorResponse } from '../club.controller';
 import { ClubLocationDto } from '../../../common/dto/club-location.dto';
+import { ClubLocationService } from '../services/club-location.service';
 
 @Controller('club')
 export class ClubLocationController {
-  constructor(private readonly clubLocationService: ClubLocationService) {}
+  constructor(private readonly service: ClubLocationService) {}
 
   @Get(':id/locations')
   async findLocationsById(@Param('id', ParseIntPipe) id: number) {
     try {
-      const items = await this.clubLocationService.findLocationsById(id);
+      const items = await this.service.findLocationsById(id);
       return successResponse('', items);
     } catch (error) {
       return errorResponse(error);
@@ -32,7 +32,7 @@ export class ClubLocationController {
     @Body() dto: ClubLocationDto,
   ) {
     try {
-      const item = await this.clubLocationService.createLocation(id, dto);
+      const item = await this.service.createLocation(id, dto);
       return successResponse('', item);
     } catch (error) {
       return errorResponse(error);
@@ -45,10 +45,7 @@ export class ClubLocationController {
     @Body() dto: ClubLocationDto,
   ) {
     try {
-      const item = await this.clubLocationService.updateLocation(
-        idLocation,
-        dto,
-      );
+      const item = await this.service.updateLocation(idLocation, dto);
       return successResponse('', item);
     } catch (error) {
       return errorResponse(error);
@@ -58,7 +55,7 @@ export class ClubLocationController {
   @Delete('/locations/:locationId')
   async deleteLocation(@Param('locationId', ParseIntPipe) locationId: number) {
     try {
-      const item = await this.clubLocationService.deleteLocation(locationId);
+      const item = await this.service.deleteLocation(locationId);
       return successResponse('', item);
     } catch (error) {
       return errorResponse(error);

@@ -1,6 +1,9 @@
 import { BadRequestException, Controller, Get, Query } from '@nestjs/common';
-import { CommonService } from './common.service';
-import { errorResponse, successResponse } from '../club/club.controller';
+import { CommonService } from '../services/common.service';
+import {
+  errorResponse,
+  successResponse,
+} from 'src/modules/club/club.controller';
 
 @Controller('common')
 export class CommonController {

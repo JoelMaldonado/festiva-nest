@@ -16,7 +16,7 @@ export class ArtistTypeService {
     private readonly repo: Repository<ArtistType>,
   ) {}
 
-  async findAll(statusId: number = 1) {
+  async findAll(statusId: number) {
     const qb = this.repo.createQueryBuilder('artistType');
     qb.leftJoinAndSelect('artistType.status', 'status');
     if (statusId !== 0) {

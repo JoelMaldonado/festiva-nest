@@ -22,7 +22,7 @@ export class ArtistTypeController {
   constructor(private readonly service: ArtistTypeService) {}
 
   @Get()
-  async findAll(@Query('status-id') statusId: number) {
+  async findAll(@Query('status-id') statusId: number = 1) {
     try {
       const res = await this.service.findAll(Number(statusId));
       return successResponse('', res);

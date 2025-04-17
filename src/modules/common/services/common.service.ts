@@ -1,10 +1,9 @@
+import { Artist } from '@entities/artist.entity';
+import { Club } from '@entities/club.entity';
+import { Event } from '@entities/event.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { Event } from '../../common/entities/event.entity';
-import { Club } from '../../common/entities/club.entity';
-import { Artist } from '../../common/entities/artist.entity';
-import { SocialNetwork } from 'src/common/entities/social-network.entity';
 
 @Injectable()
 export class CommonService {
