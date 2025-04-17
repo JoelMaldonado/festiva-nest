@@ -61,6 +61,22 @@ export class ArtistService {
     return this.findOne(artist.id);
   }
 
+  async update(id: number, dto: CreateArtistDto) {
+    const artist = await this.repo.findOne({
+      where: { id },
+    });
+    if (!artist) {
+      throw new NotFoundException('Artist not found');
+    }
+    artist.name = dto.name;
+    artist.artistType.id = dto.idArtistType;
+    artist.description = dto.description;
+    artist.biography = dto.biography;
+    artist.profileUrl = dto.profileUrl;
+    await this.repo.save(artist);
+    return;
+  }
+
   async delete(id: number) {
     const artist = await this.repo.findOne({
       where: { id },
@@ -69,6 +85,18 @@ export class ArtistService {
       throw new NotFoundException('Artist not found');
     }
     artist.status.id = 2;
+    await this.repo.save(artist);
+    return;
+  }
+
+  async restore(id: number) {
+    const artist = await this.repo.findOne({
+      where: { id },
+    });
+    if (!artist) {
+      throw new NotFoundException('Artist not found');
+    }
+    artist.status.id = 1;
     await this.repo.save(artist);
     return;
   }

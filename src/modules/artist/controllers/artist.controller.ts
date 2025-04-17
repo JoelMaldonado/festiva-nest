@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { ArtistService } from '../services/artist.service';
@@ -48,6 +49,17 @@ export class ArtistController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() dto: CreateArtistDto) {
+    try {
+      const res = await this.artistService.update(+id, dto);
+      return successResponse('', res);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     try {
@@ -57,4 +69,16 @@ export class ArtistController {
       return errorResponse(error);
     }
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Patch('restore/:id')
+  async restore(@Param('id') id: string) {
+    try {
+      const res = await this.artistService.restore(+id);
+      return successResponse('', res);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
 }
