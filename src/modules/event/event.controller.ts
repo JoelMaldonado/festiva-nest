@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Delete } from '@nestjs/common';
 import { EventService } from './event.service';
-import { errorResponse, successResponse } from '../club/club.controller';
+import { errorResponse, successResponse } from 'src/common/responses';
 
 @Controller('event')
 export class EventController {

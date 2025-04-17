@@ -11,7 +11,6 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from '../../common/dto/login.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { AuthGuard as AuthGuard2 } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {

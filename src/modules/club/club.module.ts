@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ClubService } from './club.service';
-import { ClubController } from './club.controller';
 import { ClubContact } from '../../common/entities/club-contact.entity';
 import { ClubCover } from '../../common/entities/club-cover.entity';
 import { ClubLocation } from '../../common/entities/club-location.entity';
@@ -10,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClubSchedule } from '../../common/entities/club-schedule.entity';
 import { ClubLocationController } from './controllers/club-location.controller';
 import { ClubLocationService } from './services/club-location.service';
+import { ClubController } from './controllers/club.controller';
 
 @Module({
   imports: [

@@ -1,3 +1,4 @@
+import { ClubDto } from '@dtos/club.dto';
 import {
   Body,
   Controller,
@@ -6,8 +7,8 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
-import { ClubService } from './club.service';
-import { ClubDto } from '../../common/dto/club.dto';
+import { errorResponse, successResponse } from 'src/common/responses';
+import { ClubService } from '../club.service';
 
 @Controller('club')
 export class ClubController {
@@ -102,22 +103,4 @@ export class ClubController {
       return errorResponse(error);
     }
   }
-}
-
-export function successResponse(message: string = '', data: any) {
-  return {
-    isSuccess: true,
-    code: 200,
-    message: message,
-    data: data,
-  };
-}
-
-export function errorResponse(error: any) {
-  return {
-    isSuccess: false,
-    code: error.status ?? 500,
-    message: error.message,
-    data: null,
-  };
 }

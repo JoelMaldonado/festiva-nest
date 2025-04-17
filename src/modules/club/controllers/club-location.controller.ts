@@ -8,9 +8,9 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { successResponse, errorResponse } from '../club.controller';
 import { ClubLocationDto } from '../../../common/dto/club-location.dto';
 import { ClubLocationService } from '../services/club-location.service';
+import { errorResponse, successResponse } from 'src/common/responses';
 
 @Controller('club')
 export class ClubLocationController {

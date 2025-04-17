@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { errorResponse, successResponse } from '../club/club.controller';
+import { errorResponse, successResponse } from 'src/common/responses';
 import { CreateUserDto } from 'src/common/dto/create-user.dto';
 
 @Controller('user')

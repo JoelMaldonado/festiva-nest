@@ -11,10 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ArtistTypeService } from '../services/artist-type.service';
-import {
-  errorResponse,
-  successResponse,
-} from 'src/modules/club/club.controller';
+import { errorResponse, successResponse } from 'src/common/responses';
 import { CreateArtistTypeDto } from 'src/common/dto/create-artist-type.dto';
 
 @Controller('artist-type')

@@ -10,10 +10,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import {
-  errorResponse,
-  successResponse,
-} from 'src/modules/club/club.controller';
+import { errorResponse, successResponse } from 'src/common/responses';
 import { SocialNetworkService } from '../services/social-network.service';
 
 @Controller('common/social-network')

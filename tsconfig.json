@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@entities/*": ["src/common/entities/*"],
+      "@dtos/*": ["src/common/dto/*"],
     }
   }
 }

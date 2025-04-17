@@ -11,10 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { EventCategoryService } from '../services/event-category.service';
-import {
-  errorResponse,
-  successResponse,
-} from 'src/modules/club/club.controller';
+import { errorResponse, successResponse } from 'src/common/responses';
 
 @Controller('event-category')
 export class EventCategoryController {

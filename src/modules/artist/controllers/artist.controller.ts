@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ArtistService } from '../services/artist.service';
-import { errorResponse, successResponse } from '../../club/club.controller';
+import { errorResponse, successResponse } from 'src/common/responses';
 import { CreateArtistDto } from '../../../common/dto/create-artist.dto';
 
 @Controller('artist')
