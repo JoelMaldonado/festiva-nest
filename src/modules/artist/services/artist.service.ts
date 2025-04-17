@@ -13,7 +13,7 @@ export class ArtistService {
 
   async findAll() {
     const list = await this.repo.find({
-      relations: ['status'],
+      relations: ['status', 'artistType'],
       where: { status: { id: 1 } },
       order: {
         createdAt: 'DESC',
@@ -23,7 +23,8 @@ export class ArtistService {
       return {
         id: item.id,
         name: item.name,
-        artistType: 'Singer',
+        idArtistType: item.artistType.id,
+        artistType: item.artistType.name,
         description: item.description,
         biography: item.biography,
         tags: 'Pop, Rock',
