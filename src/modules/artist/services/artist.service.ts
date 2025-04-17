@@ -60,4 +60,16 @@ export class ArtistService {
     await this.repo.save(artist);
     return this.findOne(artist.id);
   }
+
+  async delete(id: number) {
+    const artist = await this.repo.findOne({
+      where: { id },
+    });
+    if (!artist) {
+      throw new NotFoundException('Artist not found');
+    }
+    artist.status.id = 2;
+    await this.repo.save(artist);
+    return;
+  }
 }

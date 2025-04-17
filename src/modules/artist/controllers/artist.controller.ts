@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -40,6 +41,17 @@ export class ArtistController {
   async create(@Body() dto: CreateArtistDto) {
     try {
       const res = await this.artistService.create(dto);
+      return successResponse('', res);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    try {
+      const res = await this.artistService.delete(+id);
       return successResponse('', res);
     } catch (error) {
       return errorResponse(error);
