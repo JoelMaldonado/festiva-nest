@@ -41,9 +41,13 @@ export class SocialNetworkController {
 
   @HttpCode(HttpStatus.OK)
   @Post()
-  async create(@Body('name') name: string, @Body('logoUrl') logoUrl: string) {
+  async create(
+    @Body('name') name: string,
+    @Body('logoUrl') logoUrl: string,
+    @Body('imagePath') imagePath: string,
+  ) {
     try {
-      const res = await this.service.create(name, logoUrl);
+      const res = await this.service.create(name, logoUrl, imagePath);
       return successResponse('', res);
     } catch (err) {
       return errorResponse(err);
@@ -56,9 +60,10 @@ export class SocialNetworkController {
     @Param('id') id: string,
     @Body('name') name: string,
     @Body('logoUrl') logoUrl: string,
+    @Body('imagePath') imagePath: string,
   ) {
     try {
-      const res = await this.service.update(+id, name, logoUrl);
+      const res = await this.service.update(+id, name, logoUrl, imagePath);
       return successResponse('', res);
     } catch (err) {
       return errorResponse(err);

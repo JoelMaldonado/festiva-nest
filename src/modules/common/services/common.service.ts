@@ -3,6 +3,7 @@ import { Club } from '@entities/club.entity';
 import { Event } from '@entities/event.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FirebaseService } from 'src/services/firebase.service';
 import { Like, Repository } from 'typeorm';
 
 @Injectable()
@@ -14,6 +15,8 @@ export class CommonService {
     private readonly artistRepo: Repository<Artist>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
+
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   async search(query: string) {
@@ -50,5 +53,12 @@ export class CommonService {
       ...artistas.map((a) => ({ id: a.id, detail: a.name, type: 'A' })),
       ...clubs.map((d) => ({ id: d.id, detail: d.name, type: 'C' })),
     ];
+  }
+
+  async test() {
+    const res = await this.firebaseService.deleteFile(
+      'Photos/2025/4/1744847344420.png',
+    );
+    return res;
   }
 }

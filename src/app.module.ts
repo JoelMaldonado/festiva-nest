@@ -8,6 +8,8 @@ import { ClubModule } from './modules/club/club.module';
 import { UserModule } from './modules/user/user.module';
 import { ArtistModule } from './modules/artist/artist.module';
 import { EventModule } from './modules/event/event.module';
+import { FirebaseService } from './services/firebase.service';
+import { FirebaseModule } from './services/firebase.module';
 
 @Module({
   imports: [
@@ -33,8 +35,7 @@ import { EventModule } from './modules/event/event.module';
     UserModule,
     ArtistModule,
     EventModule,
+    FirebaseModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

@@ -33,7 +33,7 @@ export class SocialNetworkService {
     return item;
   }
 
-  async create(name: string, logoUrl: string) {
+  async create(name: string, logoUrl: string, imagePath: string) {
     const existingItem = await this.repo.findOne({
       where: { name },
     });
@@ -44,11 +44,12 @@ export class SocialNetworkService {
     const item = this.repo.create({
       name: name,
       logoUrl: logoUrl,
+      imagePath: imagePath,
       status: { id: 1 },
     });
     await this.repo.save(item);
   }
-  async update(id: number, name: string, logoUrl: string) {
+  async update(id: number, name: string, logoUrl: string, imagePath: string) {
     const item = await this.repo.findOne({
       relations: ['status'],
       where: { id, status: { id: 1 } },
@@ -70,6 +71,10 @@ export class SocialNetworkService {
     if (logoUrl) {
       item.logoUrl = logoUrl;
     }
+    if (imagePath) {
+      item.imagePath = imagePath;
+    }
+
     await this.repo.save(item);
   }
   async delete(id: number) {

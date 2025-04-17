@@ -22,6 +22,9 @@ export class SocialNetwork {
   @Column({ name: 'logo_url', type: 'varchar', length: 255, nullable: true })
   logoUrl: string;
 
+  @Column({ name: 'image_path', type: 'varchar', length: 255, nullable: true })
+  imagePath: string;
+
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status, (status) => status.socialNetworks)
   status: Status;
