@@ -17,13 +17,13 @@ export class CreateArtistDto {
 
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
   @IsString()
   @IsOptional()
-  biography: string;
+  biography?: string;
 
   @IsString()
   @IsOptional()
-  profileUrl: string;
+  profileUrl?: string;
 }

@@ -78,9 +78,15 @@ export class ArtistService {
     }
     artist.name = dto.name;
     artist.artistType.id = dto.idArtistType;
-    artist.description = dto.description;
-    artist.biography = dto.biography;
-    artist.profileUrl = dto.profileUrl;
+    if (dto.description) {
+      artist.description = dto.description;
+    }
+    if (dto.biography) {
+      artist.biography = dto.biography;
+    }
+    if (dto.profileUrl) {
+      artist.profileUrl = dto.profileUrl;
+    }
     await this.repo.save(artist);
     return;
   }
