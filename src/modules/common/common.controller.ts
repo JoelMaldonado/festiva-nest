@@ -4,22 +4,12 @@ import { errorResponse, successResponse } from '../club/club.controller';
 
 @Controller('common')
 export class CommonController {
-  constructor(private readonly commonService: CommonService) {}
+  constructor(private readonly service: CommonService) {}
 
   @Get('search')
   async search(@Query('q') query: string) {
     try {
-      const res = await this.commonService.search(query);
-      return successResponse('', res);
-    } catch (err) {
-      return errorResponse(err);
-    }
-  }
-
-  @Get('social-network')
-  async findAllSocialNetwork() {
-    try {
-      const res = await this.commonService.findAllSocialNetwork();
+      const res = await this.service.search(query);
       return successResponse('', res);
     } catch (err) {
       return errorResponse(err);

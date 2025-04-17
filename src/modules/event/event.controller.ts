@@ -1,19 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Param, Delete } from '@nestjs/common';
 import { EventService } from './event.service';
 import { errorResponse, successResponse } from '../club/club.controller';
 
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
-
 
   @Get()
   async findAll() {

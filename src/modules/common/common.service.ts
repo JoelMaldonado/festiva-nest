@@ -15,16 +15,12 @@ export class CommonService {
     private readonly artistRepo: Repository<Artist>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
-
-    @InjectRepository(SocialNetwork)
-    private readonly socialNetworkRepo: Repository<SocialNetwork>,
   ) {}
 
   async search(query: string) {
     if (!query) {
       throw new BadRequestException('Debe proporcionar un término de búsqueda');
     }
-
     const searchTerm = `%${query}%`;
     const [eventos, artistas, clubs] = await Promise.all([
       this.eventRepo.find({
@@ -55,10 +51,5 @@ export class CommonService {
       ...artistas.map((a) => ({ id: a.id, detail: a.name, type: 'A' })),
       ...clubs.map((d) => ({ id: d.id, detail: d.name, type: 'C' })),
     ];
-  }
-
-  async findAllSocialNetwork() {
-    const items = await this.socialNetworkRepo.find();
-    return items;
   }
 }
