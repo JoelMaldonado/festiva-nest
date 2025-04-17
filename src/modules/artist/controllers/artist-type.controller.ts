@@ -24,7 +24,7 @@ export class ArtistTypeController {
   @Get()
   async findAll(@Query('status-id') statusId: number) {
     try {
-      const res = await this.service.findAll(statusId);
+      const res = await this.service.findAll(Number(statusId));
       return successResponse('', res);
     } catch (error) {
       return errorResponse(error);
