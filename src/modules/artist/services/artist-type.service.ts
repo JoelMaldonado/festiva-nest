@@ -16,10 +16,15 @@ export class ArtistTypeService {
   ) {}
 
   async findAll(statusId: number = 1) {
-    const list = await this.repo.find({
-      relations: ['status'],
-      where: { status: { id: statusId } },
-    });
+    const qb = this.repo.createQueryBuilder('artistType');
+    qb.leftJoinAndSelect('artistType.status', 'status');
+
+    if (statusId !== 0) {
+      qb.where('status.id = :statusId', { statusId });
+    }
+
+    const list = await qb.getMany();
+
     const listMap = list.map((item) => {
       return {
         id: item.id,

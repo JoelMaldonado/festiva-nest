@@ -15,7 +15,6 @@ import {
   errorResponse,
   successResponse,
 } from 'src/modules/club/club.controller';
-import { CreateArtistDto } from 'src/common/dto/create-artist.dto';
 import { CreateArtistTypeDto } from 'src/common/dto/create-artist-type.dto';
 
 @Controller('artist-type')
