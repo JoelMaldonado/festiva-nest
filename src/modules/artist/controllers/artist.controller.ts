@@ -71,7 +71,7 @@ export class ArtistController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Patch('restore/:id')
+  @Post('restore/:id')
   async restore(@Param('id') id: string) {
     try {
       const res = await this.artistService.restore(+id);
@@ -80,5 +80,4 @@ export class ArtistController {
       return errorResponse(error);
     }
   }
-
 }

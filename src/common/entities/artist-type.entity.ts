@@ -14,7 +14,7 @@ export class ArtistType {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'name', type: 'varchar', length: 100 })
+  @Column({ name: 'name', type: 'varchar', length: 100, unique: true })
   name: string;
 
   @JoinColumn({ name: 'status_id' })

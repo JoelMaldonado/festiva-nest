@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArtistType } from '../../../common/entities/artist-type.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
+import { CreateArtistTypeDto } from 'src/common/dto/create-artist-type.dto';
 
 @Injectable()
 export class ArtistTypeService {
@@ -23,5 +28,68 @@ export class ArtistTypeService {
       };
     });
     return listMap;
+  }
+
+  async create(dto: CreateArtistTypeDto) {
+    const isExist = await this.repo.findBy({ name: dto.name });
+    if (isExist) {
+      throw new NotFoundException('Item already exists');
+    }
+    const item = this.repo.create({
+      name: dto.name,
+      status: { id: 1 },
+    });
+    await this.repo.save(item);
+  }
+
+  async update(id: number, dto: CreateArtistTypeDto) {
+    const item = await this.repo.findOne({
+      where: { id, status: { id: 1 } },
+      relations: ['status'],
+    });
+    if (!item) {
+      throw new NotFoundException('Item not found');
+    }
+    const duplicate = await this.repo.findOne({
+      where: {
+        name: dto.name,
+        status: { id: 1 },
+        id: Not(id),
+      },
+      relations: ['status'],
+    });
+
+    if (duplicate) {
+      throw new ConflictException(
+        'Ya existe un tipo de artista con ese nombre',
+      );
+    }
+
+    item.name = dto.name;
+    await this.repo.save(item);
+  }
+
+  async delete(id: number) {
+    const item = await this.repo.findOne({
+      where: { id, status: { id: 1 } },
+      relations: ['status'],
+    });
+    if (!item) {
+      throw new NotFoundException('Item not found');
+    }
+    item.status.id = 2;
+    await this.repo.save(item);
+  }
+  async restore(id: number) {
+    const item = await this.repo.findOne({
+      where: { id, status: { id: 2 } },
+      relations: ['status'],
+    });
+    if (!item) {
+      throw new NotFoundException('Item not found');
+    }
+    item.status.id = 1;
+    await this.repo.save(item);
+    return;
   }
 }
