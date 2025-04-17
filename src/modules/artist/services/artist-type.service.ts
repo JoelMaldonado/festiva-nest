@@ -10,7 +10,18 @@ export class ArtistTypeService {
     private readonly repo: Repository<ArtistType>,
   ) {}
 
-  async findAll() {
-    return await this.repo.find();
+  async findAll(statusId: number = 1) {
+    const list = await this.repo.find({
+      relations: ['status'],
+      where: { status: { id: statusId } },
+    });
+    const listMap = list.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        statusId: item.status.id,
+      };
+    });
+    return listMap;
   }
 }
