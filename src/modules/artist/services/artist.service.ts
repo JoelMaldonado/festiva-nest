@@ -12,7 +12,13 @@ export class ArtistService {
   ) {}
 
   async findAll() {
-    const list = await this.repo.find();
+    const list = await this.repo.find({
+      relations: ['status'],
+      where: { status: { id: 1 } },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
     return list.map((item) => {
       return {
         id: item.id,
