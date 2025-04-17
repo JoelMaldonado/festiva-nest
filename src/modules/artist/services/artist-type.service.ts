@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ArtistType } from '../../../common/entities/artist-type.entity';
 import { Not, Repository } from 'typeorm';
 import { CreateArtistTypeDto } from 'src/common/dto/create-artist-type.dto';
+import { log } from 'console';
 
 @Injectable()
 export class ArtistTypeService {
@@ -35,7 +36,13 @@ export class ArtistTypeService {
   }
 
   async create(dto: CreateArtistTypeDto) {
-    const isExist = await this.repo.findBy({ name: dto.name });
+    const isExist = await this.repo.findOne({
+      relations: ['status'],
+      where: {
+        name: dto.name,
+        status: { id: 1 },
+      },
+    });
     if (isExist) {
       throw new NotFoundException('Item already exists');
     }
