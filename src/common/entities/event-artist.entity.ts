@@ -1,4 +1,3 @@
-import { Status } from 'src/modules/common/entities/status.entity';
 import {
   CreateDateColumn,
   Entity,
@@ -7,8 +6,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Event } from './event.entity';
 import { Artist } from 'src/common/entities/artist.entity';
+import { Status } from './status.entity';
+import { Event } from './event.entity';
 
 @Entity({ name: 'event_artist' })
 export class EventArtist {

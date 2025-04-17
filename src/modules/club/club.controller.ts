@@ -7,7 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ClubService } from './club.service';
-import { ClubDto } from './dto/club.dto';
+import { ClubDto } from '../../common/dto/club.dto';
 
 @Controller('club')
 export class ClubController {

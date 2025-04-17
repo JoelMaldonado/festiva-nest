@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Club } from './entites/club.entity';
+import { Club } from '../../common/entities/club.entity';
 import { Repository } from 'typeorm';
-import { ClubContact } from './entites/club-contact.entity';
-import { ClubCover } from './entites/club-cover.entity';
-import { ClubLocation } from './entites/club-location.entity';
-import { ClubSocialNetwork } from './entites/club-social-network.entity';
-import { ClubDto } from './dto/club.dto';
-import { ClubSchedule } from './entites/club-schedule.entity';
+import { ClubContact } from '../../common/entities/club-contact.entity';
+import { ClubCover } from '../../common/entities/club-cover.entity';
+import { ClubLocation } from '../../common/entities/club-location.entity';
+import { ClubSocialNetwork } from '../../common/entities/club-social-network.entity';
+import { ClubDto } from '../../common/dto/club.dto';
+import { ClubSchedule } from '../../common/entities/club-schedule.entity';
 import { find } from 'rxjs';
 
 @Injectable()

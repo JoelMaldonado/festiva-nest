@@ -1,5 +1,4 @@
-import { Club } from 'src/modules/club/entites/club.entity';
-import { Status } from 'src/modules/common/entities/status.entity';
+import { Club } from 'src/common/entities/club.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,6 +11,7 @@ import {
 } from 'typeorm';
 import { EventCategory } from './event-category.entity';
 import { EventArtist } from './event-artist.entity';
+import { Status } from './status.entity';
 
 @Entity({ name: 'event' })
 export class Event {

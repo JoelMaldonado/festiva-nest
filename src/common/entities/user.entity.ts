@@ -1,6 +1,4 @@
-import { Status } from 'src/modules/common/entities/status.entity';
 import {
-  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -8,14 +6,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserRole } from './user-role.entity';
+import { Status } from './status.entity';
 
-@Entity('user_role')
-export class UserRole {
+@Entity('user')
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'role_name', type: 'varchar', length: 50 })
-  roleName: string;
+  @JoinColumn({ name: 'user_role_id' })
+  @ManyToOne(() => UserRole)
+  userRole: UserRole;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)

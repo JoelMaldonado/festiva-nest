@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ClubLocationService } from './club-location.service';
 import { successResponse, errorResponse } from '../club.controller';
-import { ClubLocationDto } from '../dto/club-location.dto';
+import { ClubLocationDto } from '../../../common/dto/club-location.dto';
 
 @Controller('club')
 export class ClubLocationController {

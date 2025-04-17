@@ -1,26 +1,26 @@
-import { Status } from 'src/modules/common/entities/status.entity';
 import {
-  Column,
-  CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
+import { Status } from './status.entity';
 import { Club } from './club.entity';
 
-@Entity('club_cover')
-export class ClubCover {
+@Entity('club_contact')
+export class ClubContact {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  url_image: string;
-
   @JoinColumn({ name: 'club_id' })
-  @ManyToOne(() => Club, (club) => club.covers)
+  @ManyToOne(() => Club, (club) => club.contacts)
   club: Club;
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  phone: string;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)

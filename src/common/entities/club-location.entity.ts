@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Club } from './club.entity';
-import { Status } from 'src/modules/common/entities/status.entity';
+import { Status } from './status.entity';
 
 @Entity('club_location')
 export class ClubLocation {

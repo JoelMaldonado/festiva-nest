@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ClubLocation } from '../entites/club-location.entity';
+import { ClubLocation } from '../../../common/entities/club-location.entity';
 import { Repository } from 'typeorm';
-import { ClubLocationDto } from '../dto/club-location.dto';
+import { ClubLocationDto } from '../../../common/dto/club-location.dto';
 
 @Injectable()
 export class ClubLocationService {

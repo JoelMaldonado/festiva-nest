@@ -9,7 +9,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dtos/login.dto';
+import { LoginDto } from '../../common/dto/login.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthGuard as AuthGuard2 } from '@nestjs/passport';
 

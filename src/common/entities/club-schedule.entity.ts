@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Club } from './club.entity';
-import { Status } from 'src/modules/common/entities/status.entity';
+import { Status } from './status.entity';
 
 @Entity({ name: 'club_schedule' })
 export class ClubSchedule {

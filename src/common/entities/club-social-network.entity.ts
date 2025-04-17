@@ -7,20 +7,25 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
+import { SocialNetwork } from './social-network.entity';
 import { Club } from './club.entity';
-import { Status } from 'src/modules/common/entities/status.entity';
+import { Status } from './status.entity';
 
-@Entity('club_contact')
-export class ClubContact {
+@Entity('club_social_network')
+export class ClubSocialNetwork {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @JoinColumn({ name: 'club_id' })
-  @ManyToOne(() => Club, (club) => club.contacts)
-  club: Club;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  logo_url: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: true })
-  phone: string;
+  @JoinColumn({ name: 'social_network_id' })
+  @ManyToOne(() => SocialNetwork, (sn) => sn.clubSocialNetworks)
+  socialNetwork: SocialNetwork;
+
+  @JoinColumn({ name: 'club_id' })
+  @ManyToOne(() => Club, (club) => club.clubSocialNetworks)
+  club: Club;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)

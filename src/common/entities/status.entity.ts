@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { SocialNetwork } from './social-network.entity';
-import { Club } from 'src/modules/club/entites/club.entity';
+import { Club } from 'src/common/entities/club.entity';
 
 @Entity('status')
 export class Status {

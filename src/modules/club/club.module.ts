@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ClubService } from './club.service';
 import { ClubController } from './club.controller';
-import { ClubContact } from './entites/club-contact.entity';
-import { ClubCover } from './entites/club-cover.entity';
-import { ClubLocation } from './entites/club-location.entity';
-import { ClubSocialNetwork } from './entites/club-social-network.entity';
-import { Club } from './entites/club.entity';
+import { ClubContact } from '../../common/entities/club-contact.entity';
+import { ClubCover } from '../../common/entities/club-cover.entity';
+import { ClubLocation } from '../../common/entities/club-location.entity';
+import { ClubSocialNetwork } from '../../common/entities/club-social-network.entity';
+import { Club } from '../../common/entities/club.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ClubSchedule } from './entites/club-schedule.entity';
+import { ClubSchedule } from '../../common/entities/club-schedule.entity';
 import { ClubLocationModule } from './club-location/club-location.module';
 
 @Module({

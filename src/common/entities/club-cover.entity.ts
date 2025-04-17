@@ -4,26 +4,26 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Club } from './club.entity';
 import { Status } from './status.entity';
-import { ClubSocialNetwork } from 'src/modules/club/entites/club-social-network.entity';
 
-@Entity('social_network')
-export class SocialNetwork {
+@Entity('club_cover')
+export class ClubCover {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
-  name: string;
-
   @Column({ type: 'varchar', length: 255, nullable: true })
-  logo_url: string;
+  url_image: string;
+
+  @JoinColumn({ name: 'club_id' })
+  @ManyToOne(() => Club, (club) => club.covers)
+  club: Club;
 
   @JoinColumn({ name: 'status_id' })
-  @ManyToOne(() => Status, (status) => status.socialNetworks)
+  @ManyToOne(() => Status)
   status: Status;
 
   @CreateDateColumn({ type: 'timestamp' })
@@ -31,7 +31,4 @@ export class SocialNetwork {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
-
-  @OneToMany(() => ClubSocialNetwork, (csn) => csn.socialNetwork)
-  clubSocialNetworks: ClubSocialNetwork[];
 }

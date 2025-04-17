@@ -12,7 +12,7 @@ import { ClubCover } from './club-cover.entity';
 import { ClubContact } from './club-contact.entity';
 import { ClubLocation } from './club-location.entity';
 import { ClubSocialNetwork } from './club-social-network.entity';
-import { Status } from 'src/modules/common/entities/status.entity';
+import { Status } from './status.entity';
 
 @Entity({ name: 'club' })
 export class Club {

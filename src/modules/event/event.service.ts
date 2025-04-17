@@ -1,10 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
 import { Repository } from 'typeorm';
-import { Event } from './entities/event.entity';
+import { Event } from '../../common/entities/event.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EventCategory } from './entities/event-category.entity';
+import { EventCategory } from '../../common/entities/event-category.entity';
 
 @Injectable()
 export class EventService {
@@ -16,9 +14,6 @@ export class EventService {
     private readonly categoryRepo: Repository<EventCategory>,
   ) {}
 
-  create(createEventDto: CreateEventDto) {
-    return 'This action adds a new event';
-  }
 
   async findAll() {
     return await this.repo.find({
@@ -38,10 +33,6 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
     return item;
-  }
-
-  update(id: number, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${id} event`;
   }
 
   remove(id: number) {
