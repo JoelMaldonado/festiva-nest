@@ -20,7 +20,8 @@ export class SocialNetworkService {
     const mapItems = items.map((item) => {
       return {
         id: item.id,
-        title: item.name,
+        name: item.name,
+        logoUrl: item.logoUrl,
         idStatus: item.status.id,
       };
     });
