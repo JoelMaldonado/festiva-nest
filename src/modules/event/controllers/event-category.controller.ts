@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { EventCategoryService } from '../services/event-category.service';
 import { errorResponse, successResponse } from 'src/common/responses';
+import { mapEventCategory } from '../mappers/event-category.mapper';
 
 @Controller('event-category')
 export class EventCategoryController {
@@ -22,7 +23,7 @@ export class EventCategoryController {
   async findAll(@Query('status_id') statusId: number = 1) {
     try {
       const res = await this.service.findAll(Number(statusId));
-      return successResponse('', res);
+      return successResponse('', res.map(mapEventCategory));
     } catch (err) {
       return errorResponse(err);
     }
@@ -33,7 +34,7 @@ export class EventCategoryController {
   async findOne(@Param('id') id: string) {
     try {
       const res = await this.service.findOne(+id);
-      return successResponse('', res);
+      return successResponse('', mapEventCategory(res));
     } catch (err) {
       return errorResponse(err);
     }

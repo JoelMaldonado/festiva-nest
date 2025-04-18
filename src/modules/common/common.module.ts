@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Event } from '../../common/entities/event.entity';
+import { EventEntity } from '../../common/entities/event.entity';
 import { Artist } from '../../common/entities/artist.entity';
 import { Club } from '../../common/entities/club.entity';
 import { Status } from 'src/common/entities/status.entity';
@@ -16,7 +16,13 @@ import { FirebaseModule } from 'src/services/firebase.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Event, Artist, Club, Status, SocialNetwork]),
+    TypeOrmModule.forFeature([
+      EventEntity,
+      Artist,
+      Club,
+      Status,
+      SocialNetwork,
+    ]),
     FirebaseModule,
   ],
   controllers: [CommonController, SocialNetworkController, UserRoleController],

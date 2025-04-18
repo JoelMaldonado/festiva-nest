@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { ClubCoverService } from '../services/club-cover.service';
 
@@ -22,8 +22,18 @@ export class ClubCoverController {
     @Body('imageUrl') imageUrl: string,
   ) {
     try {
-      const items = await this.service.create(idClub, imageUrl);
-      return successResponse('', items);
+      const res = await this.service.create(idClub, imageUrl);
+      return successResponse('', res);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    try {
+      const res = await this.service.delete(id);
+      return successResponse('', res);
     } catch (error) {
       return errorResponse(error);
     }

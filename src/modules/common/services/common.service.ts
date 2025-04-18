@@ -1,6 +1,6 @@
 import { Artist } from '@entities/artist.entity';
 import { Club } from '@entities/club.entity';
-import { Event } from '@entities/event.entity';
+import { EventEntity } from '@entities/event.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FirebaseService } from 'src/services/firebase.service';
@@ -9,8 +9,8 @@ import { Like, Repository } from 'typeorm';
 @Injectable()
 export class CommonService {
   constructor(
-    @InjectRepository(Event)
-    private readonly eventRepo: Repository<Event>,
+    @InjectRepository(EventEntity)
+    private readonly eventRepo: Repository<EventEntity>,
     @InjectRepository(Artist)
     private readonly artistRepo: Repository<Artist>,
     @InjectRepository(Club)

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { ClubService } from '../club.service';
+import { toClubResponse } from 'src/common/mappers/club.mapper';
 
 @Controller('club')
 export class ClubController {
@@ -98,7 +99,7 @@ export class ClubController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     try {
       const item = await this.clubService.findOne(id);
-      return successResponse('', item);
+      return successResponse('', toClubResponse(item));
     } catch (error) {
       return errorResponse(error);
     }

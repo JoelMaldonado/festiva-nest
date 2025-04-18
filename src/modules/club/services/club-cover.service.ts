@@ -40,4 +40,17 @@ export class ClubCoverService {
     await this.repo.save(item);
     return item;
   }
+
+  async delete(id: number) {
+    const item = await this.repo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!item) {
+      throw new Error('Club cover not found');
+    }
+    await this.repo.delete(id);
+    return item;
+  }
 }

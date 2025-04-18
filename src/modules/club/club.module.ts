@@ -30,6 +30,7 @@ import { ClubSocialNetwork } from '@entities/club-social-network.entity';
       ClubSocialNetwork,
     ]),
   ],
+  exports: [ClubService],
   controllers: [
     ClubController,
     ClubContactController,

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Artist } from 'src/common/entities/artist.entity';
 import { Status } from './status.entity';
-import { Event } from './event.entity';
+import { EventEntity } from './event.entity';
 
 @Entity({ name: 'event_artist' })
 export class EventArtist {
@@ -16,7 +16,7 @@ export class EventArtist {
   id: number;
 
   @JoinColumn({ name: 'event_id' })
-  @ManyToOne(() => Event, (e) => e.eventArtists)
+  @ManyToOne(() => EventEntity, (e) => e.eventArtists)
   event: Event;
 
   @JoinColumn({ name: 'artist_id' })

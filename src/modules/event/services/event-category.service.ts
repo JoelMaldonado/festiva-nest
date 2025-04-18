@@ -16,19 +16,20 @@ export class EventCategoryService {
     if (statusId != 0) {
       qb.where('status.id = :statusId', { statusId });
     }
-    const items = await qb.getMany();
-    const mapItems = items.map((item) => {
-      return {
-        id: item.id,
-        title: item.title,
-        idStatus: item.status.id,
-      };
-    });
-    return mapItems;
+    return await qb.getMany();
   }
 
   async findOne(id: number) {
-    const item = await this.repo.findOne({ where: { id } });
+    const item = await this.repo.findOne({
+      relations: { status: true },
+      where: {
+        id,
+        status: { id: 1 },
+      },
+    });
+    if (!item) {
+      throw new NotFoundException(`Event category with ${id} not found`);
+    }
     return item;
   }
 

@@ -14,7 +14,7 @@ import { EventArtist } from './event-artist.entity';
 import { Status } from './status.entity';
 
 @Entity({ name: 'event' })
-export class Event {
+export class EventEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
