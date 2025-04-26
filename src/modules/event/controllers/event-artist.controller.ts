@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { EventArtistService } from '../services/event-artist.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 
@@ -23,6 +23,16 @@ export class EventArtistController {
   ) {
     try {
       const res = await this.service.create(idEvent, artistId);
+      return successResponse('', res);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    try {
+      const res = await this.service.delete(id);
       return successResponse('', res);
     } catch (error) {
       return errorResponse(error);

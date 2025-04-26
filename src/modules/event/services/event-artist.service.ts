@@ -63,4 +63,16 @@ export class EventArtistService {
     await this.repo.save(item);
     return item.id;
   }
+
+  async delete(id: number) {
+    const item = await this.repo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!item) {
+      throw new NotFoundException('Event artist not found');
+    }
+    await this.repo.delete(id);
+  }
 }
