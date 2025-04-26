@@ -17,7 +17,7 @@ export class EventArtist {
 
   @JoinColumn({ name: 'event_id' })
   @ManyToOne(() => EventEntity, (e) => e.eventArtists)
-  event: Event;
+  event: EventEntity;
 
   @JoinColumn({ name: 'artist_id' })
   @ManyToOne(() => Artist)

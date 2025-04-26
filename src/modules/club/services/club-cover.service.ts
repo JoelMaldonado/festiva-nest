@@ -38,7 +38,7 @@ export class ClubCoverService {
       },
     });
     await this.repo.save(item);
-    return item;
+    return item.id;
   }
 
   async delete(id: number) {
@@ -51,6 +51,5 @@ export class ClubCoverService {
       throw new Error('Club cover not found');
     }
     await this.repo.delete(id);
-    return item;
   }
 }

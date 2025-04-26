@@ -42,17 +42,7 @@ export class ArtistService {
     if (!item) {
       throw new NotFoundException('Artist not found');
     }
-    return {
-      id: item.id,
-      name: item.name,
-      artistType: 'Singer',
-      description: item.description,
-      biography: item.biography,
-      tags: 'Pop, Rock',
-      profileUrl: item.profileUrl,
-      profileCoverUrl: item.profileUrl,
-      socialNetworks: [],
-    };
+    return item;
   }
 
   async create(dto: CreateArtistDto) {

@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { CreateUserDto } from 'src/common/dto/create-user.dto';
 
-@Controller('user2')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

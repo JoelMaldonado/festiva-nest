@@ -12,6 +12,7 @@ import {
 import { ArtistService } from '../services/artist.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { CreateArtistDto } from '../../../common/dto/create-artist.dto';
+import { toArtistResponse } from 'src/common/mappers/artist.mapper';
 
 @Controller('artist')
 export class ArtistController {
@@ -31,7 +32,7 @@ export class ArtistController {
   async findOne(@Param('id') id: string) {
     try {
       const res = await this.artistService.findOne(+id);
-      return successResponse('', res);
+      return successResponse('', toArtistResponse(res));
     } catch (error) {
       return errorResponse(error);
     }

@@ -9,6 +9,7 @@ import { ArtistTypeService } from './services/artist-type.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Artist, ArtistType])],
+  exports: [ArtistService],
   controllers: [ArtistController, ArtistTypeController],
   providers: [ArtistService, ArtistTypeService],
 })

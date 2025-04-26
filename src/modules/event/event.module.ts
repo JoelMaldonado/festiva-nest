@@ -10,11 +10,13 @@ import { EventArtistController } from './controllers/event-artist.controller';
 import { EventCategoryController } from './controllers/event-category.controller';
 import { EventService } from './services/event.service';
 import { ClubModule } from '../club/club.module';
+import { ArtistModule } from '../artist/artist.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([EventArtist, EventCategory, EventEntity]),
     ClubModule,
+    ArtistModule,
   ],
   controllers: [
     EventController,
