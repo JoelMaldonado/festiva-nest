@@ -56,6 +56,37 @@ export class EventService {
     await this.repo.save(item);
   }
 
+  async update(id: number, dto: CreateEventDto) {
+    const item = await this.repo.findOne({
+      relations: ['status'],
+      where: { id, status: { id: 1 } },
+    });
+    if (!item) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const club = await this.clubService.findOne(dto.clubId);
+    const eventCategory = await this.eventCategoryService.findOne(
+      dto.eventCategoryId,
+    );
+
+    const preload = await this.repo.preload({
+      id,
+      club: club,
+      title: dto.title,
+      description: dto.description,
+      imageUrl: dto.imageUrl,
+      eventDatetime: dto.eventDatetime,
+      eventCategory: eventCategory,
+    });
+
+    if (!preload) {
+      throw new NotFoundException('Event not found');
+    }
+
+    await this.repo.save(preload);
+  }
+
   async remove(id: number) {
     const item = await this.repo.findOne({
       relations: ['status'],

@@ -7,6 +7,7 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { EventService } from '../services/event.service';
@@ -42,6 +43,17 @@ export class EventController {
   async create(@Body() dto: CreateEventDto) {
     try {
       const res = await this.service.create(dto);
+      return successResponse('OK', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() dto: CreateEventDto) {
+    try {
+      const res = await this.service.update(+id, dto);
       return successResponse('OK', res);
     } catch (err) {
       return errorResponse(err);
