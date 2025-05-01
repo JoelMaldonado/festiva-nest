@@ -6,12 +6,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { Status } from './status.entity';
 import { Club } from './club.entity';
 
-@Entity('club_contact')
-export class ClubContact {
+@Entity('club_phone')
+@Index('idx_club_phone_club_id', ['club'])
+export class ClubPhoneEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

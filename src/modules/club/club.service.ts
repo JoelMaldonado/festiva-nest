@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Club } from '../../common/entities/club.entity';
 import { Repository } from 'typeorm';
-import { ClubContact } from '../../common/entities/club-contact.entity';
 import { ClubCover } from '../../common/entities/club-cover.entity';
 import { ClubLocation } from '../../common/entities/club-location.entity';
 import { ClubSocialNetwork } from '../../common/entities/club-social-network.entity';
@@ -17,8 +16,6 @@ export class ClubService {
     private readonly clubLocationRepo: Repository<ClubLocation>,
     @InjectRepository(ClubSchedule)
     private readonly clubScheduleRepo: Repository<ClubSchedule>,
-    @InjectRepository(ClubContact)
-    private readonly clubContactRepo: Repository<ClubContact>,
     @InjectRepository(ClubCover)
     private readonly clubCoverRepo: Repository<ClubCover>,
     @InjectRepository(ClubSocialNetwork)
@@ -129,16 +126,6 @@ export class ClubService {
     });
   }
 
-  async findAllContact(idClub: number) {
-    const items = this.clubContactRepo.find({
-      where: {
-        club: { id: idClub },
-        status: { id: 1 },
-      },
-    });
-    return items;
-  }
-
   async findAllCovers(idClub: number) {
     const items = this.clubCoverRepo.find({
       where: {
@@ -166,5 +153,4 @@ export class ClubService {
       };
     });
   }
-
 }

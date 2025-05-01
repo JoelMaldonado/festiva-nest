@@ -45,16 +45,6 @@ export class ClubController {
     }
   }
 
-  @Get(':id/contact')
-  async findAllContact(@Param('id') id: string) {
-    try {
-      const items = await this.clubService.findAllContact(+id);
-      return successResponse('', items);
-    } catch (error) {
-      return errorResponse(error);
-    }
-  }
-
   @Get(':id/covers')
   async findAllCovers(@Param('id') id: string) {
     try {

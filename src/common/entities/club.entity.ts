@@ -9,10 +9,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ClubCover } from './club-cover.entity';
-import { ClubContact } from './club-contact.entity';
 import { ClubLocation } from './club-location.entity';
 import { ClubSocialNetwork } from './club-social-network.entity';
 import { Status } from './status.entity';
+import { ClubEmailEntity } from './club-email.entity';
 
 @Entity({ name: 'club' })
 export class Club {
@@ -41,8 +41,8 @@ export class Club {
   @OneToMany(() => ClubCover, (cover) => cover.club)
   covers: ClubCover[];
 
-  @OneToMany(() => ClubContact, (contact) => contact.club)
-  contacts: ClubContact[];
+  @OneToMany(() => ClubEmailEntity, (contact) => contact.club)
+  contacts: ClubEmailEntity[];
 
   @OneToMany(() => ClubLocation, (location) => location.club)
   locations: ClubLocation[];
