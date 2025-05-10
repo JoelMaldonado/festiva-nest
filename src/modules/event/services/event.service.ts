@@ -3,8 +3,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventEntity } from '@entities/event.entity';
 import { CreateEventDto } from '@dtos/create-event.dto';
-import { ClubService } from 'src/modules/club/club.service';
 import { EventCategoryService } from './event-category.service';
+import { ClubService } from 'src/modules/club/services/club.service';
 
 @Injectable()
 export class EventService {

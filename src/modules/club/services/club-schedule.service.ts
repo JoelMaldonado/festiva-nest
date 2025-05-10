@@ -2,7 +2,7 @@ import { ClubSchedule } from '@entities/club-schedule.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ClubService } from '../club.service';
+import { ClubService } from './club.service';
 
 @Injectable()
 export class ClubScheduleService {

@@ -1,9 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ClubService } from '../club.service';
 import { ClubEmailEntity } from '@entities/club-email.entity';
 import { isEmail } from 'class-validator';
+import { ClubService } from './club.service';
 
 @Injectable()
 export class ClubEmailService {

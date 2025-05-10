@@ -1,31 +1,31 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { SocialNetwork } from './social-network.entity';
-import { Club } from './club.entity';
 import { Status } from './status.entity';
+import { Artist } from './artist.entity';
 
-@Entity('club_social_network')
-export class ClubSocialNetwork {
+@Entity({ name: 'artist_social_network' })
+export class ArtistSocialNetworkEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @JoinColumn({ name: 'club_id' })
-  @ManyToOne(() => Club, (club) => club.clubSocialNetworks)
-  club: Club;
+  @JoinColumn({ name: 'artist_id' })
+  @ManyToOne(() => Artist)
+  artist: Artist;
+
+  @Column({ name: 'url', type: 'varchar', length: 255 })
+  url: string;
 
   @JoinColumn({ name: 'social_network_id' })
-  @ManyToOne(() => SocialNetwork, (sn) => sn.clubSocialNetworks)
+  @ManyToOne(() => SocialNetwork)
   socialNetwork: SocialNetwork;
-
-  @Column({ name: 'url', type: 'varchar', length: 255, nullable: true })
-  url: string;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)

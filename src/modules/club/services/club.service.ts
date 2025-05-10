@@ -1,13 +1,12 @@
+import { ClubDto } from '@dtos/club.dto';
+import { ClubCover } from '@entities/club-cover.entity';
+import { ClubLocation } from '@entities/club-location.entity';
+import { ClubSchedule } from '@entities/club-schedule.entity';
+import { ClubSocialNetwork } from '@entities/club-social-network.entity';
+import { Club } from '@entities/club.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Club } from '../../common/entities/club.entity';
 import { Repository } from 'typeorm';
-import { ClubCover } from '../../common/entities/club-cover.entity';
-import { ClubLocation } from '../../common/entities/club-location.entity';
-import { ClubSocialNetwork } from '../../common/entities/club-social-network.entity';
-import { ClubDto } from '../../common/dto/club.dto';
-import { ClubSchedule } from '../../common/entities/club-schedule.entity';
-import { find } from 'rxjs';
 
 @Injectable()
 export class ClubService {
@@ -149,7 +148,7 @@ export class ClubService {
       return {
         id: item.socialNetwork.id,
         name: item.socialNetwork.name,
-        logoUrl: item.logo_url,
+        url: item.url,
       };
     });
   }

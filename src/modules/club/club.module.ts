@@ -6,7 +6,6 @@ import { ClubController } from './controllers/club.controller';
 import { ClubCoverController } from './controllers/club-cover.controller';
 import { ClubScheduleController } from './controllers/club-schedule.controller';
 import { ClubSocialNetworkController } from './controllers/club-social-network.controller';
-import { ClubService } from './club.service';
 import { ClubSocialNetworkService } from './services/club-social-network.service';
 import { ClubScheduleService } from './services/club-schedule.service';
 import { ClubCoverService } from './services/club-cover.service';
@@ -21,6 +20,8 @@ import { ClubEmailService } from './services/club-email.service';
 import { ClubPhoneController } from './controllers/club-phone.controller';
 import { ClubPhoneService } from './services/club-phone.service';
 import { ClubPhoneEntity } from '@entities/club-phone.entity';
+import { ClubService } from './services/club.service';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ClubPhoneEntity } from '@entities/club-phone.entity';
       ClubSchedule,
       ClubSocialNetwork,
     ]),
+    CommonModule,
   ],
   exports: [ClubService],
   controllers: [

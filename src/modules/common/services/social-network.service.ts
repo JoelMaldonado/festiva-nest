@@ -17,19 +17,14 @@ export class SocialNetworkService {
       qb.where('status.id = :statusId', { statusId });
     }
     const items = await qb.getMany();
-    const mapItems = items.map((item) => {
-      return {
-        id: item.id,
-        name: item.name,
-        logoUrl: item.logoUrl,
-        idStatus: item.status.id,
-      };
-    });
-    return mapItems;
+    return items;
   }
 
   async findOne(id: number) {
     const item = await this.repo.findOne({ where: { id } });
+    if (!item) {
+      throw new NotFoundException('Social Network not found');
+    }
     return item;
   }
 

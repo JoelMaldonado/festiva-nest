@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { httpsCertificate } from './config/https-certificate';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { ValidatorPipe } from './config/validator.pipe';
 
 async function bootstrap() {
   const options = httpsCertificate();
@@ -12,7 +13,7 @@ async function bootstrap() {
   const logger = new Logger('bootstrap');
   app.enableCors();
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(ValidatorPipe);
   const port = process.env.PORT || 3000;
   await app.listen(port);
   logger.log(`Servidor corriendo en el puerto: ${port}`);

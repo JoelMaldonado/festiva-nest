@@ -2,30 +2,23 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  JoinColumn,
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
-  JoinColumn,
 } from 'typeorm';
-import { SocialNetwork } from './social-network.entity';
-import { Club } from './club.entity';
 import { Status } from './status.entity';
 
-@Entity('club_social_network')
-export class ClubSocialNetwork {
+@Entity({ name: 'artist_tag' })
+export class ArtistTagEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @JoinColumn({ name: 'club_id' })
-  @ManyToOne(() => Club, (club) => club.clubSocialNetworks)
-  club: Club;
+  @Column({ name: 'artist_id', type: 'int' })
+  artistId: number;
 
-  @JoinColumn({ name: 'social_network_id' })
-  @ManyToOne(() => SocialNetwork, (sn) => sn.clubSocialNetworks)
-  socialNetwork: SocialNetwork;
-
-  @Column({ name: 'url', type: 'varchar', length: 255, nullable: true })
-  url: string;
+  @Column({ name: 'name', type: 'varchar', length: 100 })
+  name: string;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)

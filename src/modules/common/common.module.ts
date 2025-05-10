@@ -25,6 +25,7 @@ import { FirebaseModule } from 'src/services/firebase.module';
     ]),
     FirebaseModule,
   ],
+  exports: [SocialNetworkService],
   controllers: [CommonController, SocialNetworkController, UserRoleController],
   providers: [CommonService, SocialNetworkService, UserRoleService],
 })

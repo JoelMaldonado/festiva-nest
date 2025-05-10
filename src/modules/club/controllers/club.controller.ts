@@ -8,8 +8,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
-import { ClubService } from '../club.service';
 import { toClubResponse } from 'src/common/mappers/club.mapper';
+import { ClubService } from '../services/club.service';
 
 @Controller('club')
 export class ClubController {

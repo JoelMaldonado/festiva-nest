@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { SocialNetworkService } from '../services/social-network.service';
+import { toSocialNetworkResponse } from 'src/common/mappers/common.mapper';
 
 @Controller('common/social-network')
 export class SocialNetworkController {
@@ -22,7 +23,7 @@ export class SocialNetworkController {
   async findAll(@Query('status_id') statusId: number = 1) {
     try {
       const res = await this.service.findAll(Number(statusId));
-      return successResponse('', res);
+      return successResponse('', res.map(toSocialNetworkResponse));
     } catch (err) {
       return errorResponse(err);
     }
@@ -33,7 +34,7 @@ export class SocialNetworkController {
   async findOne(@Param('id') id: string) {
     try {
       const res = await this.service.findOne(+id);
-      return successResponse('', res);
+      return successResponse('', toSocialNetworkResponse(res));
     } catch (err) {
       return errorResponse(err);
     }
