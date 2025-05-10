@@ -16,7 +16,6 @@ import { AuthGuard } from 'src/guards/auth.guard';
 export class ArtistTagController {
   constructor(private readonly service: ArtistTagService) {}
 
-  @UseGuards(AuthGuard)
   @Get()
   async findAll(@Query('idArtist') idArtist: string) {
     try {
@@ -25,11 +24,6 @@ export class ArtistTagController {
     } catch (error) {
       return errorResponse(error);
     }
-  }
-
-  @Get('nacho')
-  nacho(){
-    return 'Hola';
   }
 
   @Post()
