@@ -1,11 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ArtistTagService } from '../services/artist-tag.service';
 import { errorResponse, successResponse } from 'src/common/responses';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('artist-tag')
 export class ArtistTagController {
   constructor(private readonly service: ArtistTagService) {}
 
+  @UseGuards(AuthGuard)
   @Get()
   async findAll(@Query('idArtist') idArtist: string) {
     try {
