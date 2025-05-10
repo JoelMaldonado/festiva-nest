@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ClubScheduleService } from '../services/club-schedule.service';
 import { errorResponse, successResponse } from 'src/common/responses';
+import { mapperClubSchedule } from 'src/common/mappers/club.mapper';
 
 @Controller('club-schedule')
 export class ClubScheduleController {
@@ -10,7 +11,7 @@ export class ClubScheduleController {
   async findAll(@Param('idClub') idClub: number) {
     try {
       const res = await this.service.findAll(idClub);
-      return successResponse('', res);
+      return successResponse('', res.map(mapperClubSchedule));
     } catch (error) {
       return errorResponse(error);
     }

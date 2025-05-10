@@ -1,7 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ClubSocialNetworkService } from '../services/club-social-network.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { ClubSocialNetworkDto } from '@dtos/club.dto';
+import { mapperClubSchedule } from 'src/common/mappers/club.mapper';
 
 @Controller('club-social-network')
 export class ClubSocialNetworkController {
