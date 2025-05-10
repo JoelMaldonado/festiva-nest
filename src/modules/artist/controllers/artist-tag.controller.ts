@@ -27,6 +27,11 @@ export class ArtistTagController {
     }
   }
 
+  @Get('nacho')
+  nacho(){
+    return 'Hola';
+  }
+
   @Post()
   async create(@Body('idArtist') idArtist: number, @Body('name') name: string) {
     try {
