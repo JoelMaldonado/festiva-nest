@@ -1,3 +1,4 @@
+import { ArtistSocialNetworkEntity } from '@entities/artist-social-network.entity';
 import { Artist } from '@entities/artist.entity';
 
 export function toArtistResponse(item: Artist) {
@@ -11,5 +12,17 @@ export function toArtistResponse(item: Artist) {
     profileUrl: item.profileUrl,
     profileCoverUrl: item.profileUrl,
     socialNetworks: [],
+  };
+}
+
+export function mapperArtistSocialNetwork(item: ArtistSocialNetworkEntity) {
+  return {
+    id: item.id,
+    url: item.url,
+    socialNetwork: {
+      id: item.socialNetwork.id,
+      name: item.socialNetwork.name,
+      logoUrl: item.socialNetwork.logoUrl,
+    },
   };
 }

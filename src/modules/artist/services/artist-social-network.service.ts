@@ -14,8 +14,10 @@ export class ArtistSocialNetworkService {
     private readonly artistService: ArtistService,
     private readonly sociaNetworkService: SocialNetworkService,
   ) {}
+
   async findAll(idArtist: number) {
     const items = await this.repository.find({
+      relations: ['socialNetwork'],
       where: {
         artist: { id: idArtist },
         status: { id: 1 },

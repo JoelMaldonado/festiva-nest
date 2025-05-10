@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ArtistSocialNetworkService } from '../services/artist-social-network.service';
 import { successResponse, errorResponse } from 'src/common/responses';
+import { mapperArtistSocialNetwork } from 'src/common/mappers/artist.mapper';
 
 @Controller('artist-social-network')
 export class ArtistSocialNetworkController {
@@ -18,7 +19,7 @@ export class ArtistSocialNetworkController {
   async findAll(@Query('idArtist') idArtist: string) {
     try {
       const res = await this.service.findAll(Number(idArtist));
-      return successResponse('OK', res);
+      return successResponse('OK', res.map(mapperArtistSocialNetwork));
     } catch (error) {
       return errorResponse(error);
     }

@@ -10,7 +10,10 @@ import {
 import { ClubSocialNetworkService } from '../services/club-social-network.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { ClubSocialNetworkDto } from '@dtos/club.dto';
-import { mapperClubSchedule } from 'src/common/mappers/club.mapper';
+import {
+  mapperClubSchedule,
+  mapperClubSocialNetwork,
+} from 'src/common/mappers/club.mapper';
 
 @Controller('club-social-network')
 export class ClubSocialNetworkController {
@@ -20,7 +23,7 @@ export class ClubSocialNetworkController {
   async findAll(@Query('idClub') idClub: number) {
     try {
       const res = await this.service.findAll(idClub);
-      return successResponse('', res);
+      return successResponse('', res.map(mapperClubSocialNetwork));
     } catch (error) {
       return errorResponse(error);
     }

@@ -18,6 +18,7 @@ export class ClubSocialNetworkService {
   async findAll(idClub: number) {
     const club = await this.clubService.findOne(idClub);
     const items = await this.repo.find({
+      relations: ['socialNetwork'],
       where: {
         club: club,
         status: { id: 1 },

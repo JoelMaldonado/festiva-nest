@@ -1,4 +1,5 @@
 import { ClubSchedule } from '@entities/club-schedule.entity';
+import { ClubSocialNetwork } from '@entities/club-social-network.entity';
 import { Club } from '@entities/club.entity';
 
 export function toClubResponse(club: Club) {
@@ -30,5 +31,17 @@ export function mapperClubSchedule(item: ClubSchedule) {
     name: days.find((day) => day.id === item.dayOfWeek)?.name,
     openingTime: item.openingTime,
     closingTime: item.closingTime,
+  };
+}
+
+export function mapperClubSocialNetwork(item: ClubSocialNetwork) {
+  return {
+    id: item.id,
+    url: item.url,
+    socialNetwork: {
+      id: item.socialNetwork.id,
+      name: item.socialNetwork.name,
+      logoUrl: item.socialNetwork.logoUrl,
+    }
   };
 }
