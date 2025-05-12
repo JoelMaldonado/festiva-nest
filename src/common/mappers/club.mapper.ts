@@ -1,17 +1,28 @@
 import { ClubSchedule } from '@entities/club-schedule.entity';
 import { ClubSocialNetwork } from '@entities/club-social-network.entity';
 import { Club } from '@entities/club.entity';
+import { map } from 'rxjs';
 
-export function toClubResponse(club: Club) {
+export function mapperClub(club: Club) {
   return {
     id: club.id,
     name: club.name,
     description: club.description,
-    phone: '',
+    emails: club.emails.map((e) => e.email),
+    phones: club.phones.map((p) => p.phone),
     logoUrl: club.logoUrl,
-    coverUrl: '',
-    address: '',
-    mapsUrl: '',
+    covers: club.covers.map((c) => c.urlImage),
+    address: club.locations.map((l) => {
+      return {
+        id: l.id,
+        address: l.address,
+        mapsUrl: l.mapsUrl,
+        latitude: Number(l.latitude),
+        longitude: Number(l.longitude),
+      };
+    }),
+    schedules: club.clubSchedules.map(mapperClubSchedule),
+    socialNetworks: club.clubSocialNetworks.map(mapperClubSocialNetwork),
   };
 }
 
@@ -42,6 +53,6 @@ export function mapperClubSocialNetwork(item: ClubSocialNetwork) {
       id: item.socialNetwork.id,
       name: item.socialNetwork.name,
       logoUrl: item.socialNetwork.logoUrl,
-    }
+    },
   };
 }

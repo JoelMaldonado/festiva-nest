@@ -18,7 +18,7 @@ export class ClubEmailEntity {
   id: number;
 
   @JoinColumn({ name: 'club_id' })
-  @ManyToOne(() => Club, (club) => club.contacts)
+  @ManyToOne(() => Club, (club) => club.emails)
   club: Club;
 
   @Column({ type: 'varchar', length: 100, nullable: true })

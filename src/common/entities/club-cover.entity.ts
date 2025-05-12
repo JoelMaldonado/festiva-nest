@@ -15,8 +15,8 @@ export class ClubCover {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  url_image: string;
+  @Column({ name: 'url_image', type: 'varchar', length: 255, nullable: true })
+  urlImage: string;
 
   @JoinColumn({ name: 'club_id' })
   @ManyToOne(() => Club, (club) => club.covers)

@@ -24,7 +24,7 @@ export class ClubCoverService {
     const itemsMap = items.map((item) => {
       return {
         id: item.id,
-        imageUrl: item.url_image,
+        imageUrl: item.urlImage,
       };
     });
     return itemsMap;
@@ -32,7 +32,7 @@ export class ClubCoverService {
 
   async create(idClub: number, imageUrl: string) {
     const item = this.repo.create({
-      url_image: imageUrl,
+      urlImage: imageUrl,
       club: {
         id: idClub,
       },

@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
-import { toClubResponse } from 'src/common/mappers/club.mapper';
+import { mapperClub } from 'src/common/mappers/club.mapper';
 import { ClubService } from '../services/club.service';
 
 @Controller('club')
@@ -86,10 +86,10 @@ export class ClubController {
   }
 
   @Get('detail/:id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id') id: number) {
     try {
       const item = await this.clubService.findOne(id);
-      return successResponse('', toClubResponse(item));
+      return successResponse('', mapperClub(item));
     } catch (error) {
       return errorResponse(error);
     }

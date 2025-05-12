@@ -89,10 +89,12 @@ export class ClubService {
     const club = await this.clubRepo.findOne({
       relations: [
         'covers',
-        'contacts',
+        'emails',
+        'phones',
         'locations',
         'clubSocialNetworks',
         'clubSocialNetworks.socialNetwork',
+        'clubSchedules',
       ],
       where: {
         id,

@@ -13,6 +13,8 @@ import { ClubLocation } from './club-location.entity';
 import { ClubSocialNetwork } from './club-social-network.entity';
 import { Status } from './status.entity';
 import { ClubEmailEntity } from './club-email.entity';
+import { ClubPhoneEntity } from './club-phone.entity';
+import { ClubSchedule } from './club-schedule.entity';
 
 @Entity({ name: 'club' })
 export class Club {
@@ -42,10 +44,16 @@ export class Club {
   covers: ClubCover[];
 
   @OneToMany(() => ClubEmailEntity, (contact) => contact.club)
-  contacts: ClubEmailEntity[];
+  emails: ClubEmailEntity[];
+
+  @OneToMany(() => ClubPhoneEntity, (phone) => phone.club)
+  phones: ClubPhoneEntity[];
 
   @OneToMany(() => ClubLocation, (location) => location.club)
   locations: ClubLocation[];
+
+  @OneToMany(() => ClubSchedule, (schedule) => schedule.club)
+  clubSchedules: ClubSchedule[];
 
   @OneToMany(() => ClubSocialNetwork, (csn) => csn.club)
   clubSocialNetworks: ClubSocialNetwork[];
