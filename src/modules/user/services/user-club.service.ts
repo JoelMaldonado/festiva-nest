@@ -16,7 +16,6 @@ export class UserClubService {
   ) {}
 
   async create(userId: number, clubId: number) {
-    // Validate user and club existence
     const ifExists = await this.userAuthRepo.findOne({
       where: {
         user: { id: userId },
