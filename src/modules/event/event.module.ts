@@ -18,6 +18,7 @@ import { ArtistModule } from '../artist/artist.module';
     ClubModule,
     ArtistModule,
   ],
+  exports: [EventService],
   controllers: [
     EventController,
     EventArtistController,

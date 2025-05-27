@@ -12,6 +12,7 @@ import { UserEventService } from './services/user-event.service';
 import { UserClubEntity } from '@entities/user-club.entity';
 import { UserEventEntity } from '@entities/user-event.entity';
 import { ClubModule } from '../club/club.module';
+import { EventModule } from '../event/event.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ClubModule } from '../club/club.module';
       UserEventEntity,
     ]),
     ClubModule,
+    EventModule,
   ],
   exports: [UserService],
   controllers: [UserController, UserClubController, UserEventController],
