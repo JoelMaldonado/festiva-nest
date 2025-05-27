@@ -1,7 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
+import { UserService } from '../user/services/user.service';
+
+export interface IUserJwt {
+  id: number;
+  email: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -15,7 +20,7 @@ export class AuthService {
     if (!(await bcrypt.compare(pass, user.password))) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-    const payload = {
+    const payload: IUserJwt = {
       email: user.username,
       id: user.id,
     };

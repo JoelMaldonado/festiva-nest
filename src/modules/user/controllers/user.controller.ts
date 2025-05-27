@@ -7,23 +7,23 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { UserService } from './user.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { CreateUserDto } from 'src/common/dto/create-user.dto';
+import { UserService } from '../services/user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly service: UserService) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.service.create(createUserDto);
   }
 
   @Get()
   async findAll() {
     try {
-      const res = await this.userService.findAll();
+      const res = await this.service.findAll();
       return successResponse('', res);
     } catch (err) {
       return errorResponse(err);
@@ -32,11 +32,11 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.service.findOne(+id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.service.remove(+id);
   }
 }
