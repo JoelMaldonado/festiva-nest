@@ -2,18 +2,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const httpsCertificate = () => {
-  const isProduction = process.env.PRODUCTION === 'true';
-  if (!isProduction) {
+  const dirKey = process.env.SSL_KEY_PATH;
+  const dirCert = process.env.SSL_CERT_PATH;
+
+  if (!dirKey || !dirCert) {
     return null;
   }
 
-  const dir = 'atmosfera-soltec.com';
-
   const httpsOptions = {
-    key: fs.readFileSync(path.join(`/etc/letsencrypt/live/${dir}/privkey.pem`)),
-    cert: fs.readFileSync(
-      path.join(`/etc/letsencrypt/live/${dir}/fullchain.pem`),
-    ),
+    key: fs.readFileSync(path.join(dirKey)),
+    cert: fs.readFileSync(path.join(dirCert)),
   };
   return httpsOptions;
 };
