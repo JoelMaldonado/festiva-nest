@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { MoreThanOrEqual, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventEntity } from '@entities/event.entity';
 import { CreateEventDto } from '@dtos/create-event.dto';
@@ -19,7 +19,13 @@ export class EventService {
   async findAll() {
     const items = await this.repo.find({
       relations: ['status', 'eventCategory', 'club'],
-      where: { status: { id: 1 } },
+      where: {
+        status: { id: 1 },
+        eventDatetime: MoreThanOrEqual(new Date()),
+      },
+      order: {
+        eventDatetime: 'ASC',
+      },
     });
     return items;
   }
