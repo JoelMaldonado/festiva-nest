@@ -7,9 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "start": "PORT=8001 DB_NAME=festiva_prod pm2 start dist/main.js --name festiva-prod",
-    "start:qa": "PORT=3001 DB_NAME=festiva_qa pm2 start dist/main.js --name festiva-qa",
+    "start:prod": "PORT=8001 DB_NAME=festiva_prod pm2 start dist/main.js --name festiva-prod",
     "restart:prod": "pm2 restart festiva-prod",
+    "start:qa": "PORT=3001 DB_NAME=festiva_qa pm2 start dist/main.js --name festiva-qa",
     "restart:qa": "pm2 restart festiva-qa",
     "dev": "nest start --watch"
   },
