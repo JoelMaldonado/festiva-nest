@@ -78,11 +78,24 @@ export class ClubService {
   }
 
   async findAll() {
-    return await this.clubRepo.find({
+    const list = await this.clubRepo.find({
+      relations: ['covers'],
       where: {
         status: { id: 1 },
       },
     });
+
+    const map = list.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        logoUrl: item.logoUrl,
+        coverUrl: item.covers.length > 0 ? item.covers[0].urlImage : null,
+      };
+    });
+
+    return map;
   }
 
   async findOne(id: number) {
