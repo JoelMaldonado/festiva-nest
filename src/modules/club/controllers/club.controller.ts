@@ -85,6 +85,7 @@ export class ClubController {
     }
   }
 
+
   @Get('detail/:id')
   async findOne(@Param('id') id: number) {
     try {

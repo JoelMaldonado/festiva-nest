@@ -79,23 +79,43 @@ export class ClubService {
 
   async findAll() {
     const list = await this.clubRepo.find({
-      relations: ['covers'],
+      relations: [
+        'covers',
+        'emails',
+        'phones',
+        'locations',
+        'clubSocialNetworks',
+        'clubSocialNetworks.socialNetwork',
+        'clubSchedules',
+      ],
       where: {
         status: { id: 1 },
       },
     });
 
-    const map = list.map((item) => {
-      return {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        logoUrl: item.logoUrl,
-        coverUrl: item.covers.length > 0 ? item.covers[0].urlImage : null,
-      };
-    });
+    return list;
+  }
 
-    return map;
+  async findAllQuery(page: number, limit: number) {
+    const qb = this.clubRepo.createQueryBuilder('club');
+    qb.leftJoinAndSelect('club.covers', 'covers');
+
+    qb.skip((page - 1) * limit);
+    qb.take(limit);
+
+    const [items, total] = await qb.getManyAndCount();
+
+    return {
+      items: items,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: total > page * limit,
+        hasPreviousPage: page > 1,
+      },
+    };
   }
 
   async findOne(id: number) {

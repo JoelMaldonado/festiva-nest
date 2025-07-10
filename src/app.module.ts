@@ -9,6 +9,7 @@ import { UserModule } from './modules/user/user.module';
 import { ArtistModule } from './modules/artist/artist.module';
 import { EventModule } from './modules/event/event.module';
 import { FirebaseModule } from './services/firebase.module';
+import { UiModule } from './modules/ui/ui.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { FirebaseModule } from './services/firebase.module';
     ArtistModule,
     EventModule,
     FirebaseModule,
+    UiModule,
   ],
 })
 export class AppModule {}
