@@ -52,6 +52,7 @@ export class ArtistService {
       description: dto.description,
       biography: dto.biography,
       profileUrl: dto.profileUrl,
+      profile2Url: dto.profile2Url,
       status: { id: 1 },
     });
     await this.repo.save(artist);

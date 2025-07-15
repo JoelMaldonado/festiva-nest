@@ -31,6 +31,14 @@ export class Artist {
   @Column({ name: 'profile_url', type: 'varchar', length: 255, nullable: true })
   profileUrl: string;
 
+  @Column({
+    name: 'profile_2_url',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  profile2Url: string;
+
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)
   status: Status;

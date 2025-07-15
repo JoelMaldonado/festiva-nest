@@ -26,4 +26,8 @@ export class CreateArtistDto {
   @IsString()
   @IsOptional()
   profileUrl?: string;
+
+  @IsString()
+  @IsOptional()
+  profile2Url?: string;
 }
