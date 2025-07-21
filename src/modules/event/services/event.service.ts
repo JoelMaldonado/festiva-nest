@@ -32,15 +32,22 @@ export class EventService {
 
   async findOne(id: number) {
     const item = await this.repo.findOne({
-      relations: {
-        status: true,
-      },
+      relations: ['status', 'club', 'club.locations', 'eventCategory'],
       where: { id, status: { id: 1 } },
     });
     if (!item) {
       throw new NotFoundException('Event not found');
     }
-    return item;
+
+    return {
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      imageUrl: item.imageUrl,
+      eventDatetime: item.eventDatetime,
+      eventCategoryTitle: item.eventCategory?.title ?? null,
+      location: item.club.locations[0]?.address ?? null,
+    };
   }
 
   async create(dto: CreateEventDto) {
