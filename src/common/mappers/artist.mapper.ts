@@ -8,9 +8,9 @@ export function toArtistResponse(item: Artist) {
     artistType: 'Singer',
     description: item.description,
     biography: item.biography,
-    tags: 'Pop, Rock',
+    tags: 'Rock',
     profileUrl: item.profileUrl,
-    profileCoverUrl: item.profileUrl,
+    profileCoverUrl: item.profile2Url,
     socialNetworks: [],
   };
 }

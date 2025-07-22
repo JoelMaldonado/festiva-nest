@@ -4,7 +4,7 @@ import { EventEntity } from '@entities/event.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FirebaseService } from 'src/services/firebase.service';
-import { Like, Repository } from 'typeorm';
+import { Like, MoreThanOrEqual, Repository } from 'typeorm';
 
 @Injectable()
 export class CommonService {
@@ -23,12 +23,18 @@ export class CommonService {
     if (!query) {
       throw new BadRequestException('Debe proporcionar un término de búsqueda');
     }
+    if (!query || query.trim().length < 3) {
+      throw new BadRequestException(
+        'El término de búsqueda debe tener al menos 3 caracteres',
+      );
+    }
     const searchTerm = `%${query}%`;
     const [eventos, artistas, clubs] = await Promise.all([
       this.eventRepo.find({
         select: ['id', 'title'],
         where: {
           title: Like(searchTerm),
+          createdAt: MoreThanOrEqual(new Date()),
         },
         take: 5,
       }),

@@ -45,7 +45,7 @@ export class EventService {
       description: item.description,
       imageUrl: item.imageUrl,
       eventDatetime: item.eventDatetime,
-      eventCategoryTitle: item.eventCategory?.title ?? null,
+      nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
     };
   }

@@ -10,6 +10,7 @@ export function mapEvent(item: EventEntity) {
     idClub: item.club?.id || null,
     nameClub: item.club?.name || null,
     idEventCategory: item.eventCategory?.id || null,
+    nameEventCategory: item.eventCategory?.title || null,
     idStatus: item.status?.id || null,
   };
 }
