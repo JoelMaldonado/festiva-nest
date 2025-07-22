@@ -99,6 +99,7 @@ export class ClubService {
   async findAllQuery(page: number, limit: number) {
     const qb = this.clubRepo.createQueryBuilder('club');
     qb.leftJoinAndSelect('club.covers', 'covers');
+    qb.leftJoinAndSelect('club.locations', 'locations');
 
     qb.skip((page - 1) * limit);
     qb.take(limit);

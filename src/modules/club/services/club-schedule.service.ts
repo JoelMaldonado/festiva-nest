@@ -24,6 +24,18 @@ export class ClubScheduleService {
     return items;
   }
 
+  async findOneByDay(idClub: number, dayOfWeek: number) {
+    const club = await this.clubService.findOne(idClub);
+
+    const item = await this.repo.findOne({
+      where: {
+        club: club,
+        dayOfWeek: dayOfWeek,
+      },
+    });
+    return item;
+  }
+
   async create(
     idClub: number,
     dayOfWeek: number,

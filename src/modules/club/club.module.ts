@@ -36,7 +36,7 @@ import { CommonModule } from '../common/common.module';
     ]),
     CommonModule,
   ],
-  exports: [ClubService],
+  exports: [ClubService, ClubScheduleService],
   controllers: [
     ClubController,
     ClubEmailController,
