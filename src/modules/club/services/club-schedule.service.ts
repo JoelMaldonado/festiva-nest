@@ -15,11 +15,13 @@ export class ClubScheduleService {
 
   async findAll(idClub: number) {
     const club = await this.clubService.findOne(idClub);
-
     const items = await this.repo.find({
       where: {
         club: club,
       },
+      order: {
+        dayOfWeek: 'ASC',
+      }
     });
     return items;
   }

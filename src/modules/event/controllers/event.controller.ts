@@ -8,6 +8,8 @@ import {
   HttpCode,
   HttpStatus,
   Patch,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { EventService } from '../services/event.service';

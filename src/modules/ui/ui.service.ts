@@ -54,6 +54,7 @@ export class UiService {
       name: club.name,
       description: club.description,
       logoUrl: club.logoUrl,
+      address: club.locations.length > 0 ? club.locations[0].address : null,
       covers: club.covers.map((cover) => cover.urlImage),
       socialNetworks: club.clubSocialNetworks.map((item) => {
         return {
