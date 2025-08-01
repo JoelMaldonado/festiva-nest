@@ -17,7 +17,7 @@ export class ArtistSocialNetworkEntity {
   id: number;
 
   @JoinColumn({ name: 'artist_id' })
-  @ManyToOne(() => Artist)
+  @ManyToOne(() => Artist, (a) => a.socialNetworks)
   artist: Artist;
 
   @Column({ name: 'url', type: 'varchar', length: 255 })

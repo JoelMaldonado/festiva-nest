@@ -5,13 +5,13 @@ export function toArtistResponse(item: Artist) {
   return {
     id: item.id,
     name: item.name,
-    artistType: 'Singer',
+    artistType: item.artistType.name,
     description: item.description,
     biography: item.biography,
     tags: 'Rock',
     profileUrl: item.profileUrl,
     profileCoverUrl: item.profile2Url,
-    socialNetworks: [],
+    socialNetworks: item.socialNetworks.map(mapperArtistSocialNetwork),
   };
 }
 
@@ -19,10 +19,7 @@ export function mapperArtistSocialNetwork(item: ArtistSocialNetworkEntity) {
   return {
     id: item.id,
     url: item.url,
-    socialNetwork: {
-      id: item.socialNetwork.id,
-      name: item.socialNetwork.name,
-      logoUrl: item.socialNetwork.logoUrl,
-    },
+    code: item.socialNetwork.code,
+    name: item.socialNetwork.name,
   };
 }

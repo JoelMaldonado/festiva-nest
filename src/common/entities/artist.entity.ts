@@ -4,11 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ArtistType } from './artist-type.entity';
 import { Status } from './status.entity';
+import { ArtistSocialNetworkEntity } from './artist-social-network.entity';
 
 @Entity({ name: 'artist' })
 export class Artist {
@@ -38,6 +40,12 @@ export class Artist {
     nullable: true,
   })
   profile2Url: string;
+
+  @OneToMany(
+    () => ArtistSocialNetworkEntity,
+    (sn) => sn.artist,
+  )
+  socialNetworks: ArtistSocialNetworkEntity[];
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)

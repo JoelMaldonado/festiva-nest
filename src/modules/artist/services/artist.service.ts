@@ -37,6 +37,12 @@ export class ArtistService {
 
   async findOne(id: number) {
     const item = await this.repo.findOne({
+      relations: [
+        'status',
+        'artistType',
+        'socialNetworks',
+        'socialNetworks.socialNetwork',
+      ],
       where: { id },
     });
     if (!item) {

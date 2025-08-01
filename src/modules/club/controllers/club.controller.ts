@@ -25,16 +25,6 @@ export class ClubController {
     }
   }
 
-  @Get('address')
-  async findAllAddress() {
-    try {
-      const items = await this.clubService.findAllAddress();
-      return successResponse('', items);
-    } catch (error) {
-      return errorResponse(error);
-    }
-  }
-
   @Get('location/:id')
   async findAddress(@Param('id') id: string) {
     try {

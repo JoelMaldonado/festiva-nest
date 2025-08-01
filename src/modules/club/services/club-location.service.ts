@@ -11,6 +11,28 @@ export class ClubLocationService {
     private readonly clubLocationRepo: Repository<ClubLocation>,
   ) {}
 
+  async findAllLocations() {
+    const locations = await this.clubLocationRepo.find({
+      relations: ['club', 'club.covers'],
+      where: {
+        status: { id: 1 },
+      },
+    });
+    const locationsMap = locations.map((location) => {
+      return {
+        idClub: location.club.id,
+        club: location.club.name,
+        address: location.address,
+        latitude: location.latitude !== null ? Number(location.latitude) : null,
+        longitude:
+          location.longitude !== null ? Number(location.longitude) : null,
+        logoUrl: location.club.logoUrl,
+        coverUrl: location.club.covers[0]?.urlImage || null,
+      };
+    });
+    return locationsMap;
+  }
+
   async findLocationsById(id: number) {
     const items = await this.clubLocationRepo.find({
       where: {

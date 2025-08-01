@@ -21,8 +21,10 @@ export class UiService {
           today.getDay(),
         );
 
-        let isOpen = false;
+        let isOpen: boolean | null = null;
+        
         if (schedule) {
+          
           isOpen = estaDentroDelHorario(
             schedule.openingTime,
             schedule.closingTime,
@@ -59,8 +61,8 @@ export class UiService {
       socialNetworks: club.clubSocialNetworks.map((item) => {
         return {
           url: item.url,
+          code: item.socialNetwork.code,
           name: item.socialNetwork.name,
-          logoUrl: item.socialNetwork.logoUrl,
         };
       }),
     };

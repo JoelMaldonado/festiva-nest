@@ -16,6 +16,16 @@ import { errorResponse, successResponse } from 'src/common/responses';
 export class ClubLocationController {
   constructor(private readonly service: ClubLocationService) {}
 
+  @Get('/locations')
+  async findAllLocations() {
+    try {
+      const items = await this.service.findAllLocations();
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
   @Get(':id/locations')
   async findLocationsById(@Param('id', ParseIntPipe) id: number) {
     try {

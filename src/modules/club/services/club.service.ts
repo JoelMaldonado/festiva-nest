@@ -29,29 +29,6 @@ export class ClubService {
     return itemCreate;
   }
 
-  async findAllAddress() {
-    const locations = await this.clubLocationRepo.find({
-      relations: ['club'],
-      where: {
-        status: { id: 1 },
-      },
-    });
-
-    const locationsMap = locations.map((location) => {
-      return {
-        idClub: location.club.id,
-        club: location.club.name,
-        logoUrl: location.club.logoUrl,
-        address: location.address,
-        latitude: location.latitude !== null ? Number(location.latitude) : null,
-        longitude:
-          location.longitude !== null ? Number(location.longitude) : null,
-        mapsUrl: location.mapsUrl,
-      };
-    });
-    return locationsMap;
-  }
-
   async findOneLocation(id: number) {
     const location = await this.clubLocationRepo.findOne({
       relations: ['club'],

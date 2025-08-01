@@ -28,13 +28,13 @@ export function mapperClub(club: Club) {
 
 export function mapperClubSchedule(item: ClubSchedule) {
   const days = [
-    { id: 1, name: 'Lunes' },
-    { id: 2, name: 'Martes' },
-    { id: 3, name: 'Miércoles' },
-    { id: 4, name: 'Jueves' },
-    { id: 5, name: 'Viernes' },
-    { id: 6, name: 'Sábado' },
-    { id: 7, name: 'Domingo' },
+    { id: 1, name: 'Monday' },
+    { id: 2, name: 'Tuesday' },
+    { id: 3, name: 'Wednesday' },
+    { id: 4, name: 'Thursday' },
+    { id: 5, name: 'Friday' },
+    { id: 6, name: 'Saturday' },
+    { id: 7, name: 'Sunday' },
   ];
   return {
     id: item.id,
@@ -51,8 +51,8 @@ export function mapperClubSocialNetwork(item: ClubSocialNetwork) {
     url: item.url,
     socialNetwork: {
       id: item.socialNetwork.id,
+      code: item.socialNetwork.code,
       name: item.socialNetwork.name,
-      logoUrl: item.socialNetwork.logoUrl,
     },
   };
 }
