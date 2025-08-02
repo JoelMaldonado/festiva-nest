@@ -17,11 +17,13 @@ export class EventService {
   ) {}
 
   async findAll() {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
     const items = await this.repo.find({
       relations: ['status', 'eventCategory', 'club'],
       where: {
         status: { id: 1 },
-        eventDatetime: MoreThanOrEqual(new Date()),
+        eventDatetime: MoreThanOrEqual(yesterday),
       },
       order: {
         eventDatetime: 'ASC',
