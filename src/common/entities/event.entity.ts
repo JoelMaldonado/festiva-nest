@@ -6,12 +6,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { EventCategory } from './event-category.entity';
 import { EventArtist } from './event-artist.entity';
 import { Status } from './status.entity';
+import { EventScheduleEntity } from './event-schedule.entity';
 
 @Entity({ name: 'event' })
 export class EventEntity {
@@ -31,9 +33,6 @@ export class EventEntity {
   @Column({ name: 'image_url', type: 'varchar', length: 255 })
   imageUrl: string;
 
-  @Column({ name: 'event_datetime', type: 'timestamp' })
-  eventDatetime: Date;
-
   @JoinColumn({ name: 'event_category_id' })
   @ManyToOne(() => EventCategory)
   eventCategory: EventCategory;
@@ -41,6 +40,9 @@ export class EventEntity {
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)
   status: Status;
+
+  @OneToOne(() => EventScheduleEntity, (s) => s.event, { cascade: true })
+  schedule: EventScheduleEntity;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

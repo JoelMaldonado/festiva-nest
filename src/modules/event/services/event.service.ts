@@ -5,12 +5,16 @@ import { EventEntity } from '@entities/event.entity';
 import { CreateEventDto } from '@dtos/create-event.dto';
 import { EventCategoryService } from './event-category.service';
 import { ClubService } from 'src/modules/club/services/club.service';
+import { EventScheduleEntity } from '@entities/event-schedule.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(EventEntity)
     private readonly repo: Repository<EventEntity>,
+
+    @InjectRepository(EventScheduleEntity)
+    private readonly repositoryEventSchedule: Repository<EventScheduleEntity>,
 
     private readonly eventCategoryService: EventCategoryService,
     private readonly clubService: ClubService,
@@ -20,13 +24,17 @@ export class EventService {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const items = await this.repo.find({
-      relations: ['status', 'eventCategory', 'club'],
+      relations: ['status', 'eventCategory', 'club', 'schedule'],
       where: {
         status: { id: 1 },
-        eventDatetime: MoreThanOrEqual(yesterday),
+        schedule: {
+          event_date: MoreThanOrEqual(yesterday),
+        },
       },
       order: {
-        eventDatetime: 'ASC',
+        schedule: {
+          event_date: 'ASC',
+        },
       },
     });
     return items;
@@ -34,7 +42,13 @@ export class EventService {
 
   async findOne(id: number) {
     const item = await this.repo.findOne({
-      relations: ['status', 'club', 'club.locations', 'eventCategory'],
+      relations: [
+        'status',
+        'club',
+        'club.locations',
+        'eventCategory',
+        'schedule',
+      ],
       where: { id, status: { id: 1 } },
     });
     if (!item) {
@@ -46,7 +60,7 @@ export class EventService {
       title: item.title,
       description: item.description,
       imageUrl: item.imageUrl,
-      eventDatetime: item.eventDatetime,
+      eventDatetime: item.schedule.event_date,
       nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
@@ -66,11 +80,21 @@ export class EventService {
       title: dto.title,
       description: dto.description,
       imageUrl: dto.imageUrl,
-      eventDatetime: dto.eventDatetime,
       eventCategory: eventCategory,
       status: { id: 1 },
     });
     await this.repo.save(item);
+
+    const itemSchedule = this.repositoryEventSchedule.create({
+      event_id: item.id,
+      event_date: dto.eventDate,
+      start_time: dto.startTime,
+      end_time: dto.endTime,
+    });
+
+    await this.repositoryEventSchedule.save(itemSchedule);
+
+    return item.id;
   }
 
   async update(id: number, dto: CreateEventDto) {
@@ -93,7 +117,6 @@ export class EventService {
       title: dto.title,
       description: dto.description,
       imageUrl: dto.imageUrl,
-      eventDatetime: dto.eventDatetime,
       eventCategory: eventCategory,
     });
 
