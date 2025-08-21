@@ -20,7 +20,7 @@ export class EventService {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const items = await this.repo.find({
-      relations: ['status', 'eventCategory', 'club', 'schedule'],
+      relations: ['status', 'eventCategory', 'club'],
       where: {
         status: { id: 1 },
         event_date: MoreThanOrEqual(yesterday),
@@ -34,13 +34,7 @@ export class EventService {
 
   async findOne(id: number) {
     const item = await this.repo.findOne({
-      relations: [
-        'status',
-        'club',
-        'club.locations',
-        'eventCategory',
-        'schedule',
-      ],
+      relations: ['status', 'club', 'club.locations', 'eventCategory'],
       where: { id, status: { id: 1 } },
     });
     if (!item) {
