@@ -5,16 +5,12 @@ import { EventEntity } from '@entities/event.entity';
 import { CreateEventDto } from '@dtos/create-event.dto';
 import { EventCategoryService } from './event-category.service';
 import { ClubService } from 'src/modules/club/services/club.service';
-import { EventScheduleEntity } from '@entities/event-schedule.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(EventEntity)
     private readonly repo: Repository<EventEntity>,
-
-    @InjectRepository(EventScheduleEntity)
-    private readonly repositoryEventSchedule: Repository<EventScheduleEntity>,
 
     private readonly eventCategoryService: EventCategoryService,
     private readonly clubService: ClubService,
@@ -27,14 +23,10 @@ export class EventService {
       relations: ['status', 'eventCategory', 'club', 'schedule'],
       where: {
         status: { id: 1 },
-        schedule: {
-          event_date: MoreThanOrEqual(yesterday),
-        },
+        event_date: MoreThanOrEqual(yesterday),
       },
       order: {
-        schedule: {
-          event_date: 'ASC',
-        },
+        event_date: 'ASC',
       },
     });
     return items;
@@ -60,9 +52,9 @@ export class EventService {
       title: item.title,
       description: item.description,
       imageUrl: item.imageUrl,
-      eventDatetime: item.schedule.event_date, // TODO Eliminar
-      eventDate: item.schedule.event_date,
-      startTime: item.schedule.start_time,
+      eventDatetime: item.event_date, // TODO Eliminar
+      eventDate: item.event_date,
+      startTime: item.start_time,
       nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
@@ -84,16 +76,10 @@ export class EventService {
       imageUrl: dto.imageUrl,
       eventCategory: eventCategory,
       status: { id: 1 },
-    });
-    await this.repo.save(item);
-
-    const itemSchedule = this.repositoryEventSchedule.create({
-      event_id: item.id,
       event_date: dto.eventDate,
       start_time: dto.startTime,
     });
-
-    await this.repositoryEventSchedule.save(itemSchedule);
+    await this.repo.save(item);
 
     return item.id;
   }

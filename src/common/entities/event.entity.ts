@@ -13,7 +13,6 @@ import {
 import { EventCategory } from './event-category.entity';
 import { EventArtist } from './event-artist.entity';
 import { Status } from './status.entity';
-import { EventScheduleEntity } from './event-schedule.entity';
 
 @Entity({ name: 'event' })
 export class EventEntity {
@@ -41,8 +40,11 @@ export class EventEntity {
   @ManyToOne(() => Status)
   status: Status;
 
-  @OneToOne(() => EventScheduleEntity, (s) => s.event, { cascade: true })
-  schedule: EventScheduleEntity;
+  @Column({ type: 'date' })
+  event_date: Date; // YYYY-MM-DD
+
+  @Column({ type: 'time' })
+  start_time: string; // HH:mm:ss
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
