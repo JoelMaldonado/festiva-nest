@@ -1,6 +1,8 @@
 import { EventEntity } from '@entities/event.entity';
+import { format } from 'date-fns';
 
 export function mapEvent(item: EventEntity) {
+  const now = new Date();
   return {
     id: item.id,
     title: item.title,
@@ -11,7 +13,7 @@ export function mapEvent(item: EventEntity) {
     idEventCategory: item.eventCategory?.id || null,
     nameEventCategory: item.eventCategory?.title || null,
     idStatus: item.status?.id || null,
-    eventDatetime: Date(), // TODO Borrar
+    eventDatetime: format(now, 'yyyy-MM-dd'),
     eventDate: item.schedule?.event_date || null,
     startTime: item.schedule?.start_time || null,
     endTime: item.schedule?.end_time || null,
