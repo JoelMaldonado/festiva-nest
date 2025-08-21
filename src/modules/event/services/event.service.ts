@@ -60,7 +60,9 @@ export class EventService {
       title: item.title,
       description: item.description,
       imageUrl: item.imageUrl,
-      eventDatetime: item.schedule.event_date,
+      eventDatetime: item.schedule.event_date, // TODO Eliminar
+      eventDate: item.schedule.event_date,
+      startTime: item.schedule.start_time,
       nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
