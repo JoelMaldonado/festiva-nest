@@ -30,4 +30,10 @@ export class CommonController {
       return errorResponse(err);
     }
   }
+
+  @Get('hour')
+  getHour() {
+    const now = new Date();
+    return { hour: now };
+  }
 }
