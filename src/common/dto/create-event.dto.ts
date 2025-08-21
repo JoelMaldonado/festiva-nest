@@ -35,12 +35,6 @@ export class CreateEventDto {
   })
   startTime: string;
 
-  @IsOptional()
-  @Matches(/^\d{2}:\d{2}(:\d{2})?$/, {
-    message: 'endTime must be in format HH:mm or HH:mm:ss',
-  })
-  endTime?: string;
-
   @IsInt()
   eventCategoryId: number;
 }

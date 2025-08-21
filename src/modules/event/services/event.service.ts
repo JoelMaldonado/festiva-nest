@@ -91,7 +91,6 @@ export class EventService {
       event_id: item.id,
       event_date: dto.eventDate,
       start_time: dto.startTime,
-      end_time: dto.endTime,
     });
 
     await this.repositoryEventSchedule.save(itemSchedule);

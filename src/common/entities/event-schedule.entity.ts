@@ -12,9 +12,6 @@ export class EventScheduleEntity {
   @Column({ type: 'time' })
   start_time: string; // HH:mm:ss
 
-  @Column({ type: 'time', nullable: true })
-  end_time?: string;
-
   @OneToOne(() => EventEntity, (event) => event.schedule, {
     onDelete: 'CASCADE',
   })
