@@ -40,11 +40,11 @@ export class EventEntity {
   @ManyToOne(() => Status)
   status: Status;
 
-  @Column({ type: 'date' })
-  event_date: Date; // YYYY-MM-DD
+  @Column({ name: 'event_date', type: 'date' })
+  eventDate: Date; // YYYY-MM-DD
 
-  @Column({ type: 'time' })
-  start_time: string; // HH:mm:ss
+  @Column({ name: 'start_time', type: 'time' })
+  startTime: string; // HH:mm:ss
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

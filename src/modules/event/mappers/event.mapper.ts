@@ -13,8 +13,8 @@ export function mapEvent(item: EventEntity) {
     idEventCategory: item.eventCategory?.id || null,
     nameEventCategory: item.eventCategory?.title || null,
     idStatus: item.status?.id || null,
-    eventDatetime: item.event_date,
-    eventDate: item.event_date || null,
-    startTime: item.start_time || null,
+    eventDatetime: item.eventDate,
+    eventDate: item.eventDate || null,
+    startTime: item.startTime || null,
   };
 }

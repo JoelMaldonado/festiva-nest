@@ -23,10 +23,10 @@ export class EventService {
       relations: ['status', 'eventCategory', 'club'],
       where: {
         status: { id: 1 },
-        event_date: MoreThanOrEqual(yesterday),
+        eventDate: MoreThanOrEqual(yesterday),
       },
       order: {
-        event_date: 'ASC',
+        eventDate: 'ASC',
       },
     });
     return items;
@@ -46,9 +46,9 @@ export class EventService {
       title: item.title,
       description: item.description,
       imageUrl: item.imageUrl,
-      eventDatetime: item.event_date, // TODO Eliminar
-      eventDate: item.event_date,
-      startTime: item.start_time,
+      eventDatetime: item.eventDate, // TODO Eliminar
+      eventDate: item.eventDate,
+      startTime: item.startTime,
       nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
@@ -70,8 +70,8 @@ export class EventService {
       imageUrl: dto.imageUrl,
       eventCategory: eventCategory,
       status: { id: 1 },
-      event_date: dto.eventDate,
-      start_time: dto.startTime,
+      eventDate: dto.eventDate,
+      startTime: dto.startTime,
     });
     await this.repo.save(item);
 
