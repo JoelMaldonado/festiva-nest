@@ -106,6 +106,7 @@ export class ClubService {
         'clubSocialNetworks',
         'clubSocialNetworks.socialNetwork',
         'clubSchedules',
+        'detail'
       ],
       where: {
         id,

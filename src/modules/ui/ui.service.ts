@@ -58,6 +58,8 @@ export class UiService {
       logoUrl: club.logoUrl,
       address: club.locations.length > 0 ? club.locations[0].address : null,
       covers: club.covers.map((cover) => cover.urlImage),
+      googleRating: club.detail.googleRating,
+      googleUserRatingsTotal: club.detail.googleUserRatingsTotal,
       socialNetworks: club.clubSocialNetworks.map((item) => {
         return {
           url: item.url,
