@@ -52,8 +52,6 @@ export class UiService {
     const club = await this.clubService.findOne(id);
     const clubDetail = await this.clubService.findClubDetail(id);
 
-    return clubDetail;
-
     return {
       id: club.id,
       name: club.name,
