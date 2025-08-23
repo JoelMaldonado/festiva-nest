@@ -1,10 +1,13 @@
 import { ClubDto } from '@dtos/club.dto';
 import { ClubCover } from '@entities/club-cover.entity';
+import { ClubDetail } from '@entities/club-detail.entity';
 import { ClubLocation } from '@entities/club-location.entity';
 import { ClubSchedule } from '@entities/club-schedule.entity';
 import { ClubSocialNetwork } from '@entities/club-social-network.entity';
 import { Club } from '@entities/club.entity';
+import { HttpService } from '@nestjs/axios';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -21,6 +24,12 @@ export class ClubService {
     private readonly clubSocialNetworkRepo: Repository<ClubSocialNetwork>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
+
+    @InjectRepository(ClubDetail)
+    private readonly clubDetailRepo: Repository<ClubDetail>,
+
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(dto: ClubDto) {
@@ -106,7 +115,6 @@ export class ClubService {
         'clubSocialNetworks',
         'clubSocialNetworks.socialNetwork',
         'clubSchedules',
-        'detail'
       ],
       where: {
         id,
@@ -165,5 +173,89 @@ export class ClubService {
         url: item.url,
       };
     });
+  }
+
+  async findClubDetail(idClub: number): Promise<any> {
+    const item = await this.clubDetailRepo.findOne({
+      where: { club: { id: idClub } },
+    });
+
+    if (!item) {
+      return null;
+    }
+
+    if (item.lastFetched) {
+      const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000); // ahora - 4h
+      if (item.lastFetched > fourHoursAgo) {
+        // 👌 Aún no han pasado 4 horas → devolver lo guardado
+        return item;
+      }
+    }
+
+    try {
+      const apiKey = this.configService.get<string>('GOOGLE_API_KEY');
+      const url = `https://maps.googleapis.com/maps/api/place/details/json`;
+      const { data } = await this.httpService.axiosRef.get(url, {
+        params: {
+          place_id: item.googlePlaceId,
+          fields: 'rating,user_ratings_total',
+          key: apiKey,
+        },
+      });
+
+      if (data.result) {
+        item.googleRating = data.result.rating ?? null;
+        item.googleUserRatingsTotal = data.result.user_ratings_total ?? null;
+        item.lastFetched = new Date();
+
+        await this.clubDetailRepo.save(item);
+      }
+    } catch (error) {
+      console.error(
+        `Error obteniendo rating para clubId=${item.clubId}:`,
+        error.message,
+      );
+    }
+
+    return item;
+  }
+
+  async getClubRating() {
+    const list = await this.clubDetailRepo
+      .createQueryBuilder('club')
+      .where('club.googlePlaceId IS NOT NULL')
+      .andWhere("club.googlePlaceId <> ''")
+      .getMany();
+
+    const apiKey = this.configService.get<string>('GOOGLE_API_KEY');
+
+    for (const detail of list) {
+      try {
+        const url = `https://maps.googleapis.com/maps/api/place/details/json`;
+        const { data } = await this.httpService.axiosRef.get(url, {
+          params: {
+            place_id: detail.googlePlaceId,
+            fields: 'rating,user_ratings_total',
+            key: apiKey,
+          },
+        });
+
+        if (data.result) {
+          detail.googleRating = data.result.rating ?? null;
+          detail.googleUserRatingsTotal =
+            data.result.user_ratings_total ?? null;
+          detail.lastFetched = new Date();
+
+          await this.clubDetailRepo.save(detail);
+        }
+      } catch (error) {
+        console.error(
+          `Error obteniendo rating para clubId=${detail.clubId}:`,
+          error.message,
+        );
+      }
+    }
+
+    return { message: 'ok' };
   }
 }

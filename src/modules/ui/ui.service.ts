@@ -22,9 +22,8 @@ export class UiService {
         );
 
         let isOpen: boolean | null = null;
-        
+
         if (schedule) {
-          
           isOpen = estaDentroDelHorario(
             schedule.openingTime,
             schedule.closingTime,
@@ -51,6 +50,10 @@ export class UiService {
 
   async findOneUiDetail(id: number) {
     const club = await this.clubService.findOne(id);
+    const clubDetail = await this.clubService.findClubDetail(id);
+
+    return clubDetail;
+
     return {
       id: club.id,
       name: club.name,
@@ -58,8 +61,8 @@ export class UiService {
       logoUrl: club.logoUrl,
       address: club.locations.length > 0 ? club.locations[0].address : null,
       covers: club.covers.map((cover) => cover.urlImage),
-      googleRating: club.detail.googleRating,
-      googleUserRatingsTotal: club.detail.googleUserRatingsTotal,
+      googleRating: clubDetail?.googleRating || null,
+      googleUserRatingsTotal: clubDetail?.googleUserRatingsTotal || null,
       socialNetworks: club.clubSocialNetworks.map((item) => {
         return {
           url: item.url,

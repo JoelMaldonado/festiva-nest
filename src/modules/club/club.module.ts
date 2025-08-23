@@ -23,6 +23,8 @@ import { ClubPhoneEntity } from '@entities/club-phone.entity';
 import { ClubService } from './services/club.service';
 import { CommonModule } from '../common/common.module';
 import { ClubDetail } from '@entities/club-detail.entity';
+import { ConfigModule } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { ClubDetail } from '@entities/club-detail.entity';
       ClubDetail
     ]),
     CommonModule,
+    ConfigModule,
+    HttpModule,
   ],
   exports: [ClubService, ClubScheduleService],
   controllers: [

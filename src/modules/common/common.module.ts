@@ -24,11 +24,8 @@ import { ConfigModule } from '@nestjs/config';
       Club,
       Status,
       SocialNetwork,
-      ClubDetail, // TODO Delete after migration
     ]),
     FirebaseModule,
-    HttpModule,
-    ConfigModule,
   ],
   exports: [SocialNetworkService, CommonService],
   controllers: [CommonController, SocialNetworkController, UserRoleController],
