@@ -1,10 +1,13 @@
 import { Artist } from '@entities/artist.entity';
+import { ClubDetail } from '@entities/club-detail.entity';
 import { Club } from '@entities/club.entity';
 import { EventEntity } from '@entities/event.entity';
+import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FirebaseService } from 'src/services/firebase.service';
-import { Like, MoreThanOrEqual, Repository } from 'typeorm';
+import { IsNull, Like, MoreThanOrEqual, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class CommonService {
@@ -16,7 +19,13 @@ export class CommonService {
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
 
+    @InjectRepository(ClubDetail)
+    private readonly clubDetailRepo: Repository<ClubDetail>,
+
     private readonly firebaseService: FirebaseService,
+
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   async search(query: string) {
@@ -59,6 +68,45 @@ export class CommonService {
       ...artistas.map((a) => ({ id: a.id, detail: a.name, type: 'A' })),
       ...clubs.map((d) => ({ id: d.id, detail: d.name, type: 'C' })),
     ];
+  }
+
+  async getClubRating() {
+    const list = await this.clubDetailRepo
+      .createQueryBuilder('club')
+      .where('club.googlePlaceId IS NOT NULL')
+      .andWhere("club.googlePlaceId <> ''")
+      .getMany();
+
+    const apiKey = this.configService.get<string>('GOOGLE_API_KEY');
+
+    for (const detail of list) {
+      try {
+        const url = `https://maps.googleapis.com/maps/api/place/details/json`;
+        const { data } = await this.httpService.axiosRef.get(url, {
+          params: {
+            place_id: detail.googlePlaceId,
+            fields: 'rating,user_ratings_total',
+            key: apiKey,
+          },
+        });
+
+        if (data.result) {
+          detail.googleRating = data.result.rating ?? null;
+          detail.googleUserRatingsTotal =
+            data.result.user_ratings_total ?? null;
+          detail.lastFetched = new Date();
+
+          await this.clubDetailRepo.save(detail);
+        }
+      } catch (error) {
+        console.error(
+          `Error obteniendo rating para clubId=${detail.clubId}:`,
+          error.message,
+        );
+      }
+    }
+
+    return { message: 'ok' };
   }
 
   async test() {

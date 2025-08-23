@@ -10,6 +10,8 @@ import { ArtistModule } from './modules/artist/artist.module';
 import { EventModule } from './modules/event/event.module';
 import { FirebaseModule } from './services/firebase.module';
 import { UiModule } from './modules/ui/ui.module';
+import { CronModule } from './modules/cron/cron.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { UiModule } from './modules/ui/ui.module';
     EventModule,
     FirebaseModule,
     UiModule,
+    CronModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}

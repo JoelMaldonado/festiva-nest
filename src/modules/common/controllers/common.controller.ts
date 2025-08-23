@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Query } from '@nestjs/common';
 import { CommonService } from '../services/common.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 @Controller('common')

@@ -11,8 +11,10 @@ import { UserRoleController } from './controllers/user-role.controller';
 import { UserRoleService } from './services/user-role.service';
 import { CommonController } from './controllers/common.controller';
 import { CommonService } from './services/common.service';
-import { FirebaseService } from 'src/services/firebase.service';
 import { FirebaseModule } from 'src/services/firebase.module';
+import { ClubDetail } from '@entities/club-detail.entity';
+import { HttpModule } from '@nestjs/axios';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -22,10 +24,13 @@ import { FirebaseModule } from 'src/services/firebase.module';
       Club,
       Status,
       SocialNetwork,
+      ClubDetail, // TODO Delete after migration
     ]),
     FirebaseModule,
+    HttpModule,
+    ConfigModule,
   ],
-  exports: [SocialNetworkService],
+  exports: [SocialNetworkService, CommonService],
   controllers: [CommonController, SocialNetworkController, UserRoleController],
   providers: [CommonService, SocialNetworkService, UserRoleService],
 })

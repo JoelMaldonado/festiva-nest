@@ -22,6 +22,7 @@ import { ClubPhoneService } from './services/club-phone.service';
 import { ClubPhoneEntity } from '@entities/club-phone.entity';
 import { ClubService } from './services/club.service';
 import { CommonModule } from '../common/common.module';
+import { ClubDetail } from '@entities/club-detail.entity';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { CommonModule } from '../common/common.module';
       ClubLocation,
       ClubSchedule,
       ClubSocialNetwork,
+      ClubDetail
     ]),
     CommonModule,
   ],
