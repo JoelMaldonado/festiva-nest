@@ -59,8 +59,9 @@ export class UiService {
       logoUrl: club.logoUrl,
       address: club.locations.length > 0 ? club.locations[0].address : null,
       covers: club.covers.map((cover) => cover.urlImage),
-      googleRating: clubDetail?.googleRating || null,
-      googleUserRatingsTotal: clubDetail?.googleUserRatingsTotal || null,
+      googleRating: Number(clubDetail?.googleRating) || null,
+      googleUserRatingsTotal:
+        Number(clubDetail?.googleUserRatingsTotal) || null,
       socialNetworks: club.clubSocialNetworks.map((item) => {
         return {
           url: item.url,
