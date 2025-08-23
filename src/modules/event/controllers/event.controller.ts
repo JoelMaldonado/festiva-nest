@@ -10,6 +10,7 @@ import {
   Patch,
   Query,
   ParseIntPipe,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { EventService } from '../services/event.service';
@@ -21,9 +22,9 @@ export class EventController {
   constructor(private readonly service: EventService) {}
 
   @Get()
-  async findAll() {
+  async findAll(@Query('clubId') clubId?: string) {
     try {
-      const res = await this.service.findAll();
+      const res = await this.service.findAll(clubId);
       return successResponse('', res.map(mapEvent));
     } catch (err) {
       return errorResponse(err);

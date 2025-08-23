@@ -16,20 +16,26 @@ export class EventService {
     private readonly clubService: ClubService,
   ) {}
 
-  async findAll() {
+  async findAll(clubId?: string) {
+
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const items = await this.repo.find({
-      relations: ['status', 'eventCategory', 'club'],
-      where: {
-        status: { id: 1 },
-        eventDate: MoreThanOrEqual(yesterday),
-      },
-      order: {
-        eventDate: 'ASC',
-      },
-    });
-    return items;
+
+    const qb = this.repo
+      .createQueryBuilder('event')
+      .leftJoinAndSelect('event.status', 'status')
+      .leftJoinAndSelect('event.eventCategory', 'eventCategory')
+      .leftJoinAndSelect('event.club', 'club')
+      .where('status.id = :statusId', { statusId: 1 })
+      .andWhere('event.eventDate >= :yesterday', { yesterday });
+
+    if (clubId) {
+      qb.andWhere('club.id = :clubId', { clubId });
+    }
+
+    qb.orderBy('event.eventDate', 'ASC');
+
+    return qb.getMany();
   }
 
   async findOne(id: number) {
