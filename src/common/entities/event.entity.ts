@@ -40,12 +40,6 @@ export class EventEntity {
   @ManyToOne(() => Status)
   status: Status;
 
-  @Column({ name: 'event_date', type: 'date' })
-  eventDate: Date; // YYYY-MM-DD
-
-  @Column({ name: 'start_time', type: 'time' })
-  startTime: string; // HH:mm:ss
-
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
@@ -54,4 +48,38 @@ export class EventEntity {
 
   @OneToMany(() => EventArtist, (ea) => ea.event)
   eventArtists: EventArtist[];
+
+  @OneToMany(() => EventScheduleEntity, (es) => es.event)
+  schedule: EventScheduleEntity[];
+}
+
+@Entity({ name: 'event_schedule' })
+export class EventScheduleEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => EventEntity, (event) => event.schedule, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'event_id' })
+  event: EventEntity;
+
+  @Column({ name: 'event_date', type: 'date' })
+  eventDate: Date; // YYYY-MM-DD
+
+  @Column({ name: 'start_time', type: 'time' })
+  startTime: string; // HH:mm:ss
+
+  @Column({ name: 'status_id', default: 1 })
+  statusId: number;
+
+  @ManyToOne(() => Status)
+  @JoinColumn({ name: 'status_id' })
+  status: Status;
+
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  updatedAt: Date;
 }

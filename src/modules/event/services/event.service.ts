@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MoreThanOrEqual, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EventEntity } from '@entities/event.entity';
+import { EventEntity, EventScheduleEntity } from '@entities/event.entity';
 import { CreateEventDto } from '@dtos/create-event.dto';
 import { EventCategoryService } from './event-category.service';
 import { ClubService } from 'src/modules/club/services/club.service';
@@ -12,35 +12,60 @@ export class EventService {
     @InjectRepository(EventEntity)
     private readonly repo: Repository<EventEntity>,
 
+    @InjectRepository(EventScheduleEntity)
+    private readonly eventScheduleRepo: Repository<EventScheduleEntity>,
+
     private readonly eventCategoryService: EventCategoryService,
     private readonly clubService: ClubService,
   ) {}
 
   async findAll(clubId?: string) {
-
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // para comparar solo fecha
 
     const qb = this.repo
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.status', 'status')
       .leftJoinAndSelect('event.eventCategory', 'eventCategory')
       .leftJoinAndSelect('event.club', 'club')
+      .leftJoinAndSelect('event.schedule', 'eventSchedule')
       .where('status.id = :statusId', { statusId: 1 })
-      .andWhere('event.eventDate >= :yesterday', { yesterday });
+      .andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('1')
+          .from('event_schedule', 'es')
+          .where('es.event_id = event.id')
+          .andWhere('es.event_date >= :today')
+          .getQuery();
+        return `EXISTS ${subQuery}`;
+      })
+      .setParameter('today', today);
 
     if (clubId) {
       qb.andWhere('club.id = :clubId', { clubId });
     }
 
-    qb.orderBy('event.eventDate', 'ASC');
+    qb.orderBy(
+      `(SELECT MIN(es2.event_date) 
+      FROM event_schedule es2 
+      WHERE es2.event_id = event.id 
+        AND es2.event_date >= :today)`,
+      'ASC',
+    );
 
     return qb.getMany();
   }
 
   async findOne(id: number) {
     const item = await this.repo.findOne({
-      relations: ['status', 'club', 'club.locations', 'eventCategory'],
+      relations: [
+        'status',
+        'club',
+        'club.locations',
+        'eventCategory',
+        'schedule',
+      ],
       where: { id, status: { id: 1 } },
     });
     if (!item) {
@@ -52,9 +77,8 @@ export class EventService {
       title: item.title,
       description: item.description,
       imageUrl: item.imageUrl,
-      eventDatetime: item.eventDate, // TODO Eliminar
-      eventDate: item.eventDate,
-      startTime: item.startTime,
+      eventDate: item.schedule[0]?.eventDate ?? null,
+      startTime: item.schedule[0]?.startTime ?? null,
       nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
@@ -76,10 +100,15 @@ export class EventService {
       imageUrl: dto.imageUrl,
       eventCategory: eventCategory,
       status: { id: 1 },
+    });
+    await this.repo.save(item);
+
+    const schedule = this.eventScheduleRepo.create({
+      event: item,
       eventDate: dto.eventDate,
       startTime: dto.startTime,
     });
-    await this.repo.save(item);
+    await this.eventScheduleRepo.save(schedule);
 
     return item.id;
   }
