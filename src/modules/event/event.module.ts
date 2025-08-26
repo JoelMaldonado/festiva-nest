@@ -14,6 +14,8 @@ import { EventCategoryController } from './controllers/event-category.controller
 import { EventService } from './services/event.service';
 import { ClubModule } from '../club/club.module';
 import { ArtistModule } from '../artist/artist.module';
+import { EventScheduleController } from './controllers/event-schedule.controller';
+import { EventScheduleService } from './services/event-schedule.service';
 
 @Module({
   imports: [
@@ -31,7 +33,13 @@ import { ArtistModule } from '../artist/artist.module';
     EventController,
     EventArtistController,
     EventCategoryController,
+    EventScheduleController,
   ],
-  providers: [EventService, EventCategoryService, EventArtistService],
+  providers: [
+    EventService,
+    EventCategoryService,
+    EventArtistService,
+    EventScheduleService,
+  ],
 })
 export class EventModule {}

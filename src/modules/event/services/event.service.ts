@@ -57,6 +57,20 @@ export class EventService {
     return qb.getMany();
   }
 
+  async findOneById(id: number) {
+    const item = await this.repo.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!item) {
+      throw new NotFoundException('Event not found');
+    }
+
+    return item;
+  }
+
   async findOne(id: number) {
     const item = await this.repo.findOne({
       relations: [
