@@ -34,7 +34,7 @@ export class EventService {
     });
     const listMap = list.map((item) => {
       return {
-        id: item.id,
+        id: item.event?.id,
         title: item.event?.title,
         description: item.event?.description,
         imageUrl: item.event?.imageUrl,
