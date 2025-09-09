@@ -30,6 +30,7 @@ export class EventService {
         statusId: 1,
         event: clubId ? { club: { id: +clubId } } : undefined,
       },
+      order: { eventDate: 'ASC', startTime: 'ASC' },
     });
     const listMap = list.map((item) => {
       return {
