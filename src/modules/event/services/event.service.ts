@@ -28,6 +28,7 @@ export class EventService {
       where: {
         eventDate: MoreThanOrEqual(yesterday),
         statusId: 1,
+        event: clubId ? { club: { id: +clubId } } : undefined,
       },
     });
     const listMap = list.map((item) => {
