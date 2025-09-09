@@ -20,10 +20,12 @@ export class EventService {
   ) {}
 
   async findAll(clubId?: string) {
+    const yesterday = new Date();
+    yesterday.setHours(0, 0, 0, 0);
     const list = await this.eventScheduleRepo.find({
       relations: ['event', 'event.club', 'event.eventCategory'],
       where: {
-        eventDate: MoreThanOrEqual(new Date()),
+        eventDate: MoreThanOrEqual(yesterday),
         statusId: 1,
         event: clubId ? { club: { id: +clubId } } : undefined,
       },
