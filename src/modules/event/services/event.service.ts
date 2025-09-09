@@ -20,41 +20,32 @@ export class EventService {
   ) {}
 
   async findAll(clubId?: string) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // para comparar solo fecha
-
-    const qb = this.repo
-      .createQueryBuilder('event')
-      .leftJoinAndSelect('event.status', 'status')
-      .leftJoinAndSelect('event.eventCategory', 'eventCategory')
-      .leftJoinAndSelect('event.club', 'club')
-      .leftJoinAndSelect('event.schedule', 'eventSchedule')
-      .where('status.id = :statusId', { statusId: 1 })
-      .andWhere((qb) => {
-        const subQuery = qb
-          .subQuery()
-          .select('1')
-          .from('event_schedule', 'es')
-          .where('es.event_id = event.id')
-          .andWhere('es.event_date >= :today')
-          .getQuery();
-        return `EXISTS ${subQuery}`;
-      })
-      .setParameter('today', today);
-
-    if (clubId) {
-      qb.andWhere('club.id = :clubId', { clubId });
-    }
-
-    qb.orderBy(
-      `(SELECT MIN(es2.event_date) 
-      FROM event_schedule es2 
-      WHERE es2.event_id = event.id 
-        AND es2.event_date >= :today)`,
-      'ASC',
-    );
-
-    return qb.getMany();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+    const list = await this.eventScheduleRepo.find({
+      relations: ['event', 'event.club', 'event.eventCategory'],
+      where: {
+        eventDate: MoreThanOrEqual(yesterday),
+        statusId: 1,
+      },
+    });
+    const listMap = list.map((item) => {
+      return {
+        id: item.id,
+        title: item.event?.title,
+        description: item.event?.description,
+        imageUrl: item.event?.imageUrl,
+        idClub: item.event?.club?.id || null,
+        nameClub: item.event?.club?.name || null,
+        idEventCategory: item.event?.eventCategory?.id || null,
+        nameEventCategory: item.event?.eventCategory?.title || null,
+        idStatus: item.statusId || null,
+        eventDate: item?.eventDate || null,
+        startTime: item?.startTime || null,
+      };
+    });
+    return listMap;
   }
 
   async findOneById(id: number) {

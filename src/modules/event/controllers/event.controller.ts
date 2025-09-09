@@ -9,13 +9,10 @@ import {
   HttpStatus,
   Patch,
   Query,
-  ParseIntPipe,
-  DefaultValuePipe,
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { EventService } from '../services/event.service';
 import { CreateEventDto } from '@dtos/create-event.dto';
-import { mapEvent } from '../mappers/event.mapper';
 
 @Controller('event')
 export class EventController {
@@ -25,7 +22,7 @@ export class EventController {
   async findAll(@Query('clubId') clubId?: string) {
     try {
       const res = await this.service.findAll(clubId);
-      return successResponse('', res.map(mapEvent));
+      return successResponse('', res);
     } catch (err) {
       return errorResponse(err);
     }
