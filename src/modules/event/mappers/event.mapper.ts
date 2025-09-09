@@ -2,7 +2,6 @@ import { EventEntity } from '@entities/event.entity';
 import { format } from 'date-fns';
 
 export function mapEvent(item: EventEntity) {
-  const now = new Date();
   return {
     id: item.id,
     title: item.title,

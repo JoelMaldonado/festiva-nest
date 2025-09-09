@@ -13,6 +13,16 @@ import { errorResponse, successResponse } from 'src/common/responses';
 export class EventScheduleController {
   constructor(private readonly service: EventScheduleService) {}
 
+  @Get()
+  async findAll() {
+    try {
+      const res = await this.service.findAll();
+      return successResponse('OK', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
   @Get(':eventId')
   async findAllByEventId(@Param('eventId') eventId: string) {
     try {
