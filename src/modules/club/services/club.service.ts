@@ -82,7 +82,29 @@ export class ClubService {
     return list;
   }
 
-  async findAllQuery(page: number, limit: number) {
+  async findAllQuery() {
+    const qb = this.clubRepo.createQueryBuilder('club');
+    qb.leftJoinAndSelect('club.covers', 'covers');
+    qb.leftJoinAndSelect('club.locations', 'locations');
+
+    qb.orderBy('RAND()');
+
+    const [items, total] = await qb.getManyAndCount();
+
+    return {
+      items: items,
+      meta: {
+        page: 1,
+        limit: 100,
+        total,
+        totalPages: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
+  }
+
+  async findAllQuery2(page: number, limit: number) {
     const qb = this.clubRepo.createQueryBuilder('club');
     qb.leftJoinAndSelect('club.covers', 'covers');
     qb.leftJoinAndSelect('club.locations', 'locations');

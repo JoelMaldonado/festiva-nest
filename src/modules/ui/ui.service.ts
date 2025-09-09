@@ -10,8 +10,8 @@ export class UiService {
     private readonly clubScheduleService: ClubScheduleService,
   ) {}
 
-  async findAllUiClub(page: number, limit: number) {
-    const res = await this.clubService.findAllQuery(page, limit);
+  async findAllUiClub() {
+    const res = await this.clubService.findAllQuery();
     const today = new Date();
 
     const items = await Promise.all(

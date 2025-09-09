@@ -7,12 +7,9 @@ export class UiController {
   constructor(private readonly service: UiService) {}
 
   @Get('club')
-  async findAllUiClub(
-    @Query('page', new ParseIntPipe()) page: number = 1,
-    @Query('limit', new ParseIntPipe()) limit: number = 10,
-  ) {
+  async findAllUiClub() {
     try {
-      const items = await this.service.findAllUiClub(page, limit);
+      const items = await this.service.findAllUiClub();
       return successResponse('', items);
     } catch (error) {
       return errorResponse(error);
