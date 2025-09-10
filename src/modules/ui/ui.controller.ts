@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { UiService } from './ui.service';
 import { errorResponse, successResponse } from 'src/common/responses';
 
