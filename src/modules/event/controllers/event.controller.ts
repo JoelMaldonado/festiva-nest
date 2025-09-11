@@ -28,6 +28,19 @@ export class EventController {
     }
   }
 
+  @Get('paged')
+  async findAllPaged(
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+  ) {
+    try {
+      const res = await this.service.findAllPaged(+page, +limit);
+      return successResponse('', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {

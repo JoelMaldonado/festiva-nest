@@ -49,6 +49,45 @@ export class EventService {
     return listMap;
   }
 
+  async findAllPaged(page: number, limit: number) {
+    const yesterday = new Date();
+    yesterday.setHours(0, 0, 0, 0);
+
+    const [list, total] = await this.eventScheduleRepo.findAndCount({
+      relations: ['event', 'event.club', 'event.eventCategory'],
+      where: {
+        eventDate: MoreThanOrEqual(yesterday),
+        statusId: 1,
+      },
+      order: { eventDate: 'ASC', startTime: 'ASC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    const listMap = list.map((item) => {
+      return {
+        id: item.event?.id,
+        title: item.event?.title,
+        description: item.event?.description,
+        imageUrl: item.event?.imageUrl,
+        idClub: item.event?.club?.id || null,
+        nameClub: item.event?.club?.name || null,
+        idEventCategory: item.event?.eventCategory?.id || null,
+        nameEventCategory: item.event?.eventCategory?.title || null,
+        idStatus: item.statusId || null,
+        eventDate: item?.eventDate || null,
+        startTime: item?.startTime || null,
+      };
+    });
+
+    return {
+      items: listMap,
+      total,
+      page,
+      limit,
+    };
+  }
+
   async findOneById(id: number) {
     const item = await this.repo.findOne({
       where: {
