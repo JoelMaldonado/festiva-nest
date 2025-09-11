@@ -6,6 +6,16 @@ import { errorResponse, successResponse } from 'src/common/responses';
 export class UiController {
   constructor(private readonly service: UiService) {}
 
+  @Get('screens')
+  async findAllUiScreens() {
+    try {
+      const items = await this.service.findAllUiScreens();
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
   @Get('club')
   async findAllUiClub() {
     try {

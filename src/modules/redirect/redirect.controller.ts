@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, Query, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { RedirectService } from './redirect.service';
 import { PlatformType } from '@entities/qr-scans.entity';
@@ -6,6 +6,17 @@ import { PlatformType } from '@entities/qr-scans.entity';
 @Controller()
 export class RedirectController {
   constructor(private readonly qrScanService: RedirectService) {}
+
+  @Get('nacho')
+  async nacho(@Query('url') url: string, @Res() res: Response) {
+    if (!url) {
+      return res.status(400).send('Missing url');
+    }
+    const png = await this.qrScanService.makePngWithLogoBox(url, 1024, 0.22);
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    return res.send(png);
+  }
 
   @Get('r')
   async handleRedirect(@Req() req: Request, @Res() res: Response) {

@@ -2,13 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { ClubService } from '../club/services/club.service';
 import { ClubScheduleService } from '../club/services/club-schedule.service';
 import { estaDentroDelHorario } from 'src/utils/functions';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AppScreenEntity } from '@entities/app-screens.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UiService {
   constructor(
     private readonly clubService: ClubService,
     private readonly clubScheduleService: ClubScheduleService,
+    @InjectRepository(AppScreenEntity)
+    private readonly appScreenRepository: Repository<AppScreenEntity>,
   ) {}
+
+  async findAllUiScreens() {
+    return this.appScreenRepository.find();
+  }
 
   async findAllUiClub() {
     const res = await this.clubService.findAllQuery();
