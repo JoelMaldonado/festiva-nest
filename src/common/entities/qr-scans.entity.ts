@@ -9,7 +9,7 @@ export type PlatformType = 'android' | 'ios' | 'other';
 
 @Entity('qr_scans')
 export class QrScansEntity {
-    
+
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
@@ -18,9 +18,6 @@ export class QrScansEntity {
     enum: ['android', 'ios', 'other'],
   })
   platform: PlatformType;
-
-  @Column({ type: 'varchar', length: 45 })
-  ip: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

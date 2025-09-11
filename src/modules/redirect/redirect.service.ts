@@ -10,8 +10,8 @@ export class RedirectService {
     private readonly qrScansRepository: Repository<QrScansEntity>,
   ) {}
 
-  async logScan(platform: PlatformType, ip: string): Promise<QrScansEntity> {
-    const scan = this.qrScansRepository.create({ platform, ip });
+  async logScan(platform: PlatformType): Promise<QrScansEntity> {
+    const scan = this.qrScansRepository.create({ platform });
     return this.qrScansRepository.save(scan);
   }
 }

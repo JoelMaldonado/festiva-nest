@@ -10,10 +10,6 @@ export class RedirectController {
   @Get('r')
   async handleRedirect(@Req() req: Request, @Res() res: Response) {
     const ua = String(req.headers['user-agent'] || '');
-    const ip =
-      (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
-      req.socket.remoteAddress ||
-      '';
 
     const isAndroid = /Android/i.test(ua);
     const isIOS = /\b(iPhone|iPad|iPod)\b/i.test(ua);
@@ -25,7 +21,7 @@ export class RedirectController {
         : 'other';
 
     // Guarda en MySQL
-    await this.qrScanService.logScan(platform, ip);
+    await this.qrScanService.logScan(platform);
 
     // Redirige
     const play =
