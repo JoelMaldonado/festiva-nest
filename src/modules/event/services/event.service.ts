@@ -33,7 +33,7 @@ export class EventService {
     });
     const listMap = list.map((item) => {
       return {
-        id: item.event?.id,
+        id: item.id,
         title: item.event?.title,
         description: item.event?.description,
         imageUrl: item.event?.imageUrl,
@@ -100,6 +100,37 @@ export class EventService {
     }
 
     return item;
+  }
+
+  async findEventScheduleById(id: number) {
+    const item = await this.eventScheduleRepo.findOne({
+      relations: [
+        'event',
+        'event.eventCategory',
+        'event.club',
+        'event.club.locations',
+      ],
+      where: {
+        id: id,
+      },
+    });
+
+    if (!item) {
+      throw new NotFoundException('Event Schedule not found');
+    }
+
+    return {
+      id: item.id,
+      title: item.event.title,
+      description: item.event.description,
+      imageUrl: item.event.imageUrl,
+      eventDate: item.eventDate ?? null,
+      startTime: item.startTime ?? null,
+      nameEventCategory: item.event?.eventCategory?.title ?? null,
+      location: item.event.club.locations[0]?.address ?? null,
+      clubId: item.event.club.id,
+      clubName: item.event.club.name,
+    };
   }
 
   async findOne(id: number) {

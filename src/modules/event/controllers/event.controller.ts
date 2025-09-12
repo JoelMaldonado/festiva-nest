@@ -44,7 +44,7 @@ export class EventController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
-      const res = await this.service.findOne(+id);
+      const res = await this.service.findEventScheduleById(+id);
       return successResponse('', res);
     } catch (err) {
       return errorResponse(err);
