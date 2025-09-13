@@ -42,8 +42,19 @@ export class EventScheduleService {
     return listMap;
   }
 
-  async findAllByEventId(eventId: number) {
-    return this.eventScheduleRepo.find({ where: { event: { id: eventId } } });
+  async findAllByEventId(eventScheduleId: number) {
+    const eventSchedule = await this.eventScheduleRepo.findOne({
+      relations: ['event'],
+      where: { id: eventScheduleId },
+    });
+
+    if (!eventSchedule) {
+      throw new Error('El evento no existe');
+    }
+
+    return this.eventScheduleRepo.find({
+      where: { event: { id: eventSchedule.event.id } },
+    });
   }
 
   async create(eventScheduleId: number, eventDate: string, startTime: string) {
