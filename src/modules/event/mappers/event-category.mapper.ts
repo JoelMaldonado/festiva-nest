@@ -1,6 +1,6 @@
-import { EventCategory } from '@entities/event-category.entity';
+import { CategoryEntity } from '@entities/category.entity';
 
-export function mapEventCategory(item: EventCategory) {
+export function mapEventCategory(item: CategoryEntity) {
   return {
     id: item.id,
     title: item.title,

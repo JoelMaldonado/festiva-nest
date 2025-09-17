@@ -5,7 +5,7 @@ import {
   EventEntity,
   EventScheduleEntity,
 } from '../../common/entities/event.entity';
-import { EventCategory } from '../../common/entities/event-category.entity';
+import { CategoryEntity } from '../../common/entities/category.entity';
 import { EventArtist } from '../../common/entities/event-artist.entity';
 import { EventCategoryService } from './services/event-category.service';
 import { EventArtistService } from './services/event-artist.service';
@@ -21,7 +21,7 @@ import { EventScheduleService } from './services/event-schedule.service';
   imports: [
     TypeOrmModule.forFeature([
       EventArtist,
-      EventCategory,
+      CategoryEntity,
       EventEntity,
       EventScheduleEntity,
     ]),

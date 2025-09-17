@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 import { Status } from './status.entity';
 
-@Entity({ name: 'event_category' })
-export class EventCategory {
+@Entity({ name: 'category' })
+export class CategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

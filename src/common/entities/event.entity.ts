@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EventCategory } from './event-category.entity';
+import { CategoryEntity } from './category.entity';
 import { EventArtist } from './event-artist.entity';
 import { Status } from './status.entity';
 
@@ -33,8 +33,8 @@ export class EventEntity {
   imageUrl: string;
 
   @JoinColumn({ name: 'event_category_id' })
-  @ManyToOne(() => EventCategory)
-  eventCategory: EventCategory;
+  @ManyToOne(() => CategoryEntity)
+  eventCategory: CategoryEntity;
 
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)

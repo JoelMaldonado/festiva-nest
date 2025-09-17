@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EventCategory } from 'src/common/entities/event-category.entity';
+import { CategoryEntity } from '@entities/category.entity';
 import { Not, Repository } from 'typeorm';
 
 @Injectable()
 export class EventCategoryService {
   constructor(
-    @InjectRepository(EventCategory)
-    private readonly repo: Repository<EventCategory>,
+    @InjectRepository(CategoryEntity)
+    private readonly repo: Repository<CategoryEntity>,
   ) {}
 
   async findAll(statusId: number) {
