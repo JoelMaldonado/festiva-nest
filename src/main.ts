@@ -17,5 +17,6 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
   logger.log(`Servidor corriendo en el puerto: ${port}`);
+  logger.log('Versión de la aplicación: 1.0.0');
 }
 bootstrap();
