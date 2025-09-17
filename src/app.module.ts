@@ -13,6 +13,7 @@ import { UiModule } from './modules/ui/ui.module';
 import { CronModule } from './modules/cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RedirectModule } from './modules/redirect/redirect.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { RedirectModule } from './modules/redirect/redirect.module';
     CronModule,
     ScheduleModule.forRoot(),
     RedirectModule,
+    MailModule,
   ],
 })
 export class AppModule {}
