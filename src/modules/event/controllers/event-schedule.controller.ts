@@ -40,16 +40,16 @@ export class EventScheduleController {
 
   @Post()
   async create(
-    @Body('eventId') eventScheduleId: string,
+    @Body('eventId') eventId: string,
     @Body('eventDate') eventDate: string,
     @Body('startTime') startTime: string,
   ) {
     try {
-      if (isNaN(+eventScheduleId)) {
+      if (isNaN(+eventId)) {
         throw new BadRequestException('El eventId debe ser un número válido');
       }
 
-      const res = await this.service.create(+eventScheduleId, eventDate, startTime);
+      const res = await this.service.create(+eventId, eventDate, startTime);
 
       return successResponse('OK', res);
     } catch (err) {
