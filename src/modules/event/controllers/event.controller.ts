@@ -28,6 +28,26 @@ export class EventController {
     }
   }
 
+  @Get('filtered')
+  async findAllFiltered(@Query('day') day: string) {
+    try {
+      const res = await this.service.findAllFiltered(day);
+      return successResponse('', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
+  @Get('weekdays')
+  async getEventWeekdays() {
+    try {
+      const res = await this.service.getEventWeekdays();
+      return successResponse('', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
   @Get('paged')
   async findAllPaged(
     @Query('page') page: string,
@@ -41,8 +61,19 @@ export class EventController {
     }
   }
 
+
+  @Get('detail/:id')
+  async findById(@Param('id') id: string) {
+    try {
+      const res = await this.service.findOneById(+id);
+      return successResponse('', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findEventByScheduleId(@Param('id') id: string) {
     try {
       const res = await this.service.findEventScheduleById(+id);
       return successResponse('', res);

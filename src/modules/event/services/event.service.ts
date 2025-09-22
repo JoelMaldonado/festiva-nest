@@ -50,6 +50,50 @@ export class EventService {
     return listMap;
   }
 
+  async getEventWeekdays(): Promise<string[]> {
+    const rows = await this.eventScheduleRepo
+      .createQueryBuilder('event_schedule')
+      .select('DATE(event_schedule.eventDate)', 'date')
+      .where('event_schedule.statusId = :statusId', { statusId: 1 })
+      .andWhere('event_schedule.eventDate >= CURDATE()') // solo desde hoy
+      .groupBy('DATE(event_schedule.eventDate)')
+      .orderBy('DATE(event_schedule.eventDate)', 'ASC')
+      .getRawMany<{ date: string }>();
+
+    // devuelve únicamente la lista de fechas como strings
+    return rows.map((r) => r.date);
+  }
+
+  async findAllFiltered(day: string) {
+    const queryBuilder = this.eventScheduleRepo
+      .createQueryBuilder('event_schedule')
+      .leftJoinAndSelect('event_schedule.event', 'event')
+      .leftJoinAndSelect('event.club', 'club')
+      .leftJoinAndSelect('event.eventCategory', 'eventCategory')
+      .where('event_schedule.statusId = :statusId', { statusId: 1 })
+      .andWhere('event_schedule.eventDate = :eventDate', { eventDate: day });
+
+    const list = await queryBuilder.getMany();
+
+    const listMap = list.map((item) => {
+      return {
+        id: item.id,
+        eventId: item.event?.id,
+        title: item.event?.title,
+        description: item.event?.description,
+        imageUrl: item.event?.imageUrl,
+        idClub: item.event?.club?.id || null,
+        nameClub: item.event?.club?.name || null,
+        idEventCategory: item.event?.eventCategory?.id || null,
+        nameEventCategory: item.event?.eventCategory?.title || null,
+        idStatus: item.statusId || null,
+        eventDate: item?.eventDate || null,
+        startTime: item?.startTime || null,
+      };
+    });
+    return listMap;
+  }
+
   async findAllPaged(page: number, limit: number) {
     const yesterday = new Date();
     yesterday.setHours(0, 0, 0, 0);
@@ -100,7 +144,18 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
 
-    return item;
+    return {
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      imageUrl: item.imageUrl,
+      eventDate: null,
+      startTime:  null,
+      nameEventCategory: item.eventCategory?.title ?? null,
+      location: item.club.locations[0]?.address ?? null,
+      clubId: item.club.id,
+      clubName: item.club.name,
+    };
   }
 
   async findEventScheduleById(id: number) {
