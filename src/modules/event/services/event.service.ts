@@ -156,6 +156,7 @@ export class EventService {
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
       clubName: item.club.name,
+      clubLogoUrl: item.club.logoUrl,
     };
   }
 
