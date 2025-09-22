@@ -135,6 +135,7 @@ export class EventService {
 
   async findOneById(id: number) {
     const item = await this.repo.findOne({
+      relations: ['club', 'club.locations', 'eventCategory'],
       where: {
         id: id,
       },
@@ -150,7 +151,7 @@ export class EventService {
       description: item.description,
       imageUrl: item.imageUrl,
       eventDate: null,
-      startTime:  null,
+      startTime: null,
       nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
