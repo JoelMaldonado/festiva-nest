@@ -35,4 +35,14 @@ export class UiController {
       return errorResponse(error);
     }
   }
+
+  @Get('home')
+  async findAllUiHome() {
+    try {
+      const items = await this.service.findAllUiHome();
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
 }

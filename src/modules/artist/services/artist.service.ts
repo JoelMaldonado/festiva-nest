@@ -19,7 +19,7 @@ export class ArtistService {
         createdAt: 'DESC',
       },
     });
-    return list.map((item) => {
+    const listMap = list.map((item) => {
       return {
         id: item.id,
         name: item.name,
@@ -33,6 +33,7 @@ export class ArtistService {
         socialNetworks: [],
       };
     });
+    return listMap;
   }
 
   async findOne(id: number) {

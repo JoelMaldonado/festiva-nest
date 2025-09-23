@@ -19,7 +19,7 @@ export class EventService {
     private readonly clubService: ClubService,
   ) {}
 
-  async findAll(clubId?: string) {
+  async findAll(clubId?: string, limit?: number) {
     const yesterday = new Date();
     yesterday.setHours(0, 0, 0, 0);
     const list = await this.eventScheduleRepo.find({
@@ -30,6 +30,7 @@ export class EventService {
         event: clubId ? { club: { id: +clubId } } : undefined,
       },
       order: { eventDate: 'ASC', startTime: 'ASC' },
+      take: limit,
     });
     const listMap = list.map((item) => {
       return {

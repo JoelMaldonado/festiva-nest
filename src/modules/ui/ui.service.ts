@@ -5,12 +5,17 @@ import { estaDentroDelHorario } from 'src/utils/functions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppScreenEntity } from '@entities/app-screens.entity';
 import { Repository } from 'typeorm';
+import { mapperClub } from 'src/common/mappers/club.mapper';
+import { EventService } from '../event/services/event.service';
+import { ArtistService } from '../artist/services/artist.service';
 
 @Injectable()
 export class UiService {
   constructor(
     private readonly clubService: ClubService,
     private readonly clubScheduleService: ClubScheduleService,
+    private readonly eventService: EventService,
+    private readonly artistService: ArtistService,
     @InjectRepository(AppScreenEntity)
     private readonly appScreenRepository: Repository<AppScreenEntity>,
   ) {}
@@ -19,8 +24,8 @@ export class UiService {
     return this.appScreenRepository.find();
   }
 
-  async findAllUiClub() {
-    const res = await this.clubService.findAllQuery();
+  async findAllUiClub(limit?: number) {
+    const res = await this.clubService.findAllQuery(limit);
     const today = new Date();
 
     const items = await Promise.all(
@@ -78,6 +83,17 @@ export class UiService {
           name: item.socialNetwork.name,
         };
       }),
+    };
+  }
+
+  async findAllUiHome() {
+    const clubs = await this.findAllUiClub(10);
+    const events = await this.eventService.findAll(undefined, 10);
+    const artists = await this.artistService.findAll();
+    return {
+      clubs: clubs.items,
+      events: events,
+      artists: artists,
     };
   }
 }

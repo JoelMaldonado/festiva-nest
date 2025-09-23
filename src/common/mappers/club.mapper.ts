@@ -1,7 +1,6 @@
 import { ClubSchedule } from '@entities/club-schedule.entity';
 import { ClubSocialNetwork } from '@entities/club-social-network.entity';
 import { Club } from '@entities/club.entity';
-import { map } from 'rxjs';
 
 export function mapperClub(club: Club) {
   return {

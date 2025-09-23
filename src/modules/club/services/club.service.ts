@@ -82,11 +82,14 @@ export class ClubService {
     return list;
   }
 
-  async findAllQuery() {
+  async findAllQuery(limit?: number) {
     const qb = this.clubRepo.createQueryBuilder('club');
     qb.leftJoinAndSelect('club.covers', 'covers');
     qb.leftJoinAndSelect('club.locations', 'locations');
 
+    if (limit) {
+      qb.take(limit);
+    }
     qb.orderBy('RAND()');
 
     const [items, total] = await qb.getManyAndCount();
@@ -95,7 +98,7 @@ export class ClubService {
       items: items,
       meta: {
         page: 1,
-        limit: 100,
+        limit: limit || 1000,
         total,
         totalPages: 1,
         hasNextPage: false,
@@ -279,5 +282,23 @@ export class ClubService {
     }
 
     return { message: 'ok' };
+  }
+
+  async findAllHome(limit: number) {
+    const qb = this.clubRepo
+      .createQueryBuilder('club')
+      .leftJoinAndSelect('club.status', 'status')
+      .leftJoinAndSelect('club.covers', 'covers')
+      .leftJoinAndSelect('club.emails', 'emails')
+      .leftJoinAndSelect('club.phones', 'phones')
+      .leftJoinAndSelect('club.locations', 'locations')
+      .leftJoinAndSelect('club.clubSocialNetworks', 'clubSocialNetworks')
+      .leftJoinAndSelect('clubSocialNetworks.socialNetwork', 'socialNetwork')
+      .leftJoinAndSelect('club.clubSchedules', 'clubSchedules')
+      .where('status.id = :statusId', { statusId: 1 })
+      .orderBy('RAND()')
+      .take(limit);
+
+    return await qb.getMany();
   }
 }
