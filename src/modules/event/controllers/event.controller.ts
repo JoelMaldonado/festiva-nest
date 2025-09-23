@@ -68,6 +68,8 @@ export class EventController {
     }
   }
 
+
+  // Filtra detalle del evento por ID
   @Get('detail/:id')
   async findById(@Param('id') id: string) {
     try {
@@ -78,8 +80,20 @@ export class EventController {
     }
   }
 
-  @Get(':id')
+  // Filtra EventSchedule por ID
+
+  @Get('schedule/:id')
   async findEventByScheduleId(@Param('id') id: string) {
+    try {
+      const res = await this.service.findEventScheduleById(+id);
+      return successResponse('', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
+  @Get(':id')
+  async findEventByScheduleIdToDelete(@Param('id') id: string) {
     try {
       const res = await this.service.findEventScheduleById(+id);
       return successResponse('', res);
