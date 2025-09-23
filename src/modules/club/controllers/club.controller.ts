@@ -85,4 +85,10 @@ export class ClubController {
       return errorResponse(error);
     }
   }
+
+  @Get('prueba')
+  async prueba() {
+    const time = new Date();
+    return time;
+  }
 }
