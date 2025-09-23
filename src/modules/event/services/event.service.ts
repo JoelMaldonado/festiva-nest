@@ -110,9 +110,6 @@ export class EventService {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
-    // si llega `date`, filtramos el DÍA COMPLETO: [date 00:00, date+1 00:00)
-    let hasSpecificDateFilter = false;
-
     const qb = this.eventScheduleRepo
       .createQueryBuilder('es')
       .leftJoinAndSelect('es.event', 'e')
@@ -149,7 +146,7 @@ export class EventService {
     const [list, total] = await qb.getManyAndCount();
 
     const items = list.map((item) => ({
-      id: item.event?.id,
+      id: item?.id,
       eventId: item.event?.id,
       title: item.event?.title,
       description: item.event?.description,
