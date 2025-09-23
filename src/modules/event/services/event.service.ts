@@ -95,42 +95,78 @@ export class EventService {
     return listMap;
   }
 
-  async findAllPaged(page: number, limit: number) {
-    const yesterday = new Date();
-    yesterday.setHours(0, 0, 0, 0);
+  async findAllPaged(
+    page: number,
+    limit: number,
+    categoryId?: string,
+    date?: string,
+  ) {
+    // sanea page/limit
+    const safePage = Math.max(1, Number(page) || 1);
+    const safeLimit = Math.min(100, Math.max(1, Number(limit) || 20));
+    const offset = (safePage - 1) * safeLimit;
 
-    const [list, total] = await this.eventScheduleRepo.findAndCount({
-      relations: ['event', 'event.club', 'event.eventCategory'],
-      where: {
-        eventDate: MoreThanOrEqual(yesterday),
-        statusId: 1,
-      },
-      order: { eventDate: 'ASC', startTime: 'ASC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    // fecha mínima por defecto: hoy 00:00
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
 
-    const listMap = list.map((item) => {
-      return {
-        id: item.event?.id,
-        title: item.event?.title,
-        description: item.event?.description,
-        imageUrl: item.event?.imageUrl,
-        idClub: item.event?.club?.id || null,
-        nameClub: item.event?.club?.name || null,
-        idEventCategory: item.event?.eventCategory?.id || null,
-        nameEventCategory: item.event?.eventCategory?.title || null,
-        idStatus: item.statusId || null,
-        eventDate: item?.eventDate || null,
-        startTime: item?.startTime || null,
-      };
-    });
+    // si llega `date`, filtramos el DÍA COMPLETO: [date 00:00, date+1 00:00)
+    let hasSpecificDateFilter = false;
+
+    const qb = this.eventScheduleRepo
+      .createQueryBuilder('es')
+      .leftJoinAndSelect('es.event', 'e')
+      .leftJoinAndSelect('e.club', 'c')
+      .leftJoinAndSelect('e.eventCategory', 'ec')
+      .where('es.statusId = :statusId', { statusId: 1 });
+
+    // fecha: si se pasó `date`, usamos rango del día; si no, >= hoy
+    if (date) {
+      qb.andWhere('es.eventDate = :date', { date });
+    } else {
+      const yesterday = new Date();
+      console.log('yesterday before', yesterday);
+      //yesterday.setDate(yesterday.getDate() - 1);
+      yesterday.setHours(0, 0, 0, 0);
+      console.log('yesterday', yesterday);
+      
+      const todayStr = yesterday.toISOString().split('T')[0];
+      qb.andWhere('es.eventDate >= :today', { today: todayStr });
+    }
+
+    // filtro por categoría (si llega)
+    if (categoryId) {
+      qb.andWhere('ec.id = :categoryId', { categoryId });
+      // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
+    }
+
+    // orden y paginación
+    qb.orderBy('es.eventDate', 'ASC')
+      .addOrderBy('es.startTime', 'ASC')
+      .skip(offset)
+      .take(safeLimit);
+
+    const [list, total] = await qb.getManyAndCount();
+
+    const items = list.map((item) => ({
+      id: item.event?.id,
+      title: item.event?.title,
+      description: item.event?.description,
+      imageUrl: item.event?.imageUrl,
+      idClub: item.event?.club?.id ?? null,
+      nameClub: item.event?.club?.name ?? null,
+      idEventCategory: item.event?.eventCategory?.id ?? null,
+      nameEventCategory: item.event?.eventCategory?.title ?? null,
+      idStatus: item.statusId ?? null,
+      eventDate: item.eventDate ?? null,
+      startTime: item.startTime ?? null,
+    }));
 
     return {
-      items: listMap,
+      items,
       total,
-      page,
-      limit,
+      page: safePage,
+      limit: safeLimit,
     };
   }
 

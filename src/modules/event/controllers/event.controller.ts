@@ -52,15 +52,21 @@ export class EventController {
   async findAllPaged(
     @Query('page') page: string,
     @Query('limit') limit: string,
+    @Query('categoryId') categoryId?: string,
+    @Query('date') date?: string,
   ) {
     try {
-      const res = await this.service.findAllPaged(+page, +limit);
+      const res = await this.service.findAllPaged(
+        +page,
+        +limit,
+        categoryId,
+        date,
+      );
       return successResponse('', res);
     } catch (err) {
       return errorResponse(err);
     }
   }
-
 
   @Get('detail/:id')
   async findById(@Param('id') id: string) {
