@@ -267,7 +267,6 @@ export class EventService {
       title: dto.title,
       description: dto.description,
       imageUrl: dto.imageUrl,
-      eventCategory: eventCategory,
       status: { id: 1 },
     });
     await this.repo.save(item);
@@ -278,6 +277,10 @@ export class EventService {
       startTime: dto.startTime,
     });
     await this.eventScheduleRepo.save(schedule);
+
+    await this.eventCategoryService.saveEventCategoriesById(item.id, [
+      dto.eventCategoryId,
+    ]);
 
     return item.id;
   }
@@ -346,6 +349,9 @@ export class EventService {
 
   async saveEventCategoriesById(id: number, body: any[]) {
     const listEventCategories = body.map((b) => b.categoryId);
-    await this.eventCategoryService.saveEventCategoriesById(id, listEventCategories);
+    await this.eventCategoryService.saveEventCategoriesById(
+      id,
+      listEventCategories,
+    );
   }
 }
