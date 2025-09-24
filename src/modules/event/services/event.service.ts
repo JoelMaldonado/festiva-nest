@@ -114,8 +114,10 @@ export class EventService {
       .createQueryBuilder('es')
       .leftJoinAndSelect('es.event', 'e')
       .leftJoinAndSelect('e.club', 'c')
-      .leftJoinAndSelect('e.eventCategory', 'ec')
-      .leftJoinAndSelect('e.eventCategories', 'ecs')
+
+      .leftJoinAndSelect('e.eventCategories', 'ec') // EventCategoryEntity[]
+      .leftJoinAndSelect('ec.category', 'cat') // CategoryEntity
+
       .where('es.statusId = :statusId', { statusId: 1 });
 
     // fecha: si se pasó `date`, usamos rango del día; si no, >= hoy
@@ -131,7 +133,7 @@ export class EventService {
 
     // filtro por categoría (si llega)
     if (categoryId) {
-      qb.andWhere('ec.id = :categoryId', { categoryId });
+      qb.andWhere('cat.id = :categoryId', { categoryId });
       // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
     }
 
@@ -143,21 +145,28 @@ export class EventService {
 
     const [list, total] = await qb.getManyAndCount();
 
-    const items = list.map((item) => ({
-      id: item?.id,
-      eventId: item.event?.id,
-      title: item.event?.title,
-      description: item.event?.description,
-      imageUrl: item.event?.imageUrl,
-      idClub: item.event?.club?.id ?? null,
-      nameClub: item.event?.club?.name ?? null,
-      ec: item.event?.eventCategories ?? [],
-      idEventCategory: item.event?.eventCategory?.id ?? null,
-      nameEventCategory: item.event?.eventCategory?.title ?? null,
-      idStatus: item.statusId ?? null,
-      eventDate: item.eventDate ?? null,
-      startTime: item.startTime ?? null,
-    }));
+    const items = list.map((item) => {
+      const categories = item.event?.eventCategories ?? [];
+      const randomCategory =
+        categories.length > 0
+          ? categories[Math.floor(Math.random() * categories.length)].category
+          : null;
+
+      return {
+        id: item?.id,
+        eventId: item.event?.id,
+        title: item.event?.title,
+        description: item.event?.description,
+        imageUrl: item.event?.imageUrl,
+        idClub: item.event?.club?.id ?? null,
+        nameClub: item.event?.club?.name ?? null,
+        idEventCategory: randomCategory?.id ?? null, // Cambiar a idCategory
+        nameEventCategory: randomCategory?.title ?? null, // Cambiar a nameCategory
+        idStatus: item.statusId ?? null,
+        eventDate: item.eventDate ?? null,
+        startTime: item.startTime ?? null,
+      };
+    });
 
     return {
       items,
