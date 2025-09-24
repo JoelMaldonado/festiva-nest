@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { errorResponse, successResponse } from 'src/common/responses';
 import { mapperClub } from 'src/common/mappers/club.mapper';
@@ -87,8 +88,11 @@ export class ClubController {
   }
 
   @Get('prueba')
-  async prueba() {
-    const time = new Date();
-    return time;
+  async prueba(
+    @Query('idClub', ParseIntPipe) idClub: number,
+    @Query('dayOfWeek', ParseIntPipe) dayOfWeek: number,
+    @Query('time') time: string,
+  ) {
+    return this.clubService.prueba(idClub, dayOfWeek, time);
   }
 }

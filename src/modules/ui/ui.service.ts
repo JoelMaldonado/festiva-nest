@@ -62,6 +62,29 @@ export class UiService {
     };
   }
 
+  async findAllUiClubV2() {
+    const res = await this.clubService.findAllQuery3();
+
+    const itemsMapped = res.map((club) => {
+      return {
+        id: club.id,
+        name: club.name,
+        logoUrl: club.logoUrl,
+        coverUrl: club.covers.length > 0 ? club.covers[0].urlImage : null,
+        address: club.locations.length > 0 ? club.locations[0].address : null,
+        schedule: club.clubSchedules.map((schedule) => {
+          return {
+            dayOfWeek: schedule.dayOfWeek,
+            openingTime: schedule.openingTime,
+            closingTime: schedule.closingTime,
+          };
+        }),
+      };
+    });
+
+    return itemsMapped;
+  }
+
   async findOneUiDetail(id: number) {
     const club = await this.clubService.findOne(id);
     const clubDetail = await this.clubService.findClubDetail(id);

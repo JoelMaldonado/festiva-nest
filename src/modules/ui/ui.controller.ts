@@ -26,6 +26,18 @@ export class UiController {
     }
   }
 
+
+
+  @Get('v2/club')
+  async findAllUiClubV2() {
+    try {
+      const items = await this.service.findAllUiClubV2();
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
   @Get('club/:id')
   async findOneUiDetail(@Param('id') id: number) {
     try {

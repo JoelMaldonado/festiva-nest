@@ -130,6 +130,16 @@ export class ClubService {
     };
   }
 
+  async findAllQuery3() {
+    const qb = this.clubRepo.createQueryBuilder('club');
+    qb.leftJoinAndSelect('club.covers', 'covers');
+    qb.leftJoinAndSelect('club.locations', 'locations');
+    qb.leftJoinAndSelect('club.clubSchedules', 'clubSchedules');
+    qb.orderBy('RAND(club.id)').addOrderBy('clubSchedules.dayOfWeek', 'ASC');
+
+    return await qb.getMany();
+  }
+
   async findOne(id: number) {
     const club = await this.clubRepo.findOne({
       relations: [
@@ -300,5 +310,47 @@ export class ClubService {
       .take(limit);
 
     return await qb.getMany();
+  }
+
+  async prueba(idClub: number, dayOfWeek: number, time: string) {
+    const club = await this.clubRepo.findOne({
+      relations: ['clubSchedules'],
+      where: {
+        id: idClub,
+        status: { id: 1 },
+        clubSchedules: { dayOfWeek: dayOfWeek },
+      },
+    });
+
+    if (!club) {
+      throw new NotFoundException(`Club with id ${idClub} not found`);
+    }
+
+    var isOpen = false;
+
+    club.clubSchedules.forEach((schedule) => {
+      const openingTime = schedule.openingTime;
+      const closingTime = schedule.closingTime;
+
+      const timeDate = new Date(`1970-01-01T${time}Z`);
+      const openingDate = new Date(`1970-01-01T${openingTime}Z`);
+      const closingDate = new Date(`1970-01-01T${closingTime}Z`);
+
+      if (openingDate <= closingDate) {
+        if (timeDate >= openingDate && timeDate <= closingDate) {
+          isOpen = true;
+        }
+      } else {
+        if (timeDate >= openingDate || timeDate <= closingDate) {
+          isOpen = true;
+        }
+      }
+    });
+
+    return {
+      name: club.name,
+      schedules: club.clubSchedules,
+      isOpen: isOpen,
+    };
   }
 }
