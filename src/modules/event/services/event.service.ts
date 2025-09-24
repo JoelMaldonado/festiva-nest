@@ -114,7 +114,8 @@ export class EventService {
       .createQueryBuilder('es')
       .leftJoinAndSelect('es.event', 'e')
       .leftJoinAndSelect('e.club', 'c')
-      .leftJoinAndSelect('e.eventCategory', 'ec')
+      .leftJoinAndSelect('e.eventCategories', 'ec')
+      .leftJoinAndSelect('ec.category', 'cat')
       .where('es.statusId = :statusId', { statusId: 1 });
 
     // fecha: si se pasó `date`, usamos rango del día; si no, >= hoy
@@ -122,20 +123,17 @@ export class EventService {
       qb.andWhere('es.eventDate = :date', { date });
     } else {
       const yesterday = new Date();
-      console.log('yesterday before', yesterday);
       //yesterday.setDate(yesterday.getDate() - 1);
       yesterday.setHours(0, 0, 0, 0);
-      console.log('yesterday', yesterday);
-
       const todayStr = yesterday.toISOString().split('T')[0];
       qb.andWhere('es.eventDate >= :today', { today: todayStr });
     }
 
     // filtro por categoría (si llega)
-    if (categoryId) {
-      qb.andWhere('ec.id = :categoryId', { categoryId });
-      // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
-    }
+    //if (categoryId) {
+    //  qb.andWhere('ec.id = :categoryId', { categoryId });
+    //  // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
+    //}
 
     // orden y paginación
     qb.orderBy('es.eventDate', 'ASC')
@@ -153,8 +151,10 @@ export class EventService {
       imageUrl: item.event?.imageUrl,
       idClub: item.event?.club?.id ?? null,
       nameClub: item.event?.club?.name ?? null,
-      idEventCategory: item.event?.eventCategory?.id ?? null,
-      nameEventCategory: item.event?.eventCategory?.title ?? null,
+      ec: item.event?.eventCategories ?? [],
+      idEventCategory: item.event?.eventCategories?.[0]?.category?.id ?? null,
+      nameEventCategory:
+        item.event?.eventCategories?.[0]?.category?.title ?? null,
       idStatus: item.statusId ?? null,
       eventDate: item.eventDate ?? null,
       startTime: item.startTime ?? null,
@@ -267,6 +267,7 @@ export class EventService {
       title: dto.title,
       description: dto.description,
       imageUrl: dto.imageUrl,
+      eventCategory: eventCategory,
       status: { id: 1 },
     });
     await this.repo.save(item);
