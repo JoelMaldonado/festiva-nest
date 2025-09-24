@@ -126,7 +126,7 @@ export class EventService {
       //yesterday.setDate(yesterday.getDate() - 1);
       yesterday.setHours(0, 0, 0, 0);
       console.log('yesterday', yesterday);
-      
+
       const todayStr = yesterday.toISOString().split('T')[0];
       qb.andWhere('es.eventDate >= :today', { today: todayStr });
     }
@@ -334,5 +334,18 @@ export class EventService {
     }
     item.status.id = 1;
     await this.repo.save(item);
+  }
+
+  async findEventCategoriesById(id: number) {
+    const items = await this.eventCategoryService.findCategoriesByEventId(id);
+    const mappedItems = items.map((ec) => ({
+      categoryId: ec.categoryId,
+    }));
+    return mappedItems;
+  }
+
+  async saveEventCategoriesById(id: number, body: any[]) {
+    const listEventCategories = body.map((b) => b.categoryId);
+    await this.eventCategoryService.saveEventCategoriesById(id, listEventCategories);
   }
 }

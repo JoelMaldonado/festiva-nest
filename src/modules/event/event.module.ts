@@ -16,6 +16,7 @@ import { ClubModule } from '../club/club.module';
 import { ArtistModule } from '../artist/artist.module';
 import { EventScheduleController } from './controllers/event-schedule.controller';
 import { EventScheduleService } from './services/event-schedule.service';
+import { EventCategoryEntity } from '@entities/event-category.entity';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EventScheduleService } from './services/event-schedule.service';
       CategoryEntity,
       EventEntity,
       EventScheduleEntity,
+      EventCategoryEntity,
     ]),
     ClubModule,
     ArtistModule,

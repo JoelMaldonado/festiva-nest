@@ -68,6 +68,25 @@ export class EventController {
     }
   }
 
+  @Get(':id/categories')
+  async findEventCategoriesById(@Param('id') id: string) {
+    try {
+      const res = await this.service.findEventCategoriesById(+id);
+      return successResponse('', res);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
+
+  @Post(':id/categories')
+  async saveEventCategoriesById(@Param('id') id: string, @Body() body: any) {
+    try {
+      await this.service.saveEventCategoriesById(+id, body);
+      return successResponse('Event Categories Saved', null);
+    } catch (err) {
+      return errorResponse(err);
+    }
+  }
 
   // Filtra detalle del evento por ID
   @Get('detail/:id')

@@ -1,13 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryEntity } from '@entities/category.entity';
-import { Not, Repository } from 'typeorm';
+import { DataSource, Not, Repository } from 'typeorm';
+import { EventCategoryEntity } from '@entities/event-category.entity';
 
 @Injectable()
 export class EventCategoryService {
   constructor(
     @InjectRepository(CategoryEntity)
     private readonly repo: Repository<CategoryEntity>,
+
+    @InjectRepository(EventCategoryEntity)
+    private readonly eventCategoryRepo: Repository<EventCategoryEntity>,
   ) {}
 
   async findAll(statusId: number) {
@@ -87,5 +91,46 @@ export class EventCategoryService {
     }
     item.status.id = 1;
     await this.repo.save(item);
+  }
+
+  async findCategoriesByEventId(
+    eventId: number,
+  ): Promise<EventCategoryEntity[]> {
+    return await this.eventCategoryRepo.find({
+      where: {
+        event: { id: eventId },
+      },
+    });
+  }
+
+  async saveEventCategoriesById(
+    eventId: number,
+    listEventCategories: number[],
+  ): Promise<void> {
+    // 1) Normaliza: números únicos
+    const ids = Array.from(
+      new Set((listEventCategories ?? []).map(Number).filter(Number.isFinite)),
+    );
+
+    await this.eventCategoryRepo.manager.transaction(async (em) => {
+      // Repos dentro de la tx
+      const repo = em.getRepository(EventCategoryEntity);
+
+      // 2) Borra todo lo existente del evento
+      await repo.delete({ eventId });
+
+      // 3) Inserta los nuevos (si hay)
+      if (ids.length > 0) {
+        const rows = ids.map((categoryId) => ({ eventId, categoryId }));
+        // Usa insert masivo; la PK compuesta evita duplicados
+        await repo
+          .createQueryBuilder()
+          .insert()
+          .into(EventCategoryEntity)
+          .values(rows)
+          .orIgnore() // defensivo si se colara un duplicado en 'ids'
+          .execute();
+      }
+    });
   }
 }

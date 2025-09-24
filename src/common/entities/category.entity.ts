@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Status } from './status.entity';
+import { EventCategoryEntity } from './event-category.entity';
 
 @Entity({ name: 'category' })
 export class CategoryEntity {
@@ -35,4 +37,7 @@ export class CategoryEntity {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @OneToMany(() => EventCategoryEntity, (ec) => ec.category)
+  eventCategories: EventCategoryEntity[];
 }

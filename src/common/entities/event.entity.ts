@@ -13,6 +13,7 @@ import {
 import { CategoryEntity } from './category.entity';
 import { EventArtist } from './event-artist.entity';
 import { Status } from './status.entity';
+import { EventCategoryEntity } from './event-category.entity';
 
 @Entity({ name: 'event' })
 export class EventEntity {
@@ -51,6 +52,9 @@ export class EventEntity {
 
   @OneToMany(() => EventScheduleEntity, (es) => es.event)
   schedule: EventScheduleEntity[];
+
+  @OneToMany(() => EventCategoryEntity, (ec) => ec.event)
+  eventCategories: EventCategoryEntity[];
 }
 
 @Entity({ name: 'event_schedule' })
