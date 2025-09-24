@@ -26,12 +26,10 @@ export class UiController {
     }
   }
 
-
-
   @Get('v2/club')
   async findAllUiClubV2() {
     try {
-      const items = await this.service.findAllUiClubV2();
+      const items = await this.service.findAllUiClubV2(false);
       return successResponse('', items);
     } catch (error) {
       return errorResponse(error);
@@ -52,6 +50,16 @@ export class UiController {
   async findAllUiHome() {
     try {
       const items = await this.service.findAllUiHome();
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
+
+  @Get('v2/home')
+  async findAllUiHomeV2() {
+    try {
+      const items = await this.service.findAllUiHomeV2();
       return successResponse('', items);
     } catch (error) {
       return errorResponse(error);

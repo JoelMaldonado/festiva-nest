@@ -62,8 +62,8 @@ export class UiService {
     };
   }
 
-  async findAllUiClubV2() {
-    const res = await this.clubService.findAllQuery3();
+  async findAllUiClubV2(random: boolean, limit?: number) {
+    const res = await this.clubService.findAllQuery3(random, limit);
 
     const itemsMapped = res.map((club) => {
       return {
@@ -115,8 +115,19 @@ export class UiService {
     const artists = await this.artistService.findAll();
     return {
       clubs: clubs.items,
-      events: events,
-      artists: artists,
+      events,
+      artists,
+    };
+  }
+
+  async findAllUiHomeV2() {
+    const clubs = await this.findAllUiClubV2(true, 10);
+    const events = await this.eventService.findAll(undefined, 10);
+    const artists = await this.artistService.findAll();
+    return {
+      clubs,
+      events,
+      artists,
     };
   }
 }

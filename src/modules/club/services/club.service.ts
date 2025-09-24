@@ -130,12 +130,17 @@ export class ClubService {
     };
   }
 
-  async findAllQuery3() {
+  async findAllQuery3(random: boolean, limit?: number) {
     const qb = this.clubRepo.createQueryBuilder('club');
     qb.leftJoinAndSelect('club.covers', 'covers');
     qb.leftJoinAndSelect('club.locations', 'locations');
     qb.leftJoinAndSelect('club.clubSchedules', 'clubSchedules');
-    qb.orderBy('RAND(club.id)').addOrderBy('clubSchedules.dayOfWeek', 'ASC');
+
+    if (random) {
+      qb.orderBy('RAND()');
+    }
+
+    if (limit) qb.take(limit);
 
     return await qb.getMany();
   }
