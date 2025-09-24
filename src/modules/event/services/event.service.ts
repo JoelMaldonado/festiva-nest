@@ -114,8 +114,8 @@ export class EventService {
       .createQueryBuilder('es')
       .leftJoinAndSelect('es.event', 'e')
       .leftJoinAndSelect('e.club', 'c')
-      .leftJoinAndSelect('e.eventCategories', 'ec')
-      .leftJoinAndSelect('ec.category', 'cat')
+      .leftJoinAndSelect('e.eventCategory', 'ec')
+      .leftJoinAndSelect('e.eventCategories', 'ecs')
       .where('es.statusId = :statusId', { statusId: 1 });
 
     // fecha: si se pasó `date`, usamos rango del día; si no, >= hoy
@@ -130,10 +130,10 @@ export class EventService {
     }
 
     // filtro por categoría (si llega)
-    //if (categoryId) {
-    //  qb.andWhere('ec.id = :categoryId', { categoryId });
-    //  // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
-    //}
+    if (categoryId) {
+      qb.andWhere('ec.id = :categoryId', { categoryId });
+      // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
+    }
 
     // orden y paginación
     qb.orderBy('es.eventDate', 'ASC')
@@ -152,9 +152,8 @@ export class EventService {
       idClub: item.event?.club?.id ?? null,
       nameClub: item.event?.club?.name ?? null,
       ec: item.event?.eventCategories ?? [],
-      idEventCategory: item.event?.eventCategories?.[0]?.category?.id ?? null,
-      nameEventCategory:
-        item.event?.eventCategories?.[0]?.category?.title ?? null,
+      idEventCategory: item.event?.eventCategory?.id ?? null,
+      nameEventCategory: item.event?.eventCategory?.title ?? null,
       idStatus: item.statusId ?? null,
       eventDate: item.eventDate ?? null,
       startTime: item.startTime ?? null,
