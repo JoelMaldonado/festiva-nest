@@ -5,6 +5,7 @@ import { EventEntity, EventScheduleEntity } from '@entities/event.entity';
 import { CreateEventDto } from '@dtos/create-event.dto';
 import { EventCategoryService } from './event-category.service';
 import { ClubService } from 'src/modules/club/services/club.service';
+import { getRandomItem } from 'src/utils/functions';
 
 @Injectable()
 export class EventService {
@@ -210,6 +211,8 @@ export class EventService {
         'event.eventCategory',
         'event.club',
         'event.club.locations',
+        'event.eventCategories',
+        'event.eventCategories.category',
       ],
       where: {
         id: id,
@@ -220,6 +223,8 @@ export class EventService {
       throw new NotFoundException('Event Schedule not found');
     }
 
+    const randomCategory = getRandomItem(item.event.eventCategories);
+
     return {
       id: item.id,
       title: item.event.title,
@@ -227,10 +232,16 @@ export class EventService {
       imageUrl: item.event.imageUrl,
       eventDate: item.eventDate ?? null,
       startTime: item.startTime ?? null,
-      nameEventCategory: item.event?.eventCategory?.title ?? null,
+      nameEventCategory: randomCategory?.category.title ?? null, // TODO Delete
       location: item.event.club.locations[0]?.address ?? null,
       clubId: item.event.club.id,
       clubName: item.event.club.name,
+      categories: item.event.eventCategories.map((ec) => {
+        return {
+          id: ec.category.id,
+          title: ec.category.title,
+        };
+      }),
     };
   }
 

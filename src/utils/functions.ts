@@ -24,3 +24,8 @@ export function estaDentroDelHorario(
 
   return isAfter(horaActual, apertura) && isBefore(horaActual, cierre);
 }
+
+export function getRandomItem<T>(arr: T[]): T | null {
+  if (!arr || arr.length === 0) return null;
+  return arr[Math.floor(Math.random() * arr.length)];
+}

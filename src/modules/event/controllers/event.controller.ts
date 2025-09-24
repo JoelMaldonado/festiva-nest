@@ -100,7 +100,6 @@ export class EventController {
   }
 
   // Filtra EventSchedule por ID
-
   @Get('schedule/:id')
   async findEventByScheduleId(@Param('id') id: string) {
     try {
