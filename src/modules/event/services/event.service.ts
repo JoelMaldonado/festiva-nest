@@ -138,11 +138,11 @@ export class EventService {
       qb.andWhere('cat.id = :categoryId', { categoryId });
       // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
     }
-
+    
     if (search) {
-      qb.andWhere('e.title LIKE :search', { search: `%${search}%` });
-      // también podrías incluir descripción o nombre del club:
-      // qb.andWhere('(e.title LIKE :search OR e.description LIKE :search OR c.name LIKE :search)', { search: `%${search}%` });
+      qb.andWhere('LOWER(e.title) LIKE :search', {
+        search: `%${search.toLowerCase()}%`,
+      });
     }
 
     // orden y paginación
