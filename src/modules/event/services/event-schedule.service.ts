@@ -45,6 +45,7 @@ export class EventScheduleService {
   async findAllByEventId(eventId: number) {
     return this.eventScheduleRepo.find({
       where: { event: { id: eventId } },
+      order: { eventDate: 'ASC', startTime: 'ASC' },
     });
   }
 
