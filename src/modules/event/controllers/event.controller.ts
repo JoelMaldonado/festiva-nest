@@ -54,6 +54,7 @@ export class EventController {
     @Query('limit') limit: string,
     @Query('categoryId') categoryId?: string,
     @Query('date') date?: string,
+    @Query('search') search?: string,
   ) {
     try {
       const res = await this.service.findAllPaged(
@@ -61,6 +62,7 @@ export class EventController {
         +limit,
         categoryId,
         date,
+        search,
       );
       return successResponse('', res);
     } catch (err) {

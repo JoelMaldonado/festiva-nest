@@ -101,6 +101,7 @@ export class EventService {
     limit: number,
     categoryId?: string,
     date?: string,
+    search?: string,
   ) {
     // sanea page/limit
     const safePage = Math.max(1, Number(page) || 1);
@@ -136,6 +137,12 @@ export class EventService {
     if (categoryId) {
       qb.andWhere('cat.id = :categoryId', { categoryId });
       // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
+    }
+
+    if (search) {
+      qb.andWhere('e.title LIKE :search', { search: `%${search}%` });
+      // también podrías incluir descripción o nombre del club:
+      // qb.andWhere('(e.title LIKE :search OR e.description LIKE :search OR c.name LIKE :search)', { search: `%${search}%` });
     }
 
     // orden y paginación
