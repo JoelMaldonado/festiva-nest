@@ -55,6 +55,9 @@ export class EventEntity {
 
   @OneToMany(() => EventCategoryEntity, (ec) => ec.event)
   eventCategories: EventCategoryEntity[];
+
+  @Column({ name: 'ticket_url', type: 'varchar', length: 255, nullable: true })
+  ticketUrl: string | null;
 }
 
 @Entity({ name: 'event_schedule' })

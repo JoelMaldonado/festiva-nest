@@ -237,6 +237,7 @@ export class EventService {
       location: item.event.club.locations[0]?.address ?? null,
       clubId: item.event.club.id,
       clubName: item.event.club.name,
+      ticketUrl: item.event.ticketUrl,
       categories: item.event.eventCategories.map((ec) => {
         return {
           id: ec.category.id,
