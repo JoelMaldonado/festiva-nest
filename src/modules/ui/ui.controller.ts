@@ -65,4 +65,14 @@ export class UiController {
       return errorResponse(error);
     }
   }
+
+  @Get('home/test')
+  async findAllUiHomeTest() {
+    try {
+      const items = await this.service.findAllUiHomeTest();
+      return successResponse('', items);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }
 }

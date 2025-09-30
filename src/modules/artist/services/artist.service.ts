@@ -114,4 +114,9 @@ export class ArtistService {
     await this.repo.save(artist);
     return;
   }
+
+
+  findAllTest() {
+    return this.repo.find();
+  }
 }

@@ -9,6 +9,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { retry } from 'rxjs';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -357,5 +358,9 @@ export class ClubService {
       schedules: club.clubSchedules,
       isOpen: isOpen,
     };
+  }
+
+  findAllTest() {
+    return this.clubRepo.find();
   }
 }

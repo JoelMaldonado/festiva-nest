@@ -384,4 +384,9 @@ export class EventService {
       listEventCategories,
     );
   }
+
+
+  findAllTest() {
+    return this.repo.find();
+  }
 }

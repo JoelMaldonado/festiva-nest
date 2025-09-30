@@ -130,4 +130,15 @@ export class UiService {
       artists,
     };
   }
+
+  async findAllUiHomeTest() {
+    const clubs = await this.clubService.findAllTest();
+    const events = await this.eventService.findAllTest();
+    const artists = await this.artistService.findAllTest();
+    return {
+      clubs,
+      events,
+      artists,
+    };
+  }
 }
