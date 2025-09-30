@@ -37,4 +37,8 @@ export class CreateEventDto {
 
   @IsInt()
   eventCategoryId: number;
+
+  @IsOptional()
+  @IsString()
+  ticketUrl?: string;
 }

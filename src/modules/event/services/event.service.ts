@@ -138,7 +138,7 @@ export class EventService {
       qb.andWhere('cat.id = :categoryId', { categoryId });
       // si ec.id es numérico, castea: { categoryId: Number(categoryId) }
     }
-    
+
     if (search) {
       qb.andWhere('LOWER(e.title) LIKE :search', {
         search: `%${search.toLowerCase()}%`,
@@ -296,6 +296,7 @@ export class EventService {
       description: dto.description,
       imageUrl: dto.imageUrl,
       eventCategory: eventCategory,
+      ticketUrl: dto.ticketUrl,
       status: { id: 1 },
     });
     await this.repo.save(item);
