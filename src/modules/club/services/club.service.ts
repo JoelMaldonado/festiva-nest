@@ -6,14 +6,16 @@ import { ClubSchedule } from '@entities/club-schedule.entity';
 import { ClubSocialNetwork } from '@entities/club-social-network.entity';
 import { Club } from '@entities/club.entity';
 import { HttpService } from '@nestjs/axios';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { retry } from 'rxjs';
+import { firstValueFrom, retry } from 'rxjs';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class ClubService {
+  private readonly logger = new Logger(ClubService.name);
+
   constructor(
     @InjectRepository(ClubLocation)
     private readonly clubLocationRepo: Repository<ClubLocation>,
@@ -35,8 +37,37 @@ export class ClubService {
 
   async create(dto: ClubDto) {
     const itemCreate = this.clubRepo.create(dto);
-    await this.clubRepo.save(itemCreate);
+    const saved = await this.clubRepo.save(itemCreate);
+    void this.saveGooglePlaceId(saved.id, dto.name).catch((error) =>
+      this.logger.warn(`saveGooglePlaceId failed: ${error.message}`),
+    );
     return itemCreate;
+  }
+
+  async saveGooglePlaceId(clubId: number, name: string) {
+    const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json`;
+    const apiKey = this.configService.get<string>('GOOGLE_API_KEY');
+    const response = await firstValueFrom(
+      this.httpService.get(url, {
+        params: {
+          input: `${name}, Oslo`,
+          inputtype: 'textquery',
+          fields: 'place_id',
+          key: apiKey,
+        },
+        timeout: 5000,
+      }),
+    );
+
+    const data = response.data;
+    if (data.candidates && data.candidates.length > 0) {
+      const placeId = data.candidates[0].place_id;
+      const clubDetail = this.clubDetailRepo.create({
+        clubId,
+        googlePlaceId: placeId,
+      });
+      await this.clubDetailRepo.save(clubDetail);
+    }
   }
 
   async findOneLocation(id: number) {
