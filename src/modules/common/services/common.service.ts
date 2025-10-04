@@ -1,13 +1,10 @@
 import { Artist } from '@entities/artist.entity';
-import { ClubDetail } from '@entities/club-detail.entity';
 import { Club } from '@entities/club.entity';
 import { EventEntity } from '@entities/event.entity';
-import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FirebaseService } from 'src/services/firebase.service';
-import { IsNull, Like, MoreThanOrEqual, Not, Repository } from 'typeorm';
+import { Like, MoreThanOrEqual, Repository } from 'typeorm';
 
 @Injectable()
 export class CommonService {
@@ -18,7 +15,6 @@ export class CommonService {
     private readonly artistRepo: Repository<Artist>,
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
-
     private readonly firebaseService: FirebaseService,
   ) {}
 
@@ -63,7 +59,6 @@ export class CommonService {
       ...clubs.map((d) => ({ id: d.id, detail: d.name, type: 'C' })),
     ];
   }
-
 
   async test() {
     const res = await this.firebaseService.deleteFile(

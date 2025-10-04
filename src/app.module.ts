@@ -14,6 +14,8 @@ import { CronModule } from './modules/cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RedirectModule } from './modules/redirect/redirect.module';
 import { MailModule } from './modules/mail/mail.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { DinamycQrCodesModule } from './modules/dinamyc-qr-codes/dinamyc-qr-codes.module';
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { MailModule } from './modules/mail/mail.module';
       autoLoadEntities: true,
       synchronize: false,
     }),
+    PrismaModule,
     AuthModule,
     CommonModule,
     ClubModule,
@@ -45,6 +48,7 @@ import { MailModule } from './modules/mail/mail.module';
     ScheduleModule.forRoot(),
     RedirectModule,
     MailModule,
+    DinamycQrCodesModule,
   ],
 })
 export class AppModule {}

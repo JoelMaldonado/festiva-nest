@@ -1,0 +1,373 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model app_screens {
+  id         Int       @id @default(autoincrement())
+  screen_key String    @unique(map: "screen_key") @db.VarChar(100)
+  is_active  Boolean   @default(true)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model artist {
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @db.VarChar(100)
+  artist_type_id        Int
+  description           String?                 @db.Text
+  biography             String?                 @db.Text
+  status_id             Int                     @default(1)
+  created_at            DateTime?               @default(now()) @db.Timestamp(0)
+  updated_at            DateTime?               @default(now()) @db.Timestamp(0)
+  profile_url           String?                 @db.VarChar(255)
+  profile_2_url         String?                 @db.VarChar(255)
+  artist_social_network artist_social_network[]
+
+  @@index([artist_type_id], map: "artist_type_id")
+  @@index([status_id], map: "status_id")
+}
+
+model artist_image {
+  id         Int       @id @default(autoincrement())
+  artist_id  Int
+  image_url  String    @db.VarChar(255)
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([artist_id], map: "artist_id")
+  @@index([status_id], map: "status_id")
+}
+
+model artist_social_network {
+  id                Int            @id @default(autoincrement())
+  artist_id         Int
+  social_network_id Int
+  url               String?        @db.VarChar(255)
+  status_id         Int?           @default(1)
+  created_at        DateTime?      @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?      @default(now()) @db.Timestamp(0)
+  artist            artist         @relation(fields: [artist_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "artist_social_network_ibfk_1")
+  social_network    social_network @relation(fields: [social_network_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "artist_social_network_ibfk_2")
+  status            status?        @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "artist_social_network_ibfk_3")
+
+  @@index([artist_id], map: "artist_id")
+  @@index([social_network_id], map: "fk_artist_social_network_social_network")
+  @@index([status_id], map: "status_id")
+}
+
+model artist_tag {
+  id         Int       @id @default(autoincrement())
+  artist_id  Int
+  name       String    @db.VarChar(100)
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([artist_id], map: "artist_id")
+  @@index([status_id], map: "status_id")
+}
+
+model artist_type {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique(map: "name") @db.VarChar(100)
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([status_id], map: "status_id")
+}
+
+model category {
+  id             Int              @id @default(autoincrement())
+  title          String?          @db.VarChar(100)
+  status_id      Int?             @default(1)
+  created_at     DateTime?        @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?        @default(now()) @db.Timestamp(0)
+  event_category event_category[]
+
+  @@index([status_id], map: "status_id")
+}
+
+model club {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(100)
+  description         String?               @db.Text
+  logo_url            String?               @db.VarChar(255)
+  status_id           Int?                  @default(1)
+  created_at          DateTime?             @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(0)
+  club_detail         club_detail?
+  club_location       club_location[]
+  club_social_network club_social_network[]
+  event               event[]
+
+  @@index([name], map: "idx_club_name")
+  @@index([status_id], map: "status_id")
+}
+
+model club_cover {
+  id         Int       @id @default(autoincrement())
+  url_image  String?   @db.VarChar(255)
+  club_id    Int
+  status_id  Int?      @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([club_id], map: "club_id")
+  @@index([status_id], map: "status_id")
+}
+
+model club_detail {
+  club_id                   Int       @id
+  google_place_id           String?   @db.VarChar(255)
+  google_rating             Decimal?  @db.Decimal(2, 1)
+  google_user_ratings_total Int?
+  last_fetched              DateTime? @db.Timestamp(0)
+  created_at                DateTime? @default(now()) @db.Timestamp(0)
+  updated_at                DateTime? @default(now()) @db.Timestamp(0)
+  club                      club      @relation(fields: [club_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_club_details_club")
+}
+
+model club_email {
+  id         Int       @id @default(autoincrement())
+  club_id    Int
+  email      String?   @db.VarChar(100)
+  status_id  Int?      @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([club_id], map: "idx_club_email_club_id")
+  @@index([status_id], map: "status_id")
+}
+
+model club_location {
+  id         Int       @id @default(autoincrement())
+  club_id    Int
+  address    String?   @db.VarChar(255)
+  latitude   Decimal?  @db.Decimal(10, 8)
+  longitude  Decimal?  @db.Decimal(11, 8)
+  maps_url   String?   @db.VarChar(255)
+  status_id  Int?      @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  club       club      @relation(fields: [club_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_club_location_club")
+  status     status?   @relation(fields: [status_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_club_location_status")
+
+  @@index([club_id], map: "club_id")
+  @@index([status_id], map: "status_id")
+}
+
+model club_phone {
+  id         Int       @id @default(autoincrement())
+  club_id    Int
+  phone      String?   @db.VarChar(20)
+  status_id  Int?      @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([club_id], map: "idx_club_phone_club_id")
+  @@index([status_id], map: "status_id")
+}
+
+model club_schedule {
+  id           Int       @id @default(autoincrement())
+  club_id      Int
+  status_id    Int?      @default(1)
+  day_of_week  Int       @db.TinyInt
+  opening_time DateTime? @db.Time(0)
+  closing_time DateTime? @db.Time(0)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([club_id], map: "club_id")
+  @@index([status_id], map: "status_id")
+}
+
+model club_social_network {
+  id                Int            @id @default(autoincrement())
+  club_id           Int
+  social_network_id Int
+  url               String?        @db.VarChar(255)
+  status_id         Int?           @default(1)
+  created_at        DateTime?      @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?      @default(now()) @db.Timestamp(0)
+  club              club           @relation(fields: [club_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_club_social_network_club")
+  social_network    social_network @relation(fields: [social_network_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_club_social_network_social_network")
+
+  @@index([club_id], map: "club_id")
+  @@index([social_network_id], map: "social_network_id")
+  @@index([status_id], map: "status_id")
+}
+
+model dynamic_qr_codes {
+  id              Int      @id @default(autoincrement()) @db.UnsignedInt
+  name            String   @db.VarChar(120)
+  description     String?  @db.VarChar(255)
+  slug            String?  @db.VarChar(64)
+  destination_url String   @db.VarChar(2048)
+  image_url       String?  @db.VarChar(2048)
+  period          DateTime @db.Date
+  ios_count       Int      @default(0) @db.UnsignedInt
+  android_count   Int      @default(0) @db.UnsignedInt
+  other_count     Int      @default(0) @db.UnsignedInt
+  created_at      DateTime @default(now()) @db.Timestamp(0)
+  updated_at      DateTime @default(now()) @db.Timestamp(0)
+}
+
+model event {
+  id                Int              @id @default(autoincrement())
+  club_id           Int
+  title             String           @db.VarChar(100)
+  description       String?          @db.Text
+  image_url         String?          @db.VarChar(255)
+  event_category_id Int?
+  status_id         Int              @default(1)
+  created_at        DateTime?        @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?        @default(now()) @db.Timestamp(0)
+  ticket_url        String?          @db.VarChar(255)
+  club              club             @relation(fields: [club_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_event_club")
+  event_category    event_category[]
+  event_schedule    event_schedule[]
+
+  @@index([club_id], map: "club_id")
+  @@index([event_category_id], map: "event_category_id")
+  @@index([status_id], map: "status_id")
+}
+
+model event_artist {
+  id         Int       @id @default(autoincrement())
+  event_id   Int
+  artist_id  Int
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([artist_id], map: "artist_id")
+  @@index([event_id], map: "event_id")
+  @@index([status_id], map: "status_id")
+}
+
+model event_category {
+  event_id    Int
+  category_id Int
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+  event       event     @relation(fields: [event_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "event_category_ibfk_1")
+  category    category  @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "event_category_ibfk_2")
+
+  @@id([event_id, category_id])
+  @@index([category_id], map: "category_id")
+}
+
+model event_schedule {
+  id         Int       @id @default(autoincrement())
+  event_id   Int
+  event_date DateTime  @db.Date
+  start_time DateTime? @db.Time(0)
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  event      event     @relation(fields: [event_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "event_schedule_ibfk_1")
+  status     status    @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "event_schedule_ibfk_2")
+
+  @@index([event_id], map: "event_id")
+  @@index([status_id], map: "status_id")
+}
+
+model qr_scans {
+  id         Int               @id @default(autoincrement()) @db.UnsignedInt
+  platform   qr_scans_platform
+  created_at DateTime          @default(now()) @db.Timestamp(0)
+}
+
+model social_network {
+  id                    Int                     @id @default(autoincrement())
+  code                  String                  @unique(map: "code") @db.VarChar(20)
+  name                  String                  @db.VarChar(50)
+  artist_social_network artist_social_network[]
+  club_social_network   club_social_network[]
+}
+
+model status {
+  id                    Int                     @id @default(autoincrement())
+  description           String?                 @unique(map: "description") @db.VarChar(20)
+  artist_social_network artist_social_network[]
+  club_location         club_location[]
+  event_schedule        event_schedule[]
+}
+
+model user {
+  id           Int       @id @default(autoincrement())
+  user_role_id Int       @default(1)
+  name         String    @db.VarChar(100)
+  email        String    @unique(map: "email") @db.VarChar(255)
+  phone        String?   @db.VarChar(20)
+  status_id    Int       @default(1)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+  birth_date   DateTime? @db.Date
+  image_url    String?   @db.VarChar(255)
+
+  @@index([status_id], map: "status_id")
+  @@index([user_role_id], map: "user_role_id")
+}
+
+model user_auth {
+  id            Int       @id @default(autoincrement())
+  user_id       Int
+  username      String    @unique(map: "username") @db.VarChar(100)
+  password_hash String    @db.VarChar(255)
+  status_id     Int       @default(1)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([status_id], map: "status_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_club {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  club_id    Int
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([club_id], map: "club_id")
+  @@index([status_id], map: "status_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_event {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  event_id   Int
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([event_id], map: "event_id")
+  @@index([status_id], map: "status_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_role {
+  id         Int       @id @default(autoincrement())
+  role_name  String    @unique(map: "role_name") @db.VarChar(50)
+  status_id  Int       @default(1)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([status_id], map: "status_id")
+}
+
+enum qr_scans_platform {
+  android
+  ios
+  other
+}
