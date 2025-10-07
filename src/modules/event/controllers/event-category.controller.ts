@@ -22,7 +22,7 @@ export class EventCategoryController {
   @Get()
   async findAll(@Query('status_id') statusId: number = 1) {
     try {
-      const res = await this.service.findAll(Number(statusId));
+      const res = await this.service.findAllOctober(Number(statusId));
       return successResponse('', res.map(mapEventCategory));
     } catch (err) {
       return errorResponse(err);

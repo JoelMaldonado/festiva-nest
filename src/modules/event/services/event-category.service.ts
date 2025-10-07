@@ -23,6 +23,26 @@ export class EventCategoryService {
     return await qb.getMany();
   }
 
+  async findAllOctober(statusId: number) {
+    const qb = this.repo
+      .createQueryBuilder('event_category')
+      .leftJoinAndSelect('event_category.status', 'status');
+
+    if (statusId !== 0) {
+      qb.where('status.id = :statusId', { statusId });
+    }
+
+    qb
+      // id 18 primero
+      .orderBy('CASE WHEN event_category.id = :pinId THEN 0 ELSE 1 END', 'ASC')
+      // luego por fecha de creación (ajusta el nombre de la columna según tu entidad)
+      .addOrderBy('event_category.created_at', 'ASC'); // o 'event_category.createdAt'
+
+    qb.setParameters({ pinId: 18 });
+
+    return await qb.getMany();
+  }
+
   async findOne(id: number) {
     const item = await this.repo.findOne({
       relations: { status: true },
