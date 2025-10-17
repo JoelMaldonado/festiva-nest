@@ -83,22 +83,25 @@ export class EventService {
 
     const list = await queryBuilder.getMany();
 
-    const listMap = list.map((item) => {
-      return {
-        id: item.id,
-        eventId: item.event?.id,
-        title: item.event?.title,
-        description: item.event?.description,
-        imageUrl: item.event?.imageUrl,
-        idClub: item.event?.club?.id || null,
-        nameClub: item.event?.club?.name || null,
-        idEventCategory: item.event?.eventCategory?.id || null,
-        nameEventCategory: item.event?.eventCategory?.title || null,
-        idStatus: item.statusId || null,
-        eventDate: item?.eventDate || null,
-        startTime: item?.startTime || null,
-      };
-    });
+    const listMap = await Promise.all(
+      list.map(async (item) => {
+        const randomCategory = await getRandomItem(item.event.eventCategories);
+        return {
+          id: item.id,
+          eventId: item.event?.id,
+          title: item.event?.title,
+          description: item.event?.description,
+          imageUrl: item.event?.imageUrl,
+          idClub: item.event?.club?.id || null,
+          nameClub: item.event?.club?.name || null,
+          idEventCategory: randomCategory?.category.id || null,
+          nameEventCategory: randomCategory?.category.title || null,
+          idStatus: item.statusId || null,
+          eventDate: item?.eventDate || null,
+          startTime: item?.startTime || null,
+        };
+      }),
+    );
     return listMap;
   }
 
@@ -209,7 +212,6 @@ export class EventService {
       imageUrl: item.imageUrl,
       eventDate: null,
       startTime: null,
-      nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
       clubName: item.club.name,
@@ -282,7 +284,6 @@ export class EventService {
       imageUrl: item.imageUrl,
       eventDate: item.schedule[0]?.eventDate ?? null,
       startTime: item.schedule[0]?.startTime ?? null,
-      nameEventCategory: item.eventCategory?.title ?? null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
       clubName: item.club.name,
@@ -292,16 +293,11 @@ export class EventService {
   async create(dto: CreateEventDto) {
     const club = await this.clubService.findOne(dto.clubId);
 
-    const eventCategory = await this.eventCategoryService.findOne(
-      dto.eventCategoryId,
-    );
-
     const item = this.repo.create({
       club: club,
       title: dto.title,
       description: dto.description,
       imageUrl: dto.imageUrl,
-      eventCategory: eventCategory,
       ticketUrl: dto.ticketUrl,
       status: { id: 1 },
     });
@@ -341,7 +337,6 @@ export class EventService {
       title: dto.title,
       description: dto.description,
       imageUrl: dto.imageUrl,
-      eventCategory: eventCategory,
     });
 
     if (!preload) {

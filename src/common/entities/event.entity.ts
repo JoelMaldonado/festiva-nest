@@ -33,10 +33,6 @@ export class EventEntity {
   @Column({ name: 'image_url', type: 'varchar', length: 255 })
   imageUrl: string;
 
-  @JoinColumn({ name: 'event_category_id' })
-  @ManyToOne(() => CategoryEntity)
-  eventCategory: CategoryEntity;
-
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)
   status: Status;

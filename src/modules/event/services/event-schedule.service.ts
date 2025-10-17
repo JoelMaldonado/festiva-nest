@@ -32,8 +32,6 @@ export class EventScheduleService {
         imageUrl: item.event?.imageUrl,
         idClub: item.event?.club?.id || null,
         nameClub: item.event?.club?.name || null,
-        idEventCategory: item.event?.eventCategory?.id || null,
-        nameEventCategory: item.event?.eventCategory?.title || null,
         idStatus: item.statusId || null,
         eventDate: item?.eventDate || null,
         startTime: item?.startTime || null,
