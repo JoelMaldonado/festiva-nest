@@ -24,7 +24,7 @@ export class EventService {
     const yesterday = new Date();
     yesterday.setHours(0, 0, 0, 0);
     const list = await this.eventScheduleRepo.find({
-      relations: ['event', 'event.club', 'event.eventCategory'],
+      relations: ['event', 'event.club'],
       where: {
         eventDate: MoreThanOrEqual(yesterday),
         statusId: 1,
@@ -77,7 +77,6 @@ export class EventService {
       .createQueryBuilder('event_schedule')
       .leftJoinAndSelect('event_schedule.event', 'event')
       .leftJoinAndSelect('event.club', 'club')
-      .leftJoinAndSelect('event.eventCategory', 'eventCategory')
       .where('event_schedule.statusId = :statusId', { statusId: 1 })
       .andWhere('event_schedule.eventDate = :eventDate', { eventDate: day });
 
@@ -125,9 +124,7 @@ export class EventService {
       .createQueryBuilder('es')
       .leftJoinAndSelect('es.event', 'e')
       .leftJoinAndSelect('e.club', 'c')
-
       .leftJoinAndSelect('e.eventCategories', 'ec') // EventCategoryEntity[]
-      .leftJoinAndSelect('ec.category', 'cat') // CategoryEntity
 
       .where('es.statusId = :statusId', { statusId: 1 });
 
@@ -195,7 +192,7 @@ export class EventService {
 
   async findOneById(id: number) {
     const item = await this.repo.findOne({
-      relations: ['club', 'club.locations', 'eventCategory'],
+      relations: ['club', 'club.locations'],
       where: {
         id: id,
       },
@@ -223,7 +220,6 @@ export class EventService {
     const item = await this.eventScheduleRepo.findOne({
       relations: [
         'event',
-        'event.eventCategory',
         'event.club',
         'event.club.locations',
         'event.eventCategories',
@@ -268,7 +264,6 @@ export class EventService {
         'status',
         'club',
         'club.locations',
-        'eventCategory',
         'schedule',
       ],
       where: { id, status: { id: 1 } },
@@ -327,9 +322,6 @@ export class EventService {
     }
 
     const club = await this.clubService.findOne(dto.clubId);
-    const eventCategory = await this.eventCategoryService.findOne(
-      dto.eventCategoryId,
-    );
 
     const preload = await this.repo.preload({
       id,
