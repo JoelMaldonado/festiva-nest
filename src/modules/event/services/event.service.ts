@@ -33,27 +33,28 @@ export class EventService {
       order: { eventDate: 'ASC', startTime: 'ASC' },
       take: limit,
     });
-    const listMap = list.map((item) => {
-      const categories = item.event.eventCategories ?? [];
-      const randomCategory =
-        categories.length > 0
-          ? categories[Math.floor(Math.random() * categories.length)].category
-          : null;
-      return {
-        id: item.id,
-        eventId: item.event?.id,
-        title: item.event?.title,
-        description: item.event?.description,
-        imageUrl: item.event?.imageUrl,
-        idClub: item.event?.club?.id || null,
-        nameClub: item.event?.club?.name || null,
-        idEventCategory: randomCategory?.id || null,
-        nameEventCategory: randomCategory?.title || null,
-        idStatus: item.statusId || null,
-        eventDate: item?.eventDate || null,
-        startTime: item?.startTime || null,
-      };
-    });
+    const listMap = await Promise.all(
+      list.map(async (item) => {
+        const randomCategory =
+          await this.eventCategoryService.findRandomCategoryByEventId(
+            item.event.id,
+          );
+        return {
+          id: item.id,
+          eventId: item.event?.id,
+          title: item.event?.title,
+          description: item.event?.description,
+          imageUrl: item.event?.imageUrl,
+          idClub: item.event?.club?.id || null,
+          nameClub: item.event?.club?.name || null,
+          idEventCategory: randomCategory?.category?.id || null,
+          nameEventCategory: randomCategory?.category?.title || null,
+          idStatus: item.statusId || null,
+          eventDate: item?.eventDate || null,
+          startTime: item?.startTime || null,
+        };
+      }),
+    );
     return listMap;
   }
 

@@ -23,6 +23,18 @@ export class EventCategoryService {
     return await qb.getMany();
   }
 
+  async findRandomCategoryByEventId(eventId: number) {
+    const item = await this.eventCategoryRepo
+      .createQueryBuilder('c')
+      .leftJoinAndSelect('c.category', 'category')
+      .where('c.eventId = :eventId', { eventId })
+      .orderBy('RAND()')
+      .limit(1)
+      .getOne();
+    return item;
+  }
+
+  // Solo por el mes de Octubre luego cambia a findOne
   async findAllOctober(statusId: number) {
     const qb = this.repo
       .createQueryBuilder('event_category')
