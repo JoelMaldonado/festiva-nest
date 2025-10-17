@@ -34,6 +34,11 @@ export class EventService {
       take: limit,
     });
     const listMap = list.map((item) => {
+      const categories = item.event.eventCategories ?? [];
+      const randomCategory =
+        categories.length > 0
+          ? categories[Math.floor(Math.random() * categories.length)].category
+          : null;
       return {
         id: item.id,
         eventId: item.event?.id,
@@ -42,8 +47,8 @@ export class EventService {
         imageUrl: item.event?.imageUrl,
         idClub: item.event?.club?.id || null,
         nameClub: item.event?.club?.name || null,
-        idEventCategory: item.event?.eventCategory?.id || null,
-        nameEventCategory: item.event?.eventCategory?.title || null,
+        idEventCategory: randomCategory?.id || null,
+        nameEventCategory: randomCategory?.title || null,
         idStatus: item.statusId || null,
         eventDate: item?.eventDate || null,
         startTime: item?.startTime || null,
@@ -384,7 +389,6 @@ export class EventService {
       listEventCategories,
     );
   }
-
 
   findAllTest() {
     return this.repo.find();
