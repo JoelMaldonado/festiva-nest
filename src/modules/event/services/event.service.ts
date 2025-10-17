@@ -124,7 +124,8 @@ export class EventService {
       .createQueryBuilder('es')
       .leftJoinAndSelect('es.event', 'e')
       .leftJoinAndSelect('e.club', 'c')
-      .leftJoinAndSelect('e.eventCategories', 'ec') // EventCategoryEntity[]
+      .leftJoinAndSelect('e.eventCategories', 'ec')
+      .leftJoinAndSelect('ec.category', 'cat')
 
       .where('es.statusId = :statusId', { statusId: 1 });
 
@@ -260,12 +261,7 @@ export class EventService {
 
   async findOne(id: number) {
     const item = await this.repo.findOne({
-      relations: [
-        'status',
-        'club',
-        'club.locations',
-        'schedule',
-      ],
+      relations: ['status', 'club', 'club.locations', 'schedule'],
       where: { id, status: { id: 1 } },
     });
     if (!item) {
