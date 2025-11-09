@@ -30,4 +30,9 @@ export class CommonController {
     const now = new Date();
     return { hour: now };
   }
+
+  @Get('test2')
+  async testGet() {
+    return this.service.testGet();
+  }
 }

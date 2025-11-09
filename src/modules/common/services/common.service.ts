@@ -3,6 +3,7 @@ import { Club } from '@entities/club.entity';
 import { EventEntity } from '@entities/event.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { FirebaseService } from 'src/services/firebase.service';
 import { Like, MoreThanOrEqual, Repository } from 'typeorm';
 
@@ -16,6 +17,7 @@ export class CommonService {
     @InjectRepository(Club)
     private readonly clubRepo: Repository<Club>,
     private readonly firebaseService: FirebaseService,
+    private readonly prisma: PrismaService,
   ) {}
 
   async search(query: string) {
@@ -65,5 +67,10 @@ export class CommonService {
       'Photos/2025/4/1744847344420.png',
     );
     return res;
+  }
+
+  async testGet() {
+    const events = await this.prisma.event.findMany();
+    return events;
   }
 }

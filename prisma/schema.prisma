@@ -220,22 +220,21 @@ model dynamic_qr_codes {
 }
 
 model event {
-  id                Int              @id @default(autoincrement())
-  club_id           Int
-  title             String           @db.VarChar(100)
-  description       String?          @db.Text
-  image_url         String?          @db.VarChar(255)
-  event_category_id Int?
-  status_id         Int              @default(1)
-  created_at        DateTime?        @default(now()) @db.Timestamp(0)
-  updated_at        DateTime?        @default(now()) @db.Timestamp(0)
-  ticket_url        String?          @db.VarChar(255)
-  club              club             @relation(fields: [club_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_event_club")
-  event_category    event_category[]
-  event_schedule    event_schedule[]
+  id             Int              @id @default(autoincrement())
+  club_id        Int
+  title          String           @db.VarChar(100)
+  description    String?          @db.Text
+  image_url      String?          @db.VarChar(255)
+  status_id      Int              @default(1)
+  created_at     DateTime?        @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?        @default(now()) @db.Timestamp(0)
+  ticket_url     String?          @db.VarChar(2048)
+  club           club             @relation(fields: [club_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_event_club")
+  event_category event_category[]
+  event_detail   event_detail?
+  event_schedule event_schedule[]
 
   @@index([club_id], map: "club_id")
-  @@index([event_category_id], map: "event_category_id")
   @@index([status_id], map: "status_id")
 }
 
@@ -364,6 +363,13 @@ model user_role {
   updated_at DateTime? @default(now()) @db.Timestamp(0)
 
   @@index([status_id], map: "status_id")
+}
+
+model event_detail {
+  event_id   Int     @id
+  ticket_url String? @db.VarChar(2048)
+  address    String? @db.VarChar(255)
+  event      event   @relation(fields: [event_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_event_detail_event")
 }
 
 enum qr_scans_platform {
