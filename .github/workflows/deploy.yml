@@ -53,6 +53,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo "🚀 Deploy festiva-api"
+            
+            # Hacer disponible npm y pm2 instalados con nvm
+            export PATH=/root/.nvm/versions/node/v22.16.0/bin:$PATH
+
             cd /var/www/festiva-api
 
             # Limpiar deps viejas (opcional pero claro)
