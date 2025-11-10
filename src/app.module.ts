@@ -16,6 +16,7 @@ import { RedirectModule } from './modules/redirect/redirect.module';
 import { MailModule } from './modules/mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { DinamycQrCodesModule } from './modules/dinamyc-qr-codes/dinamyc-qr-codes.module';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { DinamycQrCodesModule } from './modules/dinamyc-qr-codes/dinamyc-qr-code
     RedirectModule,
     MailModule,
     DinamycQrCodesModule,
+    HealthModule,
   ],
 })
 export class AppModule {}

@@ -39,8 +39,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: 'dist/**,package.json,package-lock.json'
-          target: '/var/www/festiva-api'
+          source: "dist/**,package.json,package-lock.json,prisma/**"
+          target: "/var/www/festiva-api"
           overwrite: true
           rm: false
 
@@ -59,20 +59,19 @@ jobs:
 
             cd /var/www/festiva-api
 
+            # Borrar proceso anterior si existe
+            pm2 delete festiva-prod-8081 || true
+
             # Limpiar deps viejas (opcional pero claro)
             rm -rf node_modules
 
             # Instalar solo deps necesarias para prod
-            npm ci --omit=dev
+            npm ci
 
-            # Si el proceso ya existe en PM2 -> restart
-            if pm2 describe festiva-prod-8081 > /dev/null 2>&1; then
-              echo "♻️ PM2 process existe, haciendo restart..."
-              pm2 restart festiva-prod-8081
-            else
-              echo "🚀 PM2 process no existe, haciendo start por primera vez..."
-              PORT=8081 DB_NAME=festiva_prod pm2 start dist/main.js --name festiva-prod-8081
-            fi
+            # Generar Prisma client (si usas Prisma)
+            npx prisma generate
+
+            PORT=8081 DB_NAME=festiva_prod pm2 start dist/main.js --name festiva-prod-8081
 
             pm2 save
             echo "✅ Deploy completo"
