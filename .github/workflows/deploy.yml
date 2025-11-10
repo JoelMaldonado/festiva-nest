@@ -39,7 +39,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: 22
           source: 'dist/**,package.json,package-lock.json'
           target: '/var/www/festiva-api'
           overwrite: true
@@ -52,7 +51,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: 22
           script: |
             echo "🚀 Deploy festiva-api"
             cd /var/www/festiva-api
