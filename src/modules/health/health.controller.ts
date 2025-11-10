@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { HealthService } from './health.service';
+import { successResponse } from 'src/common/responses';
 
 @Controller('health')
 export class HealthController {
@@ -7,6 +8,7 @@ export class HealthController {
 
   @Get()
   checkHealth() {
-    return this.service.checkHealth();
+    const res = this.service.checkHealth();
+    return successResponse('', res);
   }
 }
