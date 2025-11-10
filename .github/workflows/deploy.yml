@@ -1,4 +1,4 @@
-name: Deploy Festiva Backend to VPS
+name: Deploy Festiva Backend
 
 on:
   push:
@@ -6,22 +6,71 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # 1) Traer el código del repo al runner (NO al servidor)
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy to VPS via SSH
-        uses: appleboy/ssh-action@v0.1.10
+      # 2) Configurar Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          node-version: 20
+          cache: 'npm'
+
+      # 3) Instalar dependencias
+      - name: Install dependencies
+        run: npm ci
+
+      # 4) Compilar NestJS (genera /dist)
+      - name: Build NestJS
+        run: npm run build
+
+      # 5) Subir artefactos al servidor
+      # Solo lo necesario para correr en producción:
+      # - dist/** (código compilado)
+      # - package.json / package-lock.json (para npm ci en el server)
+      - name: Upload build to server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          source: 'dist/**,package.json,package-lock.json'
+          target: '/var/www/festiva-api'
+          overwrite: true
+          rm: false
+
+      # 6) Instalar deps en el server + reiniciar PM2
+      - name: Restart API with PM2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
-            cd /root/Docs/festiva-nest
-            git pull origin main
-            npm install
-            npm run build
-            npm run restart
+            echo "🚀 Deploy festiva-api"
+            cd /var/www/festiva-api
+
+            # Limpiar deps viejas (opcional pero claro)
+            rm -rf node_modules
+
+            # Instalar solo deps necesarias para prod
+            npm ci --omit=dev
+
+            # Si el proceso ya existe en PM2 -> restart
+            if pm2 describe festiva-prod-8081 > /dev/null 2>&1; then
+              echo "♻️ PM2 process existe, haciendo restart..."
+              pm2 restart festiva-prod-8081
+            else
+              echo "🚀 PM2 process no existe, haciendo start por primera vez..."
+              PORT=8081 DB_NAME=festiva_prod pm2 start dist/main.js --name festiva-prod-8081
+            fi
+
+            pm2 save
+            echo "✅ Deploy completo"
