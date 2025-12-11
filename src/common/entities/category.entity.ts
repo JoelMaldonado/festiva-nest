@@ -19,6 +19,9 @@ export class CategoryEntity {
   @Column({ name: 'title', type: 'varchar', length: 100 })
   title: string;
 
+  @Column({ name: 'sort_order', type: 'int', default: 0 })
+  sortOrder: number;
+
   @JoinColumn({ name: 'status_id' })
   @ManyToOne(() => Status)
   status: Status;

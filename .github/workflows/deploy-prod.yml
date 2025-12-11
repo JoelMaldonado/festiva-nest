@@ -1,4 +1,4 @@
-name: Deploy Festiva Backend
+name: Deploy Festiva Backend Production
 
 on:
   push:
