@@ -7,17 +7,6 @@ import { PlatformType } from '@entities/qr-scans.entity';
 export class RedirectController {
   constructor(private readonly qrScanService: RedirectService) {}
 
-  @Get('nacho')
-  async nacho(@Query('url') url: string, @Res() res: Response) {
-    if (!url) {
-      return res.status(400).send('Missing url');
-    }
-    const png = await this.qrScanService.makePngWithLogoBox(url, 1024, 0.22);
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    return res.send(png);
-  }
-
   @Get('r')
   async handleRedirect(@Req() req: Request, @Res() res: Response) {
     const ua = String(req.headers['user-agent'] || '');
@@ -42,5 +31,16 @@ export class RedirectController {
 
     const target = isAndroid ? play : isIOS ? appStore : landing;
     return res.redirect(302, target);
+  }
+
+  @Get('nacho')
+  async nacho(@Query('url') url: string, @Res() res: Response) {
+    if (!url) {
+      return res.status(400).send('Missing url');
+    }
+    const png = await this.qrScanService.makePngWithLogoBox(url, 1024, 0.22);
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    return res.send(png);
   }
 }

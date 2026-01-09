@@ -193,7 +193,13 @@ export class EventService {
 
   async findOneById(id: number) {
     const item = await this.repo.findOne({
-      relations: ['club', 'club.locations'],
+      relations: [
+        'club',
+        'club.locations',
+        'schedule',
+        'eventCategories',
+        'eventCategories.category',
+      ],
       where: {
         id: id,
       },
@@ -208,12 +214,22 @@ export class EventService {
       title: item.title,
       description: item.description,
       imageUrl: item.imageUrl,
-      eventDate: null,
-      startTime: null,
       location: item.club.locations[0]?.address ?? null,
       clubId: item.club.id,
       clubName: item.club.name,
       clubLogoUrl: item.club.logoUrl,
+      ticketUrl: item.ticketUrl || null,
+      categories: item.eventCategories.map((ec) => {
+        return {
+          id: ec.category.id,
+          title: ec.category.title,
+        };
+      }),
+      schedule: item.schedule.map((s) => ({
+        id: s.id,
+        eventDate: s.eventDate,
+        startTime: s.startTime,
+      })),
     };
   }
 

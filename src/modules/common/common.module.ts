@@ -12,9 +12,6 @@ import { UserRoleService } from './services/user-role.service';
 import { CommonController } from './controllers/common.controller';
 import { CommonService } from './services/common.service';
 import { FirebaseModule } from 'src/services/firebase.module';
-import { ClubDetail } from '@entities/club-detail.entity';
-import { HttpModule } from '@nestjs/axios';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
