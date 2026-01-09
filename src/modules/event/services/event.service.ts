@@ -203,6 +203,9 @@ export class EventService {
       where: {
         id: id,
       },
+      order: {
+        schedule: { eventDate: 'ASC', startTime: 'ASC' },
+      },
     });
 
     if (!item) {
