@@ -225,7 +225,7 @@ export class EventService {
           title: ec.category.title,
         };
       }),
-      schedule: item.schedule.map((s) => ({
+      schedules: item.schedule.map((s) => ({
         id: s.id,
         eventDate: s.eventDate,
         startTime: s.startTime,
