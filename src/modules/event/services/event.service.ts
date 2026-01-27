@@ -220,6 +220,8 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
 
+    //
+
     return {
       id: item.id,
       title: item.title,
