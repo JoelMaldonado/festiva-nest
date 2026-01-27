@@ -192,6 +192,11 @@ export class EventService {
   }
 
   async findOneById(id: number) {
+    // Obtener la fecha de ayer a las 00:00
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+
     const item = await this.repo.findOne({
       relations: [
         'club',
@@ -202,6 +207,9 @@ export class EventService {
       ],
       where: {
         id: id,
+        schedule: {
+          eventDate: MoreThanOrEqual(yesterday),
+        },
       },
       order: {
         schedule: { eventDate: 'ASC', startTime: 'ASC' },
