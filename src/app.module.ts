@@ -17,6 +17,7 @@ import { MailModule } from './modules/mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { DinamycQrCodesModule } from './modules/dinamyc-qr-codes/dinamyc-qr-codes.module';
 import { HealthModule } from './modules/health/health.module';
+import { SitemapModule } from './modules/sitemap/sitemap.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { HealthModule } from './modules/health/health.module';
     MailModule,
     DinamycQrCodesModule,
     HealthModule,
+    SitemapModule,
   ],
 })
 export class AppModule {}
