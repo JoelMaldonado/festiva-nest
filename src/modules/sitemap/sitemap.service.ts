@@ -36,7 +36,7 @@ ${events
 
   async buildSitemapXml() {
     const since = new Date();
-    since.setDate(since.getDate() - 90);
+    since.setFullYear(since.getFullYear() - 5);
 
     const events = await this.repository.find({
       select: { id: true, title: true, createdAt: true },
