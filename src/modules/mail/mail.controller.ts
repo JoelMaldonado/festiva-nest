@@ -11,7 +11,17 @@ export class MailController {
     @Body('email') email: string,
     @Body('clubName') clubName: string,
     @Body('address') address: string,
+
+    @Body('recaptchaToken') recaptchaToken: string,
+    @Body('recaptchaAction') recaptchaAction: string,
   ) {
-    return this.mailService.sendEmail(name, email, clubName, address);
+    return this.mailService.sendEmail(
+      name,
+      email,
+      clubName,
+      address,
+      recaptchaToken,
+      recaptchaAction,
+    );
   }
 }
