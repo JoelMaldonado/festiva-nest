@@ -1,51 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { EventService } from '../event/services/event.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EventEntity } from '@entities/event.entity';
+import { EventEntity, EventScheduleEntity } from '@entities/event.entity';
 import { MoreThanOrEqual, Repository } from 'typeorm';
 
 @Injectable()
 export class SitemapService {
   constructor(
-    @InjectRepository(EventEntity)
-    private readonly repository: Repository<EventEntity>,
+    @InjectRepository(EventScheduleEntity)
+    private readonly scheduleRepository: Repository<EventScheduleEntity>,
   ) {}
 
-  async generateSitemap() {
-    const events = await this.repository.find();
-
-    // Logic to generate sitemap XML from events
-    const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    ${events
-      .map(
-        (event) => `
-      <url>
-      <loc>https://www.example.com/events/${event.id}</loc>
-      <lastmod>${new Date().toISOString()}</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-      </url>
-      `,
-      )
-      .join('')}
-      </urlset>`;
-
-    return sitemapXml;
-  }
-
   async buildSitemapXml() {
-    const since = new Date();
-    since.setFullYear(since.getFullYear() - 5);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    const events = await this.repository.find({
-      select: { id: true, title: true, createdAt: true },
-      where: {
-        createdAt: MoreThanOrEqual(since),
-        status: { id: 1 },
+    const schedules = await this.scheduleRepository.find({
+      select: {
+        event: { id: true, title: true, updatedAt: true, createdAt: true },
       },
-      order: { createdAt: 'DESC' },
+      where: {
+        eventDate: MoreThanOrEqual(today),
+        statusId: 1,
+        event: { status: { id: 1 } },
+      },
+      relations: { event: true },
     });
+
+    // Deduplicate: keep one entry per event (the one with the earliest upcoming date)
+    const seen = new Map<number, EventEntity>();
+    for (const s of schedules) {
+      if (!seen.has(s.event.id)) {
+        seen.set(s.event.id, s.event);
+      }
+    }
+
+    const events = [...seen.values()];
 
     const base = 'https://app.festiva.no';
 
